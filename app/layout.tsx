@@ -1,7 +1,8 @@
+import Navbar from "@/components/navbar";
 import type { Metadata } from "next";
 import { JetBrains_Mono, Poppins } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/navbar";
+
 
 const poppins = Poppins({
   variable: "--font-poppins",

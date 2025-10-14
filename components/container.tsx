@@ -10,7 +10,7 @@ const Container = ({
   return (
     <section
       className={cn(
-        `mx-auto flex w-full max-w-4xl flex-col gap-4 px-6 py-8 sm:px-8`,
+        `mx-auto flex w-full max-w-5xl flex-col gap-4 px-6 py-8 sm:px-8`,
         className,
       )}
     >
