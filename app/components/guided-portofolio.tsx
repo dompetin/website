@@ -2,19 +2,6 @@
 import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
-import {
   Field,
   FieldError,
   FieldGroup,
@@ -39,19 +26,9 @@ import {
 } from "@/lib/simulate-investments";
 import { useForm } from "@tanstack/react-form";
 import { useState } from "react";
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import * as z from "zod";
-
-const chartConfig = {
-  moneyWithInvesting: {
-    label: "With Investing",
-    color: "var(--primary)",
-  },
-  moneyWithoutInvesting: {
-    label: "Without Investing",
-    color: "var(--destructive)",
-  },
-} satisfies ChartConfig;
+import PortofolioChart from "./portofolio-chart";
+import { Card, CardContent } from "@/components/ui/card";
 
 const formSchema = z.object({
   current_savings: z
@@ -101,248 +78,185 @@ const GuidedPortofolio = () => {
         Berapa yang bisa aku dompetin kalau...
       </h2>
 
-      <div className="grid grid-cols-3 gap-4">
-        <form
-          id="guided_portofolio_form"
-          onSubmit={(e) => {
-            e.preventDefault();
-            form.handleSubmit();
-          }}
-        >
-          <FieldGroup>
-            <form.Field
-              name="current_savings"
-              children={(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid;
-                return (
-                  <Field
-                    data-invalid={isInvalid}
-                    className="flex flex-col gap-2"
-                  >
-                    <FieldLabel htmlFor={field.name}>
-                      Tabunganku sekarang isinya
-                    </FieldLabel>
-                    <InputGroup>
-                      <InputGroupInput
-                        id={field.name}
-                        name={field.name}
-                        type="number"
-                        value={
-                          isNaN(field.state.value) ? "" : field.state.value
-                        }
-                        onBlur={field.handleBlur}
-                        onChange={(e) =>
-                          field.handleChange(e.target.valueAsNumber)
-                        }
-                        aria-invalid={isInvalid}
-                        placeholder="15 000 000"
-                        autoComplete="off"
-                      />
-                      <InputGroupAddon>Rp</InputGroupAddon>
-                      <InputGroupAddon align={`inline-end`}>
-                        IDR
-                      </InputGroupAddon>
-                    </InputGroup>
-                    {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
-                    )}
-                  </Field>
-                );
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card>
+          <CardContent className="h-full">
+            <form
+              id="guided_portofolio_form"
+              onSubmit={(e) => {
+                e.preventDefault();
+                form.handleSubmit();
               }}
-            />
-
-            <form.Field
-              name="savings_per_month"
-              children={(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid;
-                return (
-                  <Field
-                    data-invalid={isInvalid}
-                    className="flex flex-col gap-2"
-                  >
-                    <FieldLabel htmlFor={field.name}>
-                      Mau nabung per bulan
-                    </FieldLabel>
-                    <InputGroup>
-                      <InputGroupInput
-                        id={field.name}
-                        name={field.name}
-                        type="number"
-                        value={
-                          isNaN(field.state.value) ? "" : field.state.value
-                        }
-                        onBlur={field.handleBlur}
-                        onChange={(e) =>
-                          field.handleChange(e.target.valueAsNumber)
-                        }
-                        aria-invalid={isInvalid}
-                        placeholder="100 000"
-                        autoComplete="off"
-                      />
-                      <InputGroupAddon>Rp</InputGroupAddon>
-                      <InputGroupAddon align={`inline-end`}>
-                        IDR
-                      </InputGroupAddon>
-                    </InputGroup>
-                    {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
-                    )}
-                  </Field>
-                );
-              }}
-            />
-
-            <div className="grid grid-cols-2 gap-4">
-              <form.Field
-                name="risk"
-                children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid;
-                  return (
-                    <Field data-invalid={isInvalid}>
-                      <FieldLabel>Risiko</FieldLabel>
-                      <Select
-                        name={field.name}
-                        value={field.state.value}
-                        onValueChange={field.handleChange}
-                        aria-invalid={isInvalid}
+              className="h-full flex-col justify-between flex"
+            >
+              <FieldGroup>
+                <form.Field
+                  name="current_savings"
+                  children={(field) => {
+                    const isInvalid =
+                      field.state.meta.isTouched && !field.state.meta.isValid;
+                    return (
+                      <Field
+                        data-invalid={isInvalid}
+                        className="flex flex-col gap-2"
                       >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Pilih risiko" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="high">Tinggi</SelectItem>
-                          <SelectItem value="medium">Medium</SelectItem>
-                          <SelectItem value="low">Rendah</SelectItem>
-                        </SelectContent>
-                      </Select>
+                        <FieldLabel htmlFor={field.name}>
+                          Tabunganku sekarang isinya
+                        </FieldLabel>
+                        <InputGroup>
+                          <InputGroupInput
+                            id={field.name}
+                            name={field.name}
+                            type="number"
+                            value={
+                              isNaN(field.state.value) ? "" : field.state.value
+                            }
+                            onBlur={field.handleBlur}
+                            onChange={(e) =>
+                              field.handleChange(e.target.valueAsNumber)
+                            }
+                            aria-invalid={isInvalid}
+                            placeholder="15 000 000"
+                            autoComplete="off"
+                          />
+                          <InputGroupAddon>Rp</InputGroupAddon>
+                          <InputGroupAddon align={`inline-end`}>
+                            IDR
+                          </InputGroupAddon>
+                        </InputGroup>
+                        {isInvalid && (
+                          <FieldError errors={field.state.meta.errors} />
+                        )}
+                      </Field>
+                    );
+                  }}
+                />
 
-                      {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
-                      )}
-                    </Field>
-                  );
-                }}
-              />
-
-              <form.Field
-                name="product"
-                children={(field) => {
-                  const isInvalid =
-                    field.state.meta.isTouched && !field.state.meta.isValid;
-                  return (
-                    <Field data-invalid={isInvalid}>
-                      <FieldLabel>Produk</FieldLabel>
-                      <Select
-                        name={field.name}
-                        value={field.state.value}
-                        onValueChange={field.handleChange}
-                        aria-invalid={isInvalid}
+                <form.Field
+                  name="savings_per_month"
+                  children={(field) => {
+                    const isInvalid =
+                      field.state.meta.isTouched && !field.state.meta.isValid;
+                    return (
+                      <Field
+                        data-invalid={isInvalid}
+                        className="flex flex-col gap-2"
                       >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Pilih produk" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="mixed">Campur</SelectItem>
-                          <SelectItem value="mutual_fund">Reksadana</SelectItem>
-                          <SelectItem value="stocks">Saham</SelectItem>
-                          <SelectItem value="obligation">Obligasi</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      {isInvalid && (
-                        <FieldError errors={field.state.meta.errors} />
-                      )}
-                    </Field>
-                  );
-                }}
-              />
-            </div>
-          </FieldGroup>
+                        <FieldLabel htmlFor={field.name}>
+                          Mau nabung per bulan
+                        </FieldLabel>
+                        <InputGroup>
+                          <InputGroupInput
+                            id={field.name}
+                            name={field.name}
+                            type="number"
+                            value={
+                              isNaN(field.state.value) ? "" : field.state.value
+                            }
+                            onBlur={field.handleBlur}
+                            onChange={(e) =>
+                              field.handleChange(e.target.valueAsNumber)
+                            }
+                            aria-invalid={isInvalid}
+                            placeholder="100 000"
+                            autoComplete="off"
+                          />
+                          <InputGroupAddon>Rp</InputGroupAddon>
+                          <InputGroupAddon align={`inline-end`}>
+                            IDR
+                          </InputGroupAddon>
+                        </InputGroup>
+                        {isInvalid && (
+                          <FieldError errors={field.state.meta.errors} />
+                        )}
+                      </Field>
+                    );
+                  }}
+                />
 
-          <Button
-            type="submit"
-            form="guided_portofolio_form"
-            className="mt-4 w-full"
-          >
-            Hitung
-          </Button>
-        </form>
+                <div className="grid grid-cols-2 gap-2">
+                  <form.Field
+                    name="risk"
+                    children={(field) => {
+                      const isInvalid =
+                        field.state.meta.isTouched && !field.state.meta.isValid;
+                      return (
+                        <Field data-invalid={isInvalid}>
+                          <FieldLabel>Risiko</FieldLabel>
+                          <Select
+                            name={field.name}
+                            value={field.state.value}
+                            onValueChange={field.handleChange}
+                            aria-invalid={isInvalid}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Pilih risiko" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="high">Tinggi</SelectItem>
+                              <SelectItem value="medium">Medium</SelectItem>
+                              <SelectItem value="low">Rendah</SelectItem>
+                            </SelectContent>
+                          </Select>
 
-        <Card className="col-span-2">
-          <CardHeader>
-            <CardTitle>Lorem Ipsum Chart</CardTitle>
-            <CardDescription>
-              Visualizing your investment growth over time.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer config={chartConfig}>
-              <AreaChart
-                accessibilityLayer
-                data={chartData}
-                margin={{
-                  left: 12,
-                  right: 12,
-                }}
+                          {isInvalid && (
+                            <FieldError errors={field.state.meta.errors} />
+                          )}
+                        </Field>
+                      );
+                    }}
+                  />
+
+                  <form.Field
+                    name="product"
+                    children={(field) => {
+                      const isInvalid =
+                        field.state.meta.isTouched && !field.state.meta.isValid;
+                      return (
+                        <Field data-invalid={isInvalid}>
+                          <FieldLabel>Produk</FieldLabel>
+                          <Select
+                            name={field.name}
+                            value={field.state.value}
+                            onValueChange={field.handleChange}
+                            aria-invalid={isInvalid}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Pilih produk" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="mixed">Campur</SelectItem>
+                              <SelectItem value="mutual_fund">
+                                Reksadana
+                              </SelectItem>
+                              <SelectItem value="stocks">Saham</SelectItem>
+                              <SelectItem value="obligation">
+                                Obligasi
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                          {isInvalid && (
+                            <FieldError errors={field.state.meta.errors} />
+                          )}
+                        </Field>
+                      );
+                    }}
+                  />
+                </div>
+              </FieldGroup>
+
+              <Button
+                type="submit"
+                form="guided_portofolio_form"
+                className="w-full mt-4"
               >
-                <CartesianGrid vertical={false} />
-                <XAxis
-                  dataKey="year"
-                  tickLine={false}
-                  axisLine={false}
-                  tickMargin={2}
-                />
-                <YAxis tickLine={false} axisLine={false} tickMargin={2} />
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent indicator="dot" hideLabel />}
-                />
-                <Area
-                  dataKey="moneyWithInvesting"
-                  type="natural"
-                  fill="url(#fillMoneyWithInvesting)"
-                  fillOpacity={0.4}
-                  stroke="var(--color-moneyWithInvesting)"
-                />
-                <Area
-                  dataKey="moneyWithoutInvesting"
-                  type="natural"
-                  fill="url(#fillMoneyWithoutInvesting)"
-                  fillOpacity={0.4}
-                  stroke="var(--color-moneyWithoutInvesting)"
-                />
-                <defs>
-                  <linearGradient id="fillMoneyWithInvesting" x1="0" y1="0" x2="0" y2="1">
-                    <stop
-                      offset="5%"
-                      stopColor="var(--color-primary)"
-                      stopOpacity={0.8}
-                    />
-                    <stop
-                      offset="95%"
-                      stopColor="var(--color-primary)"
-                      stopOpacity={0.1}
-                    />
-                  </linearGradient>
-                  <linearGradient id="fillMoneyWithoutInvesting" x1="0" y1="0" x2="0" y2="1">
-                    <stop
-                      offset="5%"
-                      stopColor="var(--color-destructive)"
-                      stopOpacity={0.8}
-                    />
-                    <stop
-                      offset="95%"
-                      stopColor="var(--color-desctructive)"
-                      stopOpacity={0.1}
-                    />
-                  </linearGradient>
-                </defs>
-              </AreaChart>
-            </ChartContainer>
+                Hitung Investasiku
+              </Button>
+            </form>
           </CardContent>
         </Card>
+
+        <PortofolioChart data={chartData} />
       </div>
     </Container>
   );

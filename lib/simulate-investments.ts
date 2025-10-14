@@ -9,7 +9,7 @@ export interface InvestmentSimulationResult {
   year: number;
   moneyWithInvesting: number;
   moneyWithoutInvesting: number;
-};
+}
 
 export function simulateInvestments(
   data: InvestmentSimulationParams,
@@ -25,11 +25,13 @@ export function simulateInvestments(
     } else {
       // add a natural error rate to simulate market fluctuations
       investedValue =
-        (newChartData[newChartData.length - 1].moneyWithInvesting * 1.1 +
-        data.savingsPerMonth * 12) * (1 + (Math.random() - 0.5) * 0.1);
+        newChartData[newChartData.length - 1].moneyWithInvesting *
+        (1.07 + Math.random() * 0.02) +
+        data.savingsPerMonth * 12;
       nonInvestedValue =
-        (newChartData[newChartData.length - 1].moneyWithoutInvesting * 0.98 +
-        data.savingsPerMonth * 12) * (1 + (Math.random() - 0.5) * 0.1);
+        newChartData[newChartData.length - 1].moneyWithoutInvesting *
+        (0.95 + Math.random() * 0.05) +
+        data.savingsPerMonth * 12;
     }
 
     newChartData.push({
