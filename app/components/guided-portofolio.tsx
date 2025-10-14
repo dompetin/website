@@ -32,25 +32,34 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  InvestmentSimulationParams,
+  InvestmentSimulationResult,
+  simulateInvestments,
+} from "@/lib/simulate-investments";
 import { useForm } from "@tanstack/react-form";
 import { useState } from "react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import * as z from "zod";
 
 const chartConfig = {
-  withInvesting: {
+  moneyWithInvesting: {
     label: "With Investing",
     color: "var(--primary)",
   },
-  withoutInvesting: {
+  moneyWithoutInvesting: {
     label: "Without Investing",
     color: "var(--destructive)",
   },
 } satisfies ChartConfig;
 
 const formSchema = z.object({
-  current_savings: z.number().min(1),
-  savings_per_month: z.number().min(1),
+  current_savings: z
+    .number()
+    .min(0, "Tabunganmu sekarang tidak bisa di bawah 0!"),
+  savings_per_month: z
+    .number()
+    .min(0, "Investasimu per bulan tidak bisa di bawah 0!"),
   risk: z.enum(["high", "medium", "low"]),
   product: z.enum(["mixed", "mutual_fund", "stocks", "obligation"]),
 });
@@ -58,13 +67,7 @@ const formSchema = z.object({
 const GuidedPortofolio = () => {
   // const [timeRange, setTimeRange] = useState<"1m" | "3m">("3m");
   // const date = new Date();
-  const [chartData, setChartData] = useState<
-    {
-      year: string;
-      withInvesting: number;
-      withoutInvesting: number;
-    }[]
-  >([]);
+  const [chartData, setChartData] = useState<InvestmentSimulationResult[]>([]);
 
   const form = useForm({
     defaultValues: {
@@ -80,35 +83,15 @@ const GuidedPortofolio = () => {
       console.error("An unexpected error occurred:", err);
     },
     onSubmit: async ({ value }) => {
-      const newChartData: {
-        year: string;
-        withInvesting: number;
-        withoutInvesting: number;
-      }[] = [];
+      const simulatedData = simulateInvestments({
+        currentSavings: value.current_savings,
+        savingsPerMonth: value.savings_per_month,
+        risk: value.risk as InvestmentSimulationParams["risk"],
+        product: value.product as InvestmentSimulationParams["product"],
+      });
 
-      // generate new data (dummy data for now)
-      for (let year = 2025; year <= 2030; year++) {
-        let investedValue, nonInvestedValue;
-        if (year === 2025) {
-          investedValue = value.current_savings;
-          nonInvestedValue = value.current_savings;
-        } else {
-          investedValue =
-            newChartData[newChartData.length - 1].withInvesting * 1.1 +
-            value.savings_per_month * 12;
-          nonInvestedValue =
-            newChartData[newChartData.length - 1].withoutInvesting * 0.95 +
-            value.savings_per_month * 12;
-        }
-
-        newChartData.push({
-          year: year.toString(),
-          withInvesting: Math.trunc(investedValue),
-          withoutInvesting: Math.trunc(nonInvestedValue),
-        });
-      }
-
-      setChartData(newChartData);
+      console.log(simulatedData);
+      setChartData(simulatedData);
     },
   });
 
@@ -124,7 +107,8 @@ const GuidedPortofolio = () => {
           onSubmit={(e) => {
             e.preventDefault();
             form.handleSubmit();
-          }}>
+          }}
+        >
           <FieldGroup>
             <form.Field
               name="current_savings"
@@ -134,7 +118,8 @@ const GuidedPortofolio = () => {
                 return (
                   <Field
                     data-invalid={isInvalid}
-                    className="flex flex-col gap-2">
+                    className="flex flex-col gap-2"
+                  >
                     <FieldLabel htmlFor={field.name}>
                       Tabunganku sekarang isinya
                     </FieldLabel>
@@ -175,7 +160,8 @@ const GuidedPortofolio = () => {
                 return (
                   <Field
                     data-invalid={isInvalid}
-                    className="flex flex-col gap-2">
+                    className="flex flex-col gap-2"
+                  >
                     <FieldLabel htmlFor={field.name}>
                       Mau nabung per bulan
                     </FieldLabel>
@@ -221,7 +207,8 @@ const GuidedPortofolio = () => {
                         name={field.name}
                         value={field.state.value}
                         onValueChange={field.handleChange}
-                        aria-invalid={isInvalid}>
+                        aria-invalid={isInvalid}
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder="Pilih risiko" />
                         </SelectTrigger>
@@ -252,7 +239,8 @@ const GuidedPortofolio = () => {
                         name={field.name}
                         value={field.state.value}
                         onValueChange={field.handleChange}
-                        aria-invalid={isInvalid}>
+                        aria-invalid={isInvalid}
+                      >
                         <SelectTrigger>
                           <SelectValue placeholder="Pilih produk" />
                         </SelectTrigger>
@@ -276,7 +264,8 @@ const GuidedPortofolio = () => {
           <Button
             type="submit"
             form="guided_portofolio_form"
-            className="mt-4 w-full">
+            className="mt-4 w-full"
+          >
             Hitung
           </Button>
         </form>
@@ -296,34 +285,60 @@ const GuidedPortofolio = () => {
                 margin={{
                   left: 12,
                   right: 12,
-                }}>
+                }}
+              >
                 <CartesianGrid vertical={false} />
                 <XAxis
                   dataKey="year"
                   tickLine={false}
                   axisLine={false}
                   tickMargin={2}
-                  tickFormatter={(value) => value.slice(0, 4)}
                 />
                 <YAxis tickLine={false} axisLine={false} tickMargin={2} />
                 <ChartTooltip
                   cursor={false}
-                  content={<ChartTooltipContent indicator="line" />}
+                  content={<ChartTooltipContent indicator="dot" hideLabel />}
                 />
                 <Area
-                  dataKey="withInvesting"
+                  dataKey="moneyWithInvesting"
                   type="natural"
-                  fill="var(--color-withInvesting)"
+                  fill="url(#fillMoneyWithInvesting)"
                   fillOpacity={0.4}
-                  stroke="var(--color-withInvesting)"
+                  stroke="var(--color-moneyWithInvesting)"
                 />
                 <Area
-                  dataKey="withoutInvesting"
+                  dataKey="moneyWithoutInvesting"
                   type="natural"
-                  fill="var(--color-withoutInvesting)"
+                  fill="url(#fillMoneyWithoutInvesting)"
                   fillOpacity={0.4}
-                  stroke="var(--color-withoutInvesting)"
+                  stroke="var(--color-moneyWithoutInvesting)"
                 />
+                <defs>
+                  <linearGradient id="fillMoneyWithInvesting" x1="0" y1="0" x2="0" y2="1">
+                    <stop
+                      offset="5%"
+                      stopColor="var(--color-primary)"
+                      stopOpacity={0.8}
+                    />
+                    <stop
+                      offset="95%"
+                      stopColor="var(--color-primary)"
+                      stopOpacity={0.1}
+                    />
+                  </linearGradient>
+                  <linearGradient id="fillMoneyWithoutInvesting" x1="0" y1="0" x2="0" y2="1">
+                    <stop
+                      offset="5%"
+                      stopColor="var(--color-destructive)"
+                      stopOpacity={0.8}
+                    />
+                    <stop
+                      offset="95%"
+                      stopColor="var(--color-desctructive)"
+                      stopOpacity={0.1}
+                    />
+                  </linearGradient>
+                </defs>
               </AreaChart>
             </ChartContainer>
           </CardContent>
