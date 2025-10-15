@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { MaskInput, MaskInputProps } from "./mask-input"
 
 function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
@@ -144,6 +145,22 @@ function InputGroupInput({
   )
 }
 
+function InputGroupMaskInput({
+  className,
+  ...props
+}: MaskInputProps) {
+  return (
+    <MaskInput
+      data-slot="input-group-control"
+      className={cn(
+        "flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0 dark:bg-transparent",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
 function InputGroupTextarea({
   className,
   ...props
@@ -166,5 +183,6 @@ export {
   InputGroupButton,
   InputGroupText,
   InputGroupInput,
+  InputGroupMaskInput,
   InputGroupTextarea,
 }

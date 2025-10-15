@@ -3,7 +3,7 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardHeader
+  CardHeader,
 } from "@/components/ui/card";
 import {
   ChartConfig,
@@ -39,6 +39,7 @@ const PortofolioChart = ({ data }: { data: any[] }) => {
         latestDataPoint.moneyWithInvesting -
         latestDataPoint.moneyWithoutInvesting,
       );
+      console.log("saved money: ", savedMoney);
     }
   }, [data]);
 
@@ -46,11 +47,13 @@ const PortofolioChart = ({ data }: { data: any[] }) => {
     <Card className="md:col-span-2">
       <CardHeader>
         <CardDescription>
-          {savedMoney && (
+          {savedMoney ? (
             <>
               Dalam 5 tahun, kamu bisa menabung sebanyak{" "}
               <span className="font-bold">{formatCurrency(savedMoney)}</span>!
             </>
+          ) : (
+            <>Ayo mulai menabung dan blablabla!</>
           )}
         </CardDescription>
       </CardHeader>

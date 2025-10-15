@@ -1,16 +1,11 @@
 "use client";
 import Container from "@/components/container";
-import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field";
+import { Card, CardContent } from "@/components/ui/card";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import {
   InputGroup,
   InputGroupAddon,
-  InputGroupInput,
+  InputGroupMaskInput,
 } from "@/components/ui/input-group";
 import {
   Select,
@@ -20,57 +15,37 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  InvestmentSimulationParams,
   InvestmentSimulationResult,
   simulateInvestments,
 } from "@/lib/simulate-investments";
-import { useForm } from "@tanstack/react-form";
-import { useState } from "react";
-import * as z from "zod";
+import { useEffect, useState } from "react";
 import PortofolioChart from "./portofolio-chart";
-import { Card, CardContent } from "@/components/ui/card";
-
-const formSchema = z.object({
-  current_savings: z
-    .number()
-    .min(0, "Tabunganmu sekarang tidak bisa di bawah 0!"),
-  savings_per_month: z
-    .number()
-    .min(0, "Investasimu per bulan tidak bisa di bawah 0!"),
-  risk: z.enum(["high", "medium", "low"]),
-  product: z.enum(["mixed", "mutual_fund", "stocks", "obligation"]),
-});
 
 const GuidedPortofolio = () => {
-  // const [timeRange, setTimeRange] = useState<"1m" | "3m">("3m");
-  // const date = new Date();
+  const [formData, setFormData] = useState<{
+    currentSavings: string;
+    savingsPerMonth: string;
+    risk: "low" | "medium" | "high";
+    product: "mixed" | "stocks" | "mutual_fund" | "obligation";
+  }>({
+    currentSavings: "1000000",
+    savingsPerMonth: "100000",
+    risk: "medium",
+    product: "mixed",
+  });
   const [chartData, setChartData] = useState<InvestmentSimulationResult[]>([]);
 
-  const form = useForm({
-    defaultValues: {
-      current_savings: "" as unknown as number,
-      savings_per_month: "" as unknown as number,
-      risk: "",
-      product: "",
-    },
-    validators: {
-      onSubmit: formSchema,
-    },
-    onSubmitInvalid: (err) => {
-      console.error("An unexpected error occurred:", err);
-    },
-    onSubmit: async ({ value }) => {
-      const simulatedData = simulateInvestments({
-        currentSavings: value.current_savings,
-        savingsPerMonth: value.savings_per_month,
-        risk: value.risk as InvestmentSimulationParams["risk"],
-        product: value.product as InvestmentSimulationParams["product"],
-      });
+  useEffect(() => {
+    const newChartData = simulateInvestments({
+      currentSavings: Number(formData.currentSavings),
+      savingsPerMonth: Number(formData.savingsPerMonth),
+      risk: formData.risk,
+      product: formData.product,
+    });
 
-      console.log(simulatedData);
-      setChartData(simulatedData);
-    },
-  });
+    setChartData(newChartData);
+    console.log("chart data: ", chartData);
+  }, [formData]);
 
   return (
     <Container className="border-b-2 border-accent">
@@ -81,174 +56,102 @@ const GuidedPortofolio = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardContent className="h-full">
-            <form
-              id="guided_portofolio_form"
-              onSubmit={(e) => {
-                e.preventDefault();
-                form.handleSubmit();
-              }}
-              className="h-full flex-col justify-between flex"
-            >
-              <FieldGroup>
-                <form.Field name="current_savings">
-                  {(field) => {
-                    const isInvalid =
-                      field.state.meta.isTouched && !field.state.meta.isValid;
-                    return (
-                      <Field
-                        data-invalid={isInvalid}
-                        className="flex flex-col gap-2"
-                      >
-                        <FieldLabel htmlFor={field.name}>
-                          Tabunganku sekarang isinya
-                        </FieldLabel>
-                        <InputGroup>
-                          <InputGroupInput
-                            id={field.name}
-                            name={field.name}
-                            type="number"
-                            value={
-                              isNaN(field.state.value) ? "" : field.state.value
-                            }
-                            onBlur={field.handleBlur}
-                            onChange={(e) =>
-                              field.handleChange(e.target.valueAsNumber)
-                            }
-                            aria-invalid={isInvalid}
-                            placeholder="15 000 000"
-                            autoComplete="off"
-                          />
-                          <InputGroupAddon>Rp</InputGroupAddon>
-                          <InputGroupAddon align={`inline-end`}>
-                            IDR
-                          </InputGroupAddon>
-                        </InputGroup>
-                        {isInvalid && (
-                          <FieldError errors={field.state.meta.errors} />
-                        )}
-                      </Field>
-                    );
-                  }}
-                </form.Field>
-
-                <form.Field name="savings_per_month">
-                  {(field) => {
-                    const isInvalid =
-                      field.state.meta.isTouched && !field.state.meta.isValid;
-                    return (
-                      <Field
-                        data-invalid={isInvalid}
-                        className="flex flex-col gap-2"
-                      >
-                        <FieldLabel htmlFor={field.name}>
-                          Mau nabung per bulan
-                        </FieldLabel>
-                        <InputGroup>
-                          <InputGroupInput
-                            id={field.name}
-                            name={field.name}
-                            type="number"
-                            value={
-                              isNaN(field.state.value) ? "" : field.state.value
-                            }
-                            onBlur={field.handleBlur}
-                            onChange={(e) =>
-                              field.handleChange(e.target.valueAsNumber)
-                            }
-                            aria-invalid={isInvalid}
-                            placeholder="100 000"
-                            autoComplete="off"
-                          />
-                          <InputGroupAddon>Rp</InputGroupAddon>
-                          <InputGroupAddon align={`inline-end`}>
-                            IDR
-                          </InputGroupAddon>
-                        </InputGroup>
-                        {isInvalid && (
-                          <FieldError errors={field.state.meta.errors} />
-                        )}
-                      </Field>
-                    );
-                  }}
-                </form.Field>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <form.Field name="risk">
-                    {(field) => {
-                      const isInvalid =
-                        field.state.meta.isTouched && !field.state.meta.isValid;
-                      return (
-                        <Field data-invalid={isInvalid}>
-                          <FieldLabel>Risiko</FieldLabel>
-                          <Select
-                            name={field.name}
-                            value={field.state.value}
-                            onValueChange={field.handleChange}
-                            aria-invalid={isInvalid}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Pilih risiko" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="high">Tinggi</SelectItem>
-                              <SelectItem value="medium">Medium</SelectItem>
-                              <SelectItem value="low">Rendah</SelectItem>
-                            </SelectContent>
-                          </Select>
-
-                          {isInvalid && (
-                            <FieldError errors={field.state.meta.errors} />
-                          )}
-                        </Field>
-                      );
+            <FieldGroup>
+              <Field className="flex flex-col gap-2">
+                <FieldLabel>Tabunganku sekarang isinya</FieldLabel>
+                <InputGroup>
+                  <InputGroupMaskInput
+                    name={"current_savings"}
+                    mask={"currency"}
+                    currency={"IDR"}
+                    locale={"id-ID"}
+                    placeholder={"Rp 1.000.000"}
+                    value={formData.currentSavings}
+                    autoComplete="off"
+                    onValueChange={(_, unmaskedValue) => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        currentSavings: unmaskedValue,
+                      }));
                     }}
-                  </form.Field>
+                  />
+                  <InputGroupAddon align={`inline-end`}>IDR</InputGroupAddon>
+                </InputGroup>
+              </Field>
 
-                  <form.Field name="product">
-                    {(field) => {
-                      const isInvalid =
-                        field.state.meta.isTouched && !field.state.meta.isValid;
-                      return (
-                        <Field data-invalid={isInvalid}>
-                          <FieldLabel>Produk</FieldLabel>
-                          <Select
-                            name={field.name}
-                            value={field.state.value}
-                            onValueChange={field.handleChange}
-                            aria-invalid={isInvalid}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Pilih produk" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="mixed">Campur</SelectItem>
-                              <SelectItem value="mutual_fund">
-                                Reksadana
-                              </SelectItem>
-                              <SelectItem value="stocks">Saham</SelectItem>
-                              <SelectItem value="obligation">
-                                Obligasi
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
-                          {isInvalid && (
-                            <FieldError errors={field.state.meta.errors} />
-                          )}
-                        </Field>
-                      );
+              <Field className="flex flex-col gap-2">
+                <FieldLabel>Mau nabung per bulan</FieldLabel>
+                <InputGroup>
+                  <InputGroupMaskInput
+                    name={"savings_per_month"}
+                    mask={"currency"}
+                    currency={"IDR"}
+                    locale={"id-ID"}
+                    value={formData.savingsPerMonth}
+                    placeholder={"Rp 100.000"}
+                    autoComplete="off"
+                    onValueChange={(_, unmaskedValue) => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        savingsPerMonth: unmaskedValue,
+                      }));
                     }}
-                  </form.Field>
-                </div>
-              </FieldGroup>
+                  />
+                  <InputGroupAddon align={`inline-end`}>IDR</InputGroupAddon>
+                </InputGroup>
+              </Field>
 
-              <Button
-                type="submit"
-                form="guided_portofolio_form"
-                className="w-full mt-4"
-              >
-                Hitung Investasiku
-              </Button>
-            </form>
+              <div className="grid grid-cols-2 gap-2">
+                <Field>
+                  <FieldLabel>Risiko</FieldLabel>
+                  <Select
+                    name={"risk"}
+                    value={formData.risk}
+                    onValueChange={(value) => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        risk: value as "low" | "medium" | "high",
+                      }));
+                    }}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Pilih risiko" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="high">Tinggi</SelectItem>
+                      <SelectItem value="medium">Medium</SelectItem>
+                      <SelectItem value="low">Rendah</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </Field>
+
+                <Field>
+                  <FieldLabel>Produk</FieldLabel>
+                  <Select
+                    name={`product`}
+                    value={formData.product}
+                    onValueChange={(value) => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        product: value as
+                          | "mixed"
+                          | "stocks"
+                          | "mutual_fund"
+                          | "obligation",
+                      }));
+                    }}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Pilih produk" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="mixed">Campur</SelectItem>
+                      <SelectItem value="mutual_fund">Reksadana</SelectItem>
+                      <SelectItem value="stocks">Saham</SelectItem>
+                      <SelectItem value="obligation">Obligasi</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </Field>
+              </div>
+            </FieldGroup>
           </CardContent>
         </Card>
 
