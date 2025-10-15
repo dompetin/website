@@ -90,9 +90,8 @@ const GuidedPortofolio = () => {
               className="h-full flex-col justify-between flex"
             >
               <FieldGroup>
-                <form.Field
-                  name="current_savings"
-                  children={(field) => {
+                <form.Field name="current_savings">
+                  {(field) => {
                     const isInvalid =
                       field.state.meta.isTouched && !field.state.meta.isValid;
                     return (
@@ -130,11 +129,10 @@ const GuidedPortofolio = () => {
                       </Field>
                     );
                   }}
-                />
+                </form.Field>
 
-                <form.Field
-                  name="savings_per_month"
-                  children={(field) => {
+                <form.Field name="savings_per_month">
+                  {(field) => {
                     const isInvalid =
                       field.state.meta.isTouched && !field.state.meta.isValid;
                     return (
@@ -172,12 +170,11 @@ const GuidedPortofolio = () => {
                       </Field>
                     );
                   }}
-                />
+                </form.Field>
 
                 <div className="grid grid-cols-2 gap-2">
-                  <form.Field
-                    name="risk"
-                    children={(field) => {
+                  <form.Field name="risk">
+                    {(field) => {
                       const isInvalid =
                         field.state.meta.isTouched && !field.state.meta.isValid;
                       return (
@@ -205,11 +202,10 @@ const GuidedPortofolio = () => {
                         </Field>
                       );
                     }}
-                  />
+                  </form.Field>
 
-                  <form.Field
-                    name="product"
-                    children={(field) => {
+                  <form.Field name="product">
+                    {(field) => {
                       const isInvalid =
                         field.state.meta.isTouched && !field.state.meta.isValid;
                       return (
@@ -241,7 +237,7 @@ const GuidedPortofolio = () => {
                         </Field>
                       );
                     }}
-                  />
+                  </form.Field>
                 </div>
               </FieldGroup>
 
