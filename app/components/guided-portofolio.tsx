@@ -44,7 +44,6 @@ const GuidedPortofolio = () => {
     });
 
     setChartData(newChartData);
-    console.log("chart data: ", chartData);
   }, [formData]);
 
   return (

@@ -1,6 +1,7 @@
 "use client";
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -13,6 +14,15 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { formatCurrency } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
@@ -24,22 +34,27 @@ const chartConfig = {
   },
   moneyWithoutInvesting: {
     label: "Without Investing",
-    color: "var(--destructive)",
+    color: "var(--chart-5)",
   },
 } satisfies ChartConfig;
 
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 const PortofolioChart = ({ data }: { data: any[] }) => {
   const [savedMoney, setSavedMoney] = useState<number | undefined>(undefined);
+  const [timeRange, setTimeRange] = useState<string>("5y");
 
   useEffect(() => {
     if (data.length > 0) {
       const latestDataPoint = data[data.length - 1];
-      setSavedMoney(
-        latestDataPoint.moneyWithInvesting -
-        latestDataPoint.moneyWithoutInvesting,
-      );
-      console.log("saved money: ", savedMoney);
+      if (
+        "moneyWithInvesting" in latestDataPoint &&
+        "moneyWithoutInvesting" in latestDataPoint
+      ) {
+        setSavedMoney(
+          latestDataPoint.moneyWithInvesting -
+          latestDataPoint.moneyWithoutInvesting,
+        );
+      }
     }
   }, [data]);
 
@@ -56,6 +71,23 @@ const PortofolioChart = ({ data }: { data: any[] }) => {
             <>Ayo mulai menabung dan blablabla!</>
           )}
         </CardDescription>
+        <CardAction>
+          <Select defaultValue="5y">
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Pilih jangka waktu" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Jangka waktu</SelectLabel>
+                <SelectItem value="1y">1 thn</SelectItem>
+                <SelectItem value="3y">3 thn</SelectItem>
+                <SelectItem value="5y">5 thn</SelectItem>
+                <SelectItem value="10y">10 thn</SelectItem>
+                <SelectItem value="25y">25 thn</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </CardAction>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -85,18 +117,22 @@ const PortofolioChart = ({ data }: { data: any[] }) => {
               content={<ChartTooltipContent indicator="dot" hideLabel />}
             />
             <Area
-              dataKey="moneyWithInvesting"
-              type="natural"
-              fill="url(#fillMoneyWithInvesting)"
-              fillOpacity={0.4}
-              stroke="var(--color-moneyWithInvesting)"
-            />
-            <Area
               dataKey="moneyWithoutInvesting"
               type="natural"
               fill="url(#fillMoneyWithoutInvesting)"
+              // fill="var(--color-moneyWithoutInvesting)"
               fillOpacity={0.4}
               stroke="var(--color-moneyWithoutInvesting)"
+              stackId={"a"}
+            />
+            <Area
+              dataKey="moneyWithInvesting"
+              type="natural"
+              fill="url(#fillMoneyWithInvesting)"
+              // fill="var(--color-moneyWithInvesting)"
+              fillOpacity={0.4}
+              stroke="var(--color-moneyWithInvesting)"
+              stackId={"a"}
             />
             <ChartLegend content={<ChartLegendContent />} />
             <defs>
@@ -127,12 +163,12 @@ const PortofolioChart = ({ data }: { data: any[] }) => {
               >
                 <stop
                   offset="5%"
-                  stopColor="var(--color-destructive)"
+                  stopColor="var(--color-white)"
                   stopOpacity={0.8}
                 />
                 <stop
                   offset="95%"
-                  stopColor="var(--color-desctructive)"
+                  stopColor="var(--color-white)"
                   stopOpacity={0.1}
                 />
               </linearGradient>
