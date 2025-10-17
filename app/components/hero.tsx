@@ -27,7 +27,7 @@ const Hero = () => (
 
       <p className="mt-10">Mau tau portofolio yang cocok untuk kamu?</p>
       <Button className="font-semibold w-fit" asChild>
-        <Link href="/quiz">
+        <Link href="/survey">
           Cari tahu sekarang
           <ArrowRight />
         </Link>
