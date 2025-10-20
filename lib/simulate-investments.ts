@@ -1,43 +1,72 @@
 export interface InvestmentSimulationParams {
   currentSavings: number;
   savingsPerMonth: number;
-  risk: "low" | "medium" | "high";
   product: "mixed" | "stocks" | "mutual_fund" | "obligation";
 }
 
 export interface InvestmentSimulationResult {
   year: number;
-  moneyWithInvesting: number;
+  moneyWithInvestingMax: number;
+  moneyWithInvestingMin: number;
   moneyWithoutInvesting: number;
 }
+
+const productMap = {
+  obligation: {
+    min: 0.01,
+    max: 0.02,
+  },
+  mixed: {
+    min: 0.03,
+    max: 0.05,
+  },
+  mutual_fund: {
+    min: 0.05,
+    max: 0.07,
+  },
+  stocks: {
+    min: 0.07,
+    max: 0.1,
+  },
+};
 
 export function simulateInvestments(
   data: InvestmentSimulationParams,
 ): InvestmentSimulationResult[] {
   const newChartData: InvestmentSimulationResult[] = [];
+  const initialYear = new Date().getFullYear();
 
-  // generate new data (dummy data for now)
-  for (let year = 2025; year <= 2030; year++) {
-    let investedValue, nonInvestedValue;
+  const baseReturn = productMap[data.product];
+
+  for (let year = initialYear; year <= initialYear + 10; year++) {
+    let investedMin, investedMax, nonInvested;
+    // if it's the first year, just set the initial savings
     if (year === 2025) {
-      investedValue = data.currentSavings;
-      nonInvestedValue = data.currentSavings;
+      investedMin = data.currentSavings;
+      investedMax = data.currentSavings;
+      nonInvested = data.currentSavings;
     } else {
-      // add a natural error rate to simulate market fluctuations
-      investedValue =
-        newChartData[newChartData.length - 1].moneyWithInvesting *
-        (1.07 + Math.random() * 0.02) +
+      investedMin =
+        newChartData[newChartData.length - 1].moneyWithInvestingMin *
+        (1 + baseReturn.min) +
         data.savingsPerMonth * 12;
-      nonInvestedValue =
+
+      investedMax =
+        newChartData[newChartData.length - 1].moneyWithInvestingMax *
+        (1 + baseReturn.max) +
+        data.savingsPerMonth * 12;
+
+      nonInvested =
         newChartData[newChartData.length - 1].moneyWithoutInvesting *
-        (0.95 + Math.random() * 0.05) +
+        (1 - 0.025) +
         data.savingsPerMonth * 12;
     }
 
     newChartData.push({
       year,
-      moneyWithInvesting: Math.trunc(investedValue),
-      moneyWithoutInvesting: Math.trunc(nonInvestedValue),
+      moneyWithInvestingMax: Math.trunc(investedMax),
+      moneyWithInvestingMin: Math.trunc(investedMin),
+      moneyWithoutInvesting: Math.trunc(nonInvested),
     });
   }
 
