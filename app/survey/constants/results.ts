@@ -8,7 +8,7 @@ export interface ResultDescriptionsMap {
 
 export const resultDescriptions: ResultDescriptionsMap = {
   Conservative: {
-    title: "Tipe Aman",
+    title: "Aman",
     description:
       "Kamu lebih suka menjaga kestabilan dan keamanan finansial. Pilihanmu cenderung konservatif dan minim risiko.",
     recommendations: [
@@ -18,13 +18,13 @@ export const resultDescriptions: ResultDescriptionsMap = {
     ],
   },
   Balanced: {
-    title: "Tipe Seimbang",
+    title: "Seimbang",
     description:
       "Kamu punya keseimbangan antara keamanan dan potensi keuntungan. Tahu kapan harus ambil risiko.",
     recommendations: ["Reksa Dana Campuran", "Saham Blue Chip", "Properti"],
   },
   Aggressive: {
-    title: "Tipe Agresif",
+    title: "Agresif",
     description:
       "Kamu berani ambil risiko demi hasil lebih tinggi. Cocok untuk investasi jangka panjang dengan potensi besar.",
     recommendations: [

@@ -7,10 +7,10 @@ export function QuizProgress() {
   const progress = ((current + 1) / total) * 100;
 
   return (
-    <div className="mb-4">
+    <div className="mb-10 min-w-4xl">
       <div className="flex justify-between text-sm mb-1">
         <span>
-          Pertanyaan {current + 1} dari {total}
+          {current + 1} dari {total} Soal
         </span>
         <span>{progress.toFixed(0)}%</span>
       </div>
