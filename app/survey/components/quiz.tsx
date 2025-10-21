@@ -78,14 +78,7 @@ export function Quiz() {
         e.preventDefault();
         const selected = question.options[index];
         if (selected) {
-          setAnswer(
-            question.id,
-            String(
-              typeof selected.score === "number"
-                ? selected.score
-                : selected.text,
-            ),
-          );
+          setAnswer(question.id, selected.text);
         }
       }
     }
@@ -93,7 +86,7 @@ export function Quiz() {
 
   return (
     <div
-      className="flex items-center justify-start flex-col mt-32"
+      className="flex items-center justify-start flex-col mt-32 focus:outline-none"
       tabIndex={0}
       ref={containerRef}
       onKeyDown={handleKeyDown}
@@ -116,14 +109,7 @@ export function Quiz() {
               return (
                 <Button
                   key={opt.text}
-                  onClick={() =>
-                    setAnswer(
-                      question.id,
-                      String(
-                        typeof opt.score === "number" ? opt.score : opt.text,
-                      ),
-                    )
-                  }
+                  onClick={() => setAnswer(question.id, opt.text)}
                   aria-pressed={isSelected}
                   role="listitem"
                   className={`w-full p-2 border rounded text-left flex items-center justify-start gap-x-3 ${
@@ -148,7 +134,6 @@ export function Quiz() {
             value={answers[question.id] || ""}
             onChange={(e) => setAnswer(question.id, e.target.value)}
             onKeyDown={(e) => {
-              // keep enter handling local to the input as well
               if (e.key === "Enter" && trimmedAnswer.length > 0) {
                 e.preventDefault();
                 onNext();
