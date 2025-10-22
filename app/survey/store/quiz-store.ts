@@ -44,7 +44,7 @@ export const useQuizStore = create<QuizState>((set, get) => ({
     const allAnswers = Object.values(get().answers);
 
     const numericScores = allAnswers.filter(
-      (v): v is number => typeof v === "number",
+      (v): v is number => typeof v === "number"
     );
 
     const scorableCount = questions.filter((q) => q.type === "choice").length;

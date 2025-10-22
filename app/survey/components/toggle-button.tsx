@@ -22,10 +22,10 @@ export function ToggleButton({
   total,
 }: ToggleButtonProps) {
   return (
-    <>
+    <div className="w-full fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 flex justify-between items-center z-50 shadow-lg md:relative md:bottom-auto md:left-auto md:right-auto md:border-t-0 md:shadow-none md:bg-transparent md:p-0 md:mt-8">
       <Button
         size="icon"
-        className="mt-4 p-2 bg-blue-500 text-white rounded mb-0 absolute bottom-10 left-70"
+        className="bg-purple-200 text-primary hover:bg-purple-300 rounded-full p-3"
         onClick={onPrevious}
         disabled={!canGoBack}
         aria-disabled={!canGoBack}
@@ -36,24 +36,31 @@ export function ToggleButton({
       </Button>
 
       <Button
-        className="mt-4 p-2 bg-blue-500 text-white rounded mb-0 absolute bottom-10 right-70"
-        onClick={onNext}
+        className="px-8 py-3"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          if (canProceed) {
+            onNext();
+          }
+        }}
+        variant="quiz-toggle"
         disabled={!canProceed}
         aria-disabled={!canProceed}
         aria-label={current === total - 1 ? "Lihat hasil" : "Selanjutnya"}
         title={current === total - 1 ? "Lihat Hasil" : "Selanjutnya"}
       >
         {current === total - 1 ? (
-          <span className="flex items-center">
+          <span className="flex items-center gap-2">
             Lihat Hasil <ChevronRightIcon />
           </span>
         ) : (
-          <span className="flex items-center gap-x-2">
+          <span className="flex items-center gap-2">
             Selanjutnya
             <ChevronRightIcon />
           </span>
         )}
       </Button>
-    </>
+    </div>
   );
 }

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useQuizStore } from "../store/quiz-store";
 import { resultDescriptions } from "../constants/results";
 import Container from "@/components/container";
+import Image from "next/image";
 
 const riskLevel: Record<number, string> = {
   1: "Beginner",
@@ -29,13 +30,22 @@ export function ResultScreen() {
 
   return (
     <main>
-      <section className="min-h-[500px] flex items-center justify-center flex-col text-center">
-        <h1 className="mt-48">
-          Kamu adalah...
-          <br />
-          Investor {result.title}
-        </h1>
-        <p className="text-gray-700 mt-2">{result.description}</p>
+      <section className="flex items-center justify-end flex-col text-center rounded-b-[5rem] overflow-hidden">
+        <Image
+          src="/avatar.png"
+          alt="Result Image"
+          width={200}
+          height={200}
+          className="translate-y-28"
+        />
+        <Container className="bg-purple-600 w-full min-h-[300px] mb-0">
+          <h1 className="mt-48">
+            Kamu adalah...
+            <br />
+            Investor {result.title}
+          </h1>
+          <p className="text-gray-700 mt-2">{result.description}</p>
+        </Container>
       </section>
       <Container className="flex flex-col items-center justify-center">
         <h2 className="text-2xl lg:text-4xl font-bold mb-10">

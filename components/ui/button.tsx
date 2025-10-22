@@ -19,6 +19,8 @@ const buttonVariants = cva(
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-foreground underline-offset-4 hover:underline",
+        "quiz-toggle":
+          "bg-primary text-primary-foreground hover:bg-primary/90 rounded-2xl px-6 py-3 font-medium",
       },
       size: {
         default: "h-9 px-8 py-2",
@@ -33,7 +35,7 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
     },
-  },
+  }
 );
 
 function Button({
