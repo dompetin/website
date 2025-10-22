@@ -42,7 +42,7 @@ const PortofolioChart = ({ data }: { data: InvestmentSimulationResult[] }) => {
   }, [data]);
 
   return (
-    <>
+    <div className="flex flex-col items-center w-full">
       <div className="flex flex-col items-center gap-2 mt-6">
         <p className="text-sm">
           Uang yang kamu dompetin selama{" "}
@@ -75,15 +75,14 @@ const PortofolioChart = ({ data }: { data: InvestmentSimulationResult[] }) => {
         </div>
       </div>
 
-      <ChartContainer config={chartConfig}>
+      <ChartContainer config={chartConfig} className="aspect-video w-full">
         <AreaChart
           accessibilityLayer
           data={data}
           margin={{
             left: 12,
             right: 12,
-          }}
-        >
+          }}>
           <CartesianGrid vertical={false} />
           <XAxis
             dataKey="year"
@@ -91,12 +90,14 @@ const PortofolioChart = ({ data }: { data: InvestmentSimulationResult[] }) => {
             axisLine={false}
             tickMargin={2}
           />
-<YAxis
+          <YAxis
             orientation="right"
             tickLine={false}
             axisLine={false}
             tickMargin={2}
-            tickFormatter={(value) => formatCurrency(value / 10 ** 6, "decimal") + " jt"}
+            tickFormatter={(value) =>
+              formatCurrency(value / 10 ** 6, "decimal") + " jt"
+            }
           />
           <ChartTooltip
             cursor={false}
@@ -128,7 +129,7 @@ const PortofolioChart = ({ data }: { data: InvestmentSimulationResult[] }) => {
           />
         </AreaChart>
       </ChartContainer>
-    </>
+    </div>
   );
 };
 
