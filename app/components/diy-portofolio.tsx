@@ -23,33 +23,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { InvestmentSimulationResult } from "@/lib/simulate-investments";
 import PortofolioChart from "./portofolio-chart";
-
-const assetCatalog = {
-  reksadana_pasar_uang: {
-    label: "Reksadana Pasar Uang",
-    minReturn: 0.03,
-    maxReturn: 0.045,
-  },
-  saham_as: {
-    label: "Saham AS",
-    minReturn: 0.06,
-    maxReturn: 0.1,
-  },
-  obligasi: {
-    label: "Obligasi",
-    minReturn: 0.04,
-    maxReturn: 0.06,
-  },
-  saham_indonesia: {
-    label: "Saham Indonesia",
-    minReturn: 0.05,
-    maxReturn: 0.085,
-  },
-} as const;
-
-type AssetType = keyof typeof assetCatalog;
+import DiyPortfolioInsight from "./diy-portfolio-insight";
+import {
+  SIMULATION_HORIZON_YEARS,
+  analyzeCustomPortfolio,
+  assetCatalog,
+  AssetType,
+  simulateCustomPortfolio,
+} from "@/lib/custom-portfolio";
+import { InvestmentSimulationResult } from "@/lib/simulate-investments";
 
 type AssetAllocationRow = {
   id: string;
@@ -67,53 +50,6 @@ const generateRowId = () =>
     ? crypto.randomUUID()
     : Math.random().toString(36).slice(2, 9);
 
-interface SimulationInputs {
-  currentSavings: number;
-  savingsPerMonth: number;
-  minReturn: number;
-  maxReturn: number;
-}
-
-const SIMULATION_HORIZON_YEARS = 25;
-
-const simulateCustomPortfolio = ({
-  currentSavings,
-  savingsPerMonth,
-  minReturn,
-  maxReturn,
-}: SimulationInputs): InvestmentSimulationResult[] => {
-  const startYear = new Date().getFullYear();
-  const yearlyContribution = savingsPerMonth * 12;
-
-  let minBalance = currentSavings;
-  let maxBalance = currentSavings;
-  let savingsBalance = currentSavings;
-
-  const results: InvestmentSimulationResult[] = [
-    {
-      year: startYear,
-      moneyWithInvestingMin: Math.trunc(minBalance),
-      moneyWithInvestingMax: Math.trunc(maxBalance),
-      moneyWithoutInvesting: Math.trunc(savingsBalance),
-    },
-  ];
-
-  for (let yearIndex = 1; yearIndex <= SIMULATION_HORIZON_YEARS; yearIndex++) {
-    minBalance = minBalance * (1 + minReturn) + yearlyContribution;
-    maxBalance = maxBalance * (1 + maxReturn) + yearlyContribution;
-    savingsBalance = savingsBalance * (1 - 0.025) + yearlyContribution;
-
-    results.push({
-      year: startYear + yearIndex,
-      moneyWithInvestingMin: Math.trunc(minBalance),
-      moneyWithInvestingMax: Math.trunc(maxBalance),
-      moneyWithoutInvesting: Math.trunc(savingsBalance),
-    });
-  }
-
-  return results;
-};
-
 const DiyPortofolio = () => {
   const [assets, setAssets] = useState<AssetAllocationRow[]>(INITIAL_ASSETS);
   const [formData, setFormData] = useState<{
@@ -124,6 +60,9 @@ const DiyPortofolio = () => {
     savingsPerMonth: "100000",
   });
   const [chartData, setChartData] = useState<InvestmentSimulationResult[]>([]);
+  const latestProjection = chartData.length
+    ? chartData[chartData.length - 1]
+    : null;
 
   const allocationStats = useMemo(() => {
     return assets.reduce(
@@ -147,6 +86,26 @@ const DiyPortofolio = () => {
   const totalAllocationRounded = Number(totalAllocation.toFixed(2));
   const allocationIsValid = Math.abs(totalAllocationRounded - 100) <= 0.1;
   const { minReturn, maxReturn } = allocationStats;
+
+  const portfolioAnalysis = useMemo(() => {
+    const allocation = assets.map((assetRow) => ({
+      type: assetRow.type,
+      percentage: Number(assetRow.percentage) || 0,
+    }));
+
+    return analyzeCustomPortfolio({
+      allocation,
+      allocationIsValid,
+      minReturn,
+      maxReturn,
+    });
+  }, [allocationIsValid, assets, maxReturn, minReturn]);
+
+  const totalDeposited = useMemo(() => {
+    const currentSavings = Number(formData.currentSavings) || 0;
+    const savingsPerMonth = Number(formData.savingsPerMonth) || 0;
+    return currentSavings + savingsPerMonth * 12 * SIMULATION_HORIZON_YEARS;
+  }, [formData]);
 
   useEffect(() => {
     const currentSavings = Number(formData.currentSavings) || 0;
@@ -203,7 +162,7 @@ const DiyPortofolio = () => {
         Mau Coba Bikin Portfoliomu Sendiri?
       </h2>
 
-      <div className="flex gap-6 justify-between w-full mt-6">
+      <div className="flex flex-col md:flex-row gap-6 justify-between w-full mt-6">
         <div className="flex flex-col w-full gap-6 ">
           <FieldGroup className="flex flex-row flex-wrap gap-3">
             <Field className="flex-1">
@@ -341,6 +300,13 @@ const DiyPortofolio = () => {
         </div>
         <PortofolioChart data={chartData} />
       </div>
+
+      <DiyPortfolioInsight
+        analysis={portfolioAnalysis}
+        latestProjection={latestProjection}
+        totalDeposited={totalDeposited}
+        horizonYears={SIMULATION_HORIZON_YEARS}
+      />
     </Container>
   );
 };
