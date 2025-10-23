@@ -12,12 +12,12 @@ const Hero = () => (
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
-        className="text-4xl font-medium"
+        className="text-2xl md:text-4xl font-medium"
       >
         Ada Uang Sisa?
       </m.h2>
       <m.h1
-        className="text-7xl font-bold"
+        className="text-5xl md:text-7xl font-bold"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}

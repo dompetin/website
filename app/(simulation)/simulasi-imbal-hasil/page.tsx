@@ -1,4 +1,4 @@
-import GuidedPortofolio from "@/app/components/guided-portofolio";
+import GuidedPortofolio from "../components/guided-portofolio";
 
 const InvestmentReturnSimulationPage = () => {
   return (

@@ -35,15 +35,21 @@ const Navbar = () => {
           Dompetin
         </Link>
 
-        <div className="flex gap-4">
-          {LINKS.map((link) => (
-            <Button key={link.href} variant="ghost" asChild>
-              <Link href={link.href}>{link.name}</Link>
-            </Button>
-          ))}
-        </div>
+        <DesktopLinks />
       </div>
     </nav>
+  );
+};
+
+const DesktopLinks = () => {
+  return (
+    <div className="flex gap-4 max-md:hidden">
+      {LINKS.map((link) => (
+        <Button key={link.href} variant="ghost" asChild>
+          <Link href={link.href}>{link.name}</Link>
+        </Button>
+      ))}
+    </div>
   );
 };
 

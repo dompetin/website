@@ -1,4 +1,4 @@
-import DiyPortofolio from "@/app/components/diy-portofolio";
+import DiyPortofolio from "../components/diy-portofolio";
 
 const PortofolioSimulationPage = () => {
   return (
