@@ -9,7 +9,7 @@ import { ResultScreen } from "./result-screen";
 import { ToggleButton } from "./toggle-button";
 
 export function Quiz() {
-  const { current, total, answers, setAnswer, onPrevious, onNext } =
+const { current, total, answers, setAnswer, onPrevious, onNext } =
     useQuizStore();
   const question = questions[current];
   const rawAnswer = answers[question?.id] ?? "";
@@ -148,8 +148,8 @@ export function Quiz() {
                         // role="listitem"
                         className={`w-full px-4 py-2 border-2 rounded-2xl text-left flex items-center justify-start gap-4 text-xs sm:text-sm lg:text-base transition-all duration-200 h-auto ${
                           isSelected
-                            ? "bg-primary text-white border-primary shadow-lg"
-                            : "bg-white text-gray-700 border-gray-200 hover:border-primary hover:shadow-md"
+                            ? "bg-primary text-white border-primary shadow-lg hover:bg-primary hover:text-white"
+                            : "bg-white text-gray-700 border-gray-200 hover:bg-white hover:text-gray-700"
                         }`}
                       >
                         <span className="flex-1 break-words whitespace-pre-line">

@@ -65,8 +65,19 @@ export const useQuizStore = create<QuizState>((set, get) => ({
   getResult: () => {
     const numeric = get().getNumericResult();
 
-    if (numeric >= 1 && numeric <= 3) return "Conservative";
-    if (numeric >= 4 && numeric <= 6) return "Balanced";
-    return "Aggressive";
+    // Map numeric scores to specific investor types
+    if (numeric === 1) return "Conservative";
+    if (numeric === 2) return "Conservative2";
+    if (numeric === 3) return "Conservative3";
+    if (numeric === 4) return "Balanced";
+    if (numeric === 5) return "Balanced2";
+    if (numeric === 6) return "Balanced3";
+    if (numeric === 7) return "Aggressive";
+    if (numeric === 8) return "Aggressive2";
+    if (numeric === 9) return "Aggressive3";
+    if (numeric === 10) return "Aggressive4";
+
+    // Fallback
+    return "Balanced";
   },
 }));
