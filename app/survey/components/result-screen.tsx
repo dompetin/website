@@ -26,57 +26,15 @@ export function ResultScreen() {
   }));
 
   return (
-    <main className="min-h-screen bg-white">
-      {/* Header Section with Purple Background */}
-      <section className="relative bg-gradient-to-br from-purple-600 to-purple-800 overflow-visible min-h-screen">
+    <main className="bg-white">
+      <section className="rounded-b-[5rem] min-h-screen bg-gradient-to-t from-purple-500 to-transparent flex flex-col overflow-hidden">
+        a
         <div
-          style={{
-            borderBottomLeftRadius: "5rem",
-            borderBottomRightRadius: "5rem",
-            clipPath: "ellipse(140% 90% at 50% 120%)",
-          }}
-          className="bg-white"
-        ></div>
-
-        {/* Background decorative elements */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-10 left-10 w-8 h-8 bg-purple-300 rounded-full"></div>
-          <div className="absolute top-20 right-20 w-6 h-6 bg-purple-400 rounded-full"></div>
-          <div className="absolute bottom-20 left-20 w-4 h-4 bg-purple-300 rounded-full"></div>
-          <div className="absolute bottom-10 right-10 w-10 h-10 bg-purple-400 rounded-full"></div>
-          <div className="absolute top-1/2 left-1/4 w-3 h-3 bg-purple-300 rounded-full"></div>
-          <div className="absolute top-1/3 right-1/3 w-5 h-5 bg-purple-400 rounded-full"></div>
+          className=" mb-0 mt-auto text-center bg-purple-700 min-h-[30dvh] lg:min-h-[50dvh] h-auto flex justify-center items-end overflow-visible"
+          style={{ clipPath: "ellipse(57% 65% at 50% 69%)" }}
+        >
+          a
         </div>
-
-        {/* Main character illustration */}
-        <div className="flex justify-center pt-8 absolute top-0 translate-y-[-50%]">
-          <Image
-            src={`/survey/${
-              numeric >= 1 && numeric <= 3
-                ? "1-3"
-                : numeric >= 4 && numeric <= 6
-                ? "4-6"
-                : numeric >= 7 && numeric <= 10
-                ? "7-10"
-                : "default"
-            }.png`}
-            alt="Investor Character"
-            width={200}
-            height={200}
-            className="z-10"
-          />
-        </div>
-
-        {/* Result text */}
-        <Container className="text-center text-white pb-12">
-          <h1 className="text-lg font-normal mb-2">Kamu adalah...</h1>
-          <h2 className="text-4xl lg:text-5xl font-bold mb-4">
-            Investor {result.title}
-          </h2>
-          <p className="text-white/90 text-sm lg:text-base max-w-2xl mx-auto leading-relaxed">
-            {result.description}
-          </p>
-        </Container>
       </section>
 
       {/* Portfolio Section */}
@@ -88,18 +46,18 @@ export function ResultScreen() {
           <p className="text-gray-600">Level resiko: {result.level}</p>
         </div>
 
-        <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12">
+        <div className="items-center justify-center gap-8 lg:gap-12 grid grid-cols-1 lg:grid-cols-2">
           {/* Donut Chart */}
-          <div className="w-64 h-64 lg:w-80 lg:h-80">
+          <div className="w-64 h-64 lg:w-96 lg:h-96 mx-auto">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
                   data={chartData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={60}
-                  outerRadius={120}
-                  paddingAngle={2}
+                  innerRadius={120}
+                  outerRadius={180}
+                  paddingAngle={0}
                   dataKey="value"
                 >
                   {chartData.map((entry, index) => (
@@ -112,66 +70,63 @@ export function ResultScreen() {
 
           {/* Portfolio Legend */}
           <div className="space-y-4">
+            <div className="w-full flex justify-between items-center">
+              <p>Jenis Aset</p>
+              <p>Alokasi Dana</p>
+            </div>
             {result.portfolio.map((item, index) => (
-              <div key={index} className="flex items-center gap-3">
-                <div
-                  className="w-4 h-4 rounded-full"
-                  style={{ backgroundColor: item.color }}
-                ></div>
-                <div>
+              <div
+                key={index}
+                className="flex items-center gap-3 justify-between"
+              >
+                <div className="flex items-center gap-2 justify-center">
+                  <div
+                    className="w-4 h-4 rounded-full"
+                    style={{ backgroundColor: item.color }}
+                  ></div>
                   <div className="font-medium text-gray-800">{item.asset}</div>
-                  <div className="text-sm text-gray-600">Alokasi dana</div>
-                  <div className="text-lg font-bold text-purple-600">
-                    {item.percentage}%
-                  </div>
+                </div>
+
+                <div className="text-lg font-bold text-purple-600">
+                  {item.percentage}%
                 </div>
               </div>
             ))}
+            <div className="mt-8">
+              <p className="text-gray-600 mb-4">
+                Mau coba bikin portfoliomu sendiri?
+              </p>
+              <Button
+                className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg text-lg font-semibold"
+                onClick={() => (window.location.href = "/simulasi-portofolio")}
+              >
+                Simulasikan sekarang!
+              </Button>
+              <p className="text-xs text-gray-400 mt-4">
+                *Bukan ajakan berinvestasi, selalu lakukan riset sendiri sebelum
+                mengambil keputusan finansial
+              </p>
+            </div>
           </div>
-        </div>
-
-        {/* CTA Button */}
-        <div className="text-center mt-8">
-          <p className="text-gray-600 mb-4">
-            Mau coba bikin portfoliomu sendiri?
-          </p>
-          <Button
-            className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg text-lg font-semibold"
-            onClick={() => (window.location.href = "/simulasi-portofolio")}
-          >
-            Simulasikan sekarang!
-          </Button>
-          <p className="text-xs text-gray-400 mt-4">
-            *Bukan ajakan berinvestasi, selalu lakukan riset sendiri sebelum
-            mengambil keputusan finansial
-          </p>
         </div>
       </Container>
 
       {/* Asset Learning Section */}
-      <Container className="py-12 bg-gray-50">
-        <h2 className="text-2xl lg:text-3xl font-bold text-gray-800 mb-8 text-center">
+      <Container className="py-12">
+        <h2 className="text-2xl lg:text-3xl font-bold text-gray-800 mb-8">
           Yuk pelajari aset berikut!
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="flex flex-wrap items-center gap-6 justify-center lg:grid lg:grid-cols-3 lg:gap-10">
           {result.recommendations.map((asset, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow"
-            >
-              <div className="flex justify-center mb-4">
-                <Image
-                  src={getAssetImage(asset, index)}
-                  alt={`${asset} illustration`}
-                  width={120}
-                  height={120}
-                  className="rounded-lg"
-                />
-              </div>
-              <h3 className="text-lg font-bold text-gray-800 text-center">
-                {asset}
-              </h3>
+            <div key={index} className="items-end flex">
+              <Image
+                src={getAssetImage(asset, index)}
+                alt={`${asset} illustration`}
+                width={250}
+                height={120}
+                className="rounded-lg w-full"
+              />
             </div>
           ))}
         </div>
