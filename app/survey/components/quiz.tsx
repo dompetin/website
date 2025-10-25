@@ -7,9 +7,10 @@ import { useQuizStore } from "../store/quiz-store";
 import { QuizProgress } from "./progress";
 import { ResultScreen } from "./result-screen";
 import { ToggleButton } from "./toggle-button";
+import { Kbd } from "@/components/ui/kbd";
 
 export function Quiz() {
-const { current, total, answers, setAnswer, onPrevious, onNext } =
+  const { current, total, answers, setAnswer, onPrevious, onNext } =
     useQuizStore();
   const question = questions[current];
   const rawAnswer = answers[question?.id] ?? "";
@@ -142,11 +143,11 @@ const { current, total, answers, setAnswer, onPrevious, onNext } =
                         : ans === opt.text;
                     return (
                       <Button
-                        key={opt.text}
+                        key={idx.toString()}
                         onClick={() => setAnswer(question.id, opt.text)}
                         aria-pressed={isSelected}
                         // role="listitem"
-                        className={`w-full px-4 py-2 border-2 rounded-2xl text-left flex items-center justify-start gap-4 text-xs sm:text-sm lg:text-base transition-all duration-200 h-auto ${
+                        className={`w-full px-4 py-2 border-2 rounded-2xl text-left flex items-center justify-start lg:justify-between gap-4 text-xs sm:text-sm lg:text-base transition-all duration-200 h-auto ${
                           isSelected
                             ? "bg-primary text-white border-primary shadow-lg hover:bg-primary hover:text-white"
                             : "bg-white text-gray-700 border-gray-200 hover:bg-white hover:text-gray-700"
@@ -155,10 +156,11 @@ const { current, total, answers, setAnswer, onPrevious, onNext } =
                         <span className="flex-1 break-words whitespace-pre-line">
                           {opt.text}
                         </span>
+                        <Kbd className="lg:flex hidden">{opt.id}</Kbd>
                       </Button>
                     );
                   })}
-                  <p className="text-xs text-gray-500 hidden lg:block mt-4 text-center">
+                  <p className="text-xs text-gray-500 hidden lg:block mt-4 text-end">
                     Tekan angka 1-{Math.min(9, question.options?.length ?? 1)}{" "}
                     untuk memilih jawaban cepat.
                   </p>

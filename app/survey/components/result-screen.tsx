@@ -18,7 +18,6 @@ export function ResultScreen() {
   const numeric = getNumericResult();
   const result = resultDescriptions[category];
 
-  // Prepare data for the pie chart
   const chartData = result.portfolio.map((item) => ({
     name: item.asset,
     value: item.percentage,
@@ -27,13 +26,43 @@ export function ResultScreen() {
 
   return (
     <main className="bg-white">
-      <section className="rounded-b-[5rem] min-h-screen bg-gradient-to-t from-purple-500 to-transparent flex flex-col overflow-hidden">
-        a
+      <section className="relative bg-gradient-to-t from-purple-300 to-transparent flex flex-col mt-48 xl:mt-96 rounded-b-[5rem] max-h-screen">
+        {/* Character image ditempatkan di luar ellipse */}
+        <div className="absolute bottom-54 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
+          <Image
+            src={`/survey/${
+              numeric >= 1 && numeric <= 3
+                ? "1-3"
+                : numeric >= 4 && numeric <= 6
+                  ? "4-6"
+                  : numeric >= 7 && numeric <= 10
+                    ? "7-10"
+                    : "default"
+            }.png`}
+            alt="Investor Character"
+            width={350}
+            height={350}
+            quality={100}
+            className="drop-shadow-xl"
+          />
+        </div>
+
+        {/* Background purple dengan ellipse */}
         <div
-          className=" mb-0 mt-auto text-center bg-purple-700 min-h-[30dvh] lg:min-h-[50dvh] h-auto flex justify-center items-end overflow-visible"
+          className="mt-auto text-center bg-[#601679] min-h-[30dvh] lg:min-h-[50dvh] flex justify-center items-end relative z-10 rounded-b-xl xl:rounded-b-[5rem]"
           style={{ clipPath: "ellipse(57% 65% at 50% 69%)" }}
         >
-          a
+          <Container className="text-center text-white pb-18">
+            <h1 className="text-base sm:text-lg font-normal lg:text-2xl xl:text-3xl text-purple-300">
+              Kamu adalah...
+            </h1>
+            <h2 className="text-4xl lg:text-5xl xl:text-6xl font-bold mt-3 text-white">
+              Investor {result.title}
+            </h2>
+            <p className="text-white/90 text-sm lg:text-base xl:text-lg max-w-2xl xl:max-w-3xl text-pretty mx-auto leading-relaxed mt-8">
+              {result.description}
+            </p>
+          </Container>
         </div>
       </section>
 
@@ -123,8 +152,9 @@ export function ResultScreen() {
               <Image
                 src={getAssetImage(asset, index)}
                 alt={`${asset} illustration`}
-                width={250}
-                height={120}
+                width={550}
+                height={520}
+                quality={100}
                 className="rounded-lg w-full"
               />
             </div>
