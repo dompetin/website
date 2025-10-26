@@ -1,10 +1,10 @@
 "use client";
 import { Card, CardContent } from "@/components/ui/card";
 import {
-    ChartConfig,
-    ChartContainer,
-    ChartTooltip,
-    ChartTooltipContent,
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
 } from "@/components/ui/chart";
 import { InvestmentSimulationResult } from "@/lib/simulate-investments";
 import { formatCurrency } from "@/lib/utils";
@@ -50,7 +50,7 @@ const PortofolioChart = ({ data }: { data: InvestmentSimulationResult[] }) => {
         </p>
 
         <div className="flex max-sm:flex-col gap-2 items-center">
-          <Card>
+          <Card className="">
             <CardContent className="text-sm">
               Jika diinvestasikan menjadi{" "}
               <p className="text-lg text-primary font-bold">

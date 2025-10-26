@@ -33,6 +33,8 @@ import {
   simulateCustomPortfolio,
 } from "@/lib/custom-portfolio";
 import { InvestmentSimulationResult } from "@/lib/simulate-investments";
+import { generateRowId } from "@/lib/utils";
+import { PlusCircle } from "lucide-react";
 
 type AssetAllocationRow = {
   id: string;
@@ -44,11 +46,6 @@ const INITIAL_ASSETS: AssetAllocationRow[] = [
   { id: "asset-0", type: "reksadana_pasar_uang", percentage: "60" },
   { id: "asset-1", type: "obligasi", percentage: "40" },
 ];
-
-const generateRowId = () =>
-  typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
-    ? crypto.randomUUID()
-    : Math.random().toString(36).slice(2, 9);
 
 const DiyPortofolio = () => {
   const [assets, setAssets] = useState<AssetAllocationRow[]>(INITIAL_ASSETS);
@@ -233,7 +230,7 @@ const DiyPortofolio = () => {
                               value as AssetType
                             )
                           }>
-                          <SelectTrigger className="w-full">
+                          <SelectTrigger className="w-full bg-muted text-muted-foreground border-0 justify-center ">
                             <SelectValue
                               placeholder={`Pilih aset ${index + 1}`}
                             />
@@ -276,8 +273,13 @@ const DiyPortofolio = () => {
                 </div>
 
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between pt-3">
-                  <Button variant="outline" size="sm" onClick={handleAddAsset}>
-                    Tambah Aset
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-primary hover:text-primary/80"
+                    onClick={handleAddAsset}>
+                    <PlusCircle />
+                    add item
                   </Button>
                   <span
                     className={`text-sm ${

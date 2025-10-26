@@ -9,6 +9,8 @@ import {
 import {
   ChartConfig,
   ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
@@ -127,6 +129,7 @@ const DiyPortfolioInsight = ({
                     }}
                   />
                 </Pie>
+                <ChartLegend content={<ChartLegendContent nameKey="type" />} />
                 <ChartTooltip
                   cursor={false}
                   content={<ChartTooltipContent hideLabel />}
@@ -140,61 +143,34 @@ const DiyPortfolioInsight = ({
               </p>
             </div>
           )}
-
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
-            <div className="flex items-center gap-3">
-              <span className="font-medium text-foreground">
-                Jenis aset terbesar
-              </span>
-              <span className="flex items-center gap-2">
-                <span
-                  className="h-3 w-3 rounded-full"
-                  style={{
-                    backgroundColor: analysis.topAsset
-                      ? `var(--color-${analysis.topAsset.type})`
-                      : "#d4d4d8",
-                  }}
-                />
-                {analysis.topAsset?.label ?? "Belum ada"}
-              </span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="font-medium text-foreground">Alokasi dana</span>
-              <span className="font-semibold text-foreground">
-                {analysis.topAsset
-                  ? `${analysis.topAsset.percentage.toFixed(1)}%`
-                  : "0%"}
-              </span>
-            </div>
-          </div>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <Card className="relative overflow-hidden rounded-3xl border-0 bg-background/70 shadow-lg">
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-r from-pink-200/70 via-purple-200/60 to-purple-100/60" />
-            <CardContent className="relative flex h-full flex-col justify-end gap-3 pt-24">
-              <CardTitle className="text-lg">Diversifikasi</CardTitle>
-              <CardDescription className="text-sm">
-                {analysis.diversificationNote}
-              </CardDescription>
-              <p className="text-5xl font-semibold">
+        <div className="grid gap-8 md:grid-cols-2">
+          <div className="rounded-3xl overflow-clip flex flex-col shadow-md">
+            <div className="h-28 flex items-center justify-center text-3xl text-center bg-gradient-to-r from-pink-200/70 via-purple-200/60 to-purple-100/60 font-bold">
+              Disverifikasi
+            </div>
+            <div className="bg-white text-center p-6 flex flex-col items-center gap-3">
+              <p className="text-4xl font-bold">
                 {analysis.diversificationScore}/10
               </p>
-            </CardContent>
-          </Card>
 
-          <Card className="relative overflow-hidden rounded-3xl border-0 bg-background/70 shadow-lg">
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-r from-primary/70 via-primary/40 to-indigo-200/50" />
-            <CardContent className="relative flex h-full flex-col justify-end gap-3 pt-24">
-              <CardTitle className="text-lg">Risk-to-Reward Ratio</CardTitle>
-              <CardDescription className="text-sm">
-                {analysis.riskRewardNote}
-              </CardDescription>
-              <p className="text-5xl font-semibold">
+              <p className="text-sm mt-auto">{analysis.diversificationNote}</p>
+            </div>
+          </div>
+
+          <div className="rounded-3xl overflow-clip flex flex-col shadow-md">
+            <div className="h-28 flex items-center justify-center text-3xl text-center bg-gradient-to-r from-primary/70 via-primary/40 to-indigo-200/80 font-bold">
+              Risk-to-Reward Ratio
+            </div>
+            <div className="bg-white text-center p-6 flex flex-col items-center gap-3">
+              <p className="text-4xl font-bold">
                 {analysis.riskRewardScore}/10
               </p>
-            </CardContent>
-          </Card>
+
+              <p className="text-sm mt-auto">{analysis.riskRewardNote}</p>
+            </div>
+          </div>
         </div>
       </div>
 
