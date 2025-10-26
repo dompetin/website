@@ -8,6 +8,7 @@ import { QuizProgress } from "./progress";
 import { ResultScreen } from "./result-screen";
 import { ToggleButton } from "./toggle-button";
 import { Kbd } from "@/components/ui/kbd";
+import Image from "next/image";
 
 export function Quiz() {
   const { current, total, answers, setAnswer, onPrevious, onNext } =
@@ -106,6 +107,15 @@ export function Quiz() {
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br from-purple-100 via-purple-50 to-purple-200 relative overflow-hidden">
+        <Image
+          src="/pattern.png"
+          alt="Background Image"
+          quality={100}
+          width={1920}
+          height={1080}
+          className="absolute inset-0 object-cover bottom-0 top-auto"
+        />
+
         {/* Background decorative elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-20 -right-20 w-80 h-80 bg-purple-200/30 rounded-full blur-3xl"></div>

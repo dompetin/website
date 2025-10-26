@@ -61,12 +61,9 @@ export function ToggleButton({
           title={current === total - 1 ? "Lihat Hasil" : "Selanjutnya"}
         >
           {current === total - 1 ? (
-            <span className="flex items-center gap-4 justify-between">
-              <div className="flex items-center">
-                Lihat Hasil
-                <ChevronRightIcon />
-              </div>
-              <Kbd className="lg:flex hidden">Enter</Kbd>
+            <span className="flex items-center gap-2 justify-between">
+              Lihat Hasil
+              <ChevronRightIcon />
             </span>
           ) : (
             <span className="flex items-center gap-2">

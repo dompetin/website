@@ -27,6 +27,15 @@ export function ResultScreen() {
   return (
     <main className="bg-white">
       <section className="relative bg-gradient-to-t from-purple-300 to-transparent flex flex-col mt-48 xl:mt-96 rounded-b-[5rem] max-h-screen">
+        <Image
+          src="/pattern.png"
+          alt="Background Image"
+          quality={100}
+          width={1920}
+          height={1080}
+          className="absolute inset-0 object-cover bottom-50 top-auto"
+        />
+
         {/* Character image ditempatkan di luar ellipse */}
         <div className="absolute bottom-54 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
           <Image
