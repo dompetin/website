@@ -43,10 +43,10 @@ export function ResultScreen() {
               numeric >= 1 && numeric <= 3
                 ? "1-3"
                 : numeric >= 4 && numeric <= 6
-                  ? "4-6"
-                  : numeric >= 7 && numeric <= 10
-                    ? "7-10"
-                    : "default"
+                ? "4-6"
+                : numeric >= 7 && numeric <= 10
+                ? "7-10"
+                : "default"
             }.png`}
             alt="Investor Character"
             width={350}
@@ -76,7 +76,7 @@ export function ResultScreen() {
       </section>
 
       {/* Portfolio Section */}
-      <Container className="py-12">
+      <Container className="py-12 flex flex-col items-center justify-center">
         <div className="text-center mb-8">
           <h2 className="text-2xl lg:text-3xl font-bold text-gray-800 mb-2">
             Portfolio yang Cocok Untukmu
@@ -84,7 +84,7 @@ export function ResultScreen() {
           <p className="text-gray-600">Level resiko: {result.level}</p>
         </div>
 
-        <div className="items-center justify-center gap-8 lg:gap-12 grid grid-cols-1 lg:grid-cols-2">
+        <div className="items-center justify-center gap-8 lg:gap-12 grid grid-cols-1 lg:grid-cols-2 lg:max-w-none w-full sm:min-w-lg max-w-lg">
           {/* Donut Chart */}
           <div className="w-64 h-64 lg:w-96 lg:h-96 mx-auto">
             <ResponsiveContainer width="100%" height="100%">
@@ -93,8 +93,8 @@ export function ResultScreen() {
                   data={chartData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={120}
-                  outerRadius={180}
+                  innerRadius="55%"
+                  outerRadius="90%"
                   paddingAngle={0}
                   dataKey="value"
                 >
@@ -131,22 +131,23 @@ export function ResultScreen() {
               </div>
             ))}
             <div className="mt-8">
-              <p className="text-gray-600 mb-4">
+              <p className="mb-4 font-bold">
                 Mau coba bikin portfoliomu sendiri?
               </p>
               <Button
-                className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg text-lg font-semibold"
+                size="lg"
+                className="bg-[#A267DD] hover:bg-purple-700 text-white px-8 py-3 rounded-full text-lg font-semibold"
                 onClick={() => (window.location.href = "/simulasi-portofolio")}
               >
                 Simulasikan sekarang!
               </Button>
-              <p className="text-xs text-gray-400 mt-4">
-                *Bukan ajakan berinvestasi, selalu lakukan riset sendiri sebelum
-                mengambil keputusan finansial
-              </p>
             </div>
           </div>
         </div>
+        <p className="text-xs text-gray-400 mt-4 lg:max-w-none w-full sm:min-w-lg max-w-lg">
+          *Bukan ajakan berinvestasi, selalu lakukan riset sendiri sebelum
+          mengambil keputusan finansial
+        </p>
       </Container>
 
       {/* Asset Learning Section */}
