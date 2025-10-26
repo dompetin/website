@@ -26,18 +26,18 @@ export function ResultScreen() {
 
   return (
     <main className="bg-white">
-      <section className="relative bg-gradient-to-t from-purple-300 to-transparent flex flex-col mt-48 xl:mt-96 rounded-b-[5rem] max-h-screen">
+      <section className="relative bg-gradient-to-t from-purple-300 to-transparent flex flex-col mt-48 xl:mt-96 rounded-b-[5rem] min-h-[30rem] max-h-screen">
         <Image
           src="/pattern.png"
           alt="Background Image"
           quality={100}
           width={1920}
           height={1080}
-          className="absolute inset-0 object-cover bottom-50 top-auto"
+          className="absolute inset-0 object-cover rounded-b-[5rem] top-auto"
         />
 
         {/* Character image ditempatkan di luar ellipse */}
-        <div className="absolute bottom-54 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
+        <div className="absolute bottom-32 sm:bottom-40 md:bottom-44 lg:bottom-50 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
           <Image
             src={`/survey/${
               numeric >= 1 && numeric <= 3
@@ -52,23 +52,23 @@ export function ResultScreen() {
             width={350}
             height={350}
             quality={100}
-            className="drop-shadow-xl"
+            className="drop-shadow-xl w-[200px] h-[200px] sm:w-[250px] sm:h-[250px] lg:w-[300px] lg:h-[300px] xl:w-[350px] xl:h-[350px]"
           />
         </div>
 
         {/* Background purple dengan ellipse */}
         <div
-          className="mt-auto text-center bg-[#601679] min-h-[30dvh] lg:min-h-[50dvh] flex justify-center items-end relative z-10 rounded-b-xl xl:rounded-b-[5rem]"
+          className="mt-auto text-center bg-[#601679] min-h-[30vh] sm:min-h-[20rem] md:min-h-[40dvh] lg:min-h-[45dvh] xl:min-h-[30rem] flex justify-center items-end relative z-10 rounded-b-xl xl:rounded-b-[5rem]"
           style={{ clipPath: "ellipse(57% 65% at 50% 69%)" }}
         >
-          <Container className="text-center text-white pb-18">
-            <h1 className="text-base sm:text-lg font-normal lg:text-2xl xl:text-3xl text-purple-300">
+          <Container className="text-center text-white pb-8 sm:pb-12 lg:pb-16">
+            <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-purple-300">
               Kamu adalah...
             </h1>
-            <h2 className="text-4xl lg:text-5xl xl:text-6xl font-bold mt-3 text-white">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-bold -mt-3 sm:mt-3 text-white">
               Investor {result.title}
             </h2>
-            <p className="text-white/90 text-sm lg:text-base xl:text-lg max-w-2xl xl:max-w-3xl text-pretty mx-auto leading-relaxed mt-8">
+            <p className="text-white/90 text-xs sm:text-sm md:text-base lg:text-lg xl:text-lg max-w-2xl xl:max-w-3xl text-pretty mx-auto leading-relaxed sm:mt-6 lg:mt-8 px-4">
               {result.description}
             </p>
           </Container>
