@@ -4,10 +4,11 @@ import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 const LINKS = [
   { name: "Simulasi", href: "/simulasi-imbal-hasil" },
-  { name: "Akademi", href: "/akademi" },
+  { name: "Akademi", href: "/pahamin" },
   { name: "Kupas", href: "/kupas" },
   { name: "Tentang Kami", href: "/tentang" },
 ] as const;
@@ -28,7 +29,8 @@ const Navbar = () => {
     <nav
       className={cn(
         `h-20 bg-background flex justify-center items-center fixed top-0 inset-x-0 transition-all duration-300 ease-out z-50`,
-        isScrolled && "shadow-lg inset-x-6 top-6 rounded-full"
+        isScrolled &&
+          "shadow-lg top-2 inset-x-2 md:inset-x-6 md:top-6 rounded-full"
       )}>
       <div className="flex justify-between items-center w-full px-6 sm:px-8">
         <Link
@@ -45,14 +47,18 @@ const Navbar = () => {
 };
 
 const DesktopLinks = () => {
+  const pathname = usePathname();
+
   return (
-    <div className="flex gap-4 max-md:hidden">
+    <div className="flex gap-1 max-md:hidden">
       {LINKS.map((link) => (
         <Button
           key={link.href}
-          variant="ghost"
+          variant={pathname === link.href ? "default" : "ghost"}
           asChild
-          className="font-bold text-neutral-800">
+          className={`font-bold ${
+            pathname !== link.href && "text-neutral-600"
+          }`}>
           <Link href={link.href}>{link.name}</Link>
         </Button>
       ))}

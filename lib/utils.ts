@@ -13,7 +13,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export function formatCurrency(
   value: number,
-  style: "decimal" | "currency" | "unit" | "percent" = "currency",
+  style: "decimal" | "currency" | "unit" | "percent" = "currency"
 ) {
   const currencyFormatter = new Intl.NumberFormat("id-ID", {
     style: style,
@@ -22,4 +22,11 @@ export function formatCurrency(
   });
 
   return currencyFormatter.format(value);
+}
+
+export function generateRowId() {
+  return typeof crypto !== "undefined" &&
+    typeof crypto.randomUUID === "function"
+    ? crypto.randomUUID()
+    : Math.random().toString(36).slice(2, 9);
 }
