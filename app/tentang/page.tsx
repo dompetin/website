@@ -6,14 +6,6 @@ import Image from "next/image";
 export default function TentangKamiPage() {
   return (
     <main className="min-h-screen flex items-center flex-col justify-center relative">
-      <Image
-        src="/pattern.png"
-        alt="Background Image"
-        quality={100}
-        width={1920}
-        height={1080}
-        className="absolute inset-0 object-cover rotate-180 -z-[1]"
-      />
 
       <Container className="flex items-center justify-center flex-col md:flex-row my-32 gap-8 md:gap-12 lg:gap-16">
         <Image

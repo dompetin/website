@@ -17,7 +17,7 @@ const CONTENT = [
 
 const FinancialMyths = () => (
   <Container className="">
-    <div>
+    <div className="">
       {CONTENT.map((section) => (
         <Section key={section.title} {...section} />
       ))}
@@ -27,8 +27,8 @@ const FinancialMyths = () => (
 );
 
 const Section = (props: (typeof CONTENT)[number]) => (
-  <div className="p-2 flex gap-16 items-center max-w-3xl mx-auto">
-    <div className="size-35 relative shrink-0 bg-neutral-200">
+  <div className="p-2 flex max-md:flex-col max-md:items-center gap-6 md:gap-16 items-center max-w-3xl mx-auto">
+    <div className="size-45 rounded-full relative shrink-0 bg-neutral-200 overflow-clip">
       <Image
         src={props.src}
         alt={props.title}
@@ -37,7 +37,7 @@ const Section = (props: (typeof CONTENT)[number]) => (
       />
     </div>
 
-    <div>
+    <div className="flex flex-col max-md:items-center max-md:text-center">
       <h3 className="text-primary font-bold text-3xl">{props.title}</h3>
       <p className="text-muted-foreground text-xl">{props.description}</p>
     </div>

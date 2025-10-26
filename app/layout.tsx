@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { JetBrains_Mono, Poppins } from "next/font/google";
 import "./globals.css";
 import { MotionProvider } from "@/lib/motion";
+import { Pattern } from "@/components/pattern";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -32,6 +33,7 @@ export default function RootLayout({
       >
         <MotionProvider>
           <Navbar />
+          <Pattern className="rotate-180 h-auto top-0 bottom-auto" />
           {children}
         </MotionProvider>
       </body>
