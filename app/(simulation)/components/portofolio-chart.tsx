@@ -1,15 +1,15 @@
 "use client";
 import { Card, CardContent } from "@/components/ui/card";
 import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
+    ChartConfig,
+    ChartContainer,
+    ChartTooltip,
+    ChartTooltipContent,
 } from "@/components/ui/chart";
 import { InvestmentSimulationResult } from "@/lib/simulate-investments";
 import { formatCurrency } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { Area, AreaChart, XAxis, YAxis } from "recharts";
 
 const chartConfig = {
   moneyWithInvestingMax: {
@@ -83,7 +83,7 @@ const PortofolioChart = ({ data }: { data: InvestmentSimulationResult[] }) => {
             left: 12,
             right: 12,
           }}>
-          <CartesianGrid vertical={false} />
+          {/* <CartesianGrid vertical={false} /> */}
           <XAxis
             dataKey="year"
             tickLine={false}

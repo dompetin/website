@@ -1,11 +1,12 @@
 import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 const BelajarInvestasi = () => (
   <Container className="text-center">
-    <h2 className="text-3xl font-bold text-primary">
+    <h2 className="text-3xl md:text-5xl font-bold text-primary">
       Belajar investasi tanpa risiko
     </h2>
     <p>
@@ -23,21 +24,27 @@ const BelajarInvestasi = () => (
 );
 
 const CardPortofolio = () => (
-  <div className="rounded-xl flex flex-col justify-between gap-6 bg-gradient-to-tl from-pink-300 to-pink-200 p-6">
-    <h3 className="font-bold text-2xl">Mau coba bikin portofoliomu sendiri?</h3>
-    <Button asChild className="ml-auto">
-      <Link href="/simulasi-portofolio">Simulasikan Sekarang</Link>
+  <div className="rounded-2xl shadow-lg flex flex-col justify-between gap-6 bg-gradient-to-tl from-pink-300 to-pink-200 p-6">
+    <h3 className="font-bold text-xl md:text-3xl w-full md:max-w-3/5">
+      Mau coba bikin portofoliomu sendiri?
+    </h3>
+    <Button asChild variant={`secondary`} className="ml-auto">
+      <Link href="/simulasi-portofolio">
+        Simulasikan Sekarang <ChevronRight />
+      </Link>
     </Button>
   </div>
 );
 
 const CardImbal = () => (
-  <div className="rounded-xl flex flex-col justify-between gap-6 bg-gradient-to-tl from-purple-300 to-purple-200 p-6">
-    <h3 className="font-bold text-2xl">
+  <div className="rounded-2xl shadow-lg flex flex-col justify-between gap-6 bg-gradient-to-tl from-purple-300 to-purple-200 p-6">
+    <h3 className="font-bold text-xl md:text-3xl w-full md:max-w-3/5">
       Mau lihat hasil dari emas, saham, dan lainnya?
     </h3>
-    <Button asChild className="ml-auto">
-      <Link href="/simulasi-imbal-hasil">Simulasikan Sekarang</Link>
+    <Button asChild variant={`secondary`} className="ml-auto">
+      <Link href="/simulasi-imbal-hasil">
+        Simulasikan Sekarang <ChevronRight />
+      </Link>
     </Button>
   </div>
 );

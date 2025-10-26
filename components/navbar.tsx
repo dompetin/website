@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 const LINKS = [
   { name: "Simulasi", href: "/simulasi-imbal-hasil" },
@@ -27,11 +28,13 @@ const Navbar = () => {
     <nav
       className={cn(
         `h-20 bg-background flex justify-center items-center fixed top-0 inset-x-0 transition-all duration-300 ease-out z-50`,
-        isScrolled && "shadow-lg inset-x-6 top-6 rounded-full",
-      )}
-    >
+        isScrolled && "shadow-lg inset-x-6 top-6 rounded-full"
+      )}>
       <div className="flex justify-between items-center w-full px-6 sm:px-8">
-        <Link href={`/`} className="font-bold text-lg text-primary">
+        <Link
+          href={`/`}
+          className="font-bold text-lg flex items-center text-secondary">
+          <Image src="/logo.svg" alt="Dompetin" width={32} height={32} />
           Dompetin
         </Link>
 
@@ -45,7 +48,11 @@ const DesktopLinks = () => {
   return (
     <div className="flex gap-4 max-md:hidden">
       {LINKS.map((link) => (
-        <Button key={link.href} variant="ghost" asChild>
+        <Button
+          key={link.href}
+          variant="ghost"
+          asChild
+          className="font-bold text-neutral-800">
           <Link href={link.href}>{link.name}</Link>
         </Button>
       ))}
