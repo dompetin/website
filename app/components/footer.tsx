@@ -52,7 +52,7 @@ const Footer = () => (
       ))}
     </div>
 
-    <Pattern className="z-10 h-auto -bottom-30 bg-gradient-to-b from-secondary to-transparent opacity-30" />
+    <Pattern className="z-10 h-auto -bottom-30 bg-gradient-to-b from-secondary to-transparent opacity-10" />
   </footer>
 );
 

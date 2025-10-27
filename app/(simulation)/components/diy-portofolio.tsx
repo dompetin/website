@@ -154,7 +154,7 @@ const DiyPortofolio = () => {
   };
 
   return (
-    <Container className="border-b-2 max-w-7xl mt-20 border-accent">
+    <Container className="border-b-2 max-w-7xl border-accent">
       <h2 className="text-5xl font-bold">
         Mau Coba Bikin Portfoliomu Sendiri?
       </h2>

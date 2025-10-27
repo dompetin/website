@@ -1,13 +1,14 @@
 import Container from "@/components/container";
+import { Pattern } from "@/components/pattern";
 import Image from "next/image";
 
 // bg-gradient-to-b from-[#E6D8F2] to-30%
 
 export default function TentangKamiPage() {
   return (
-    <main className="min-h-screen flex items-center flex-col justify-center relative">
-
-      <Container className="flex items-center justify-center flex-col md:flex-row my-32 gap-8 md:gap-12 lg:gap-16">
+    <main className="relative flex min-h-screen flex-col items-center justify-center">
+      <Pattern className="top-0 bottom-auto h-auto rotate-180 opacity-50" />
+      <Container className="my-32 flex flex-col items-center justify-center gap-8 md:flex-row md:gap-12 lg:gap-16">
         <Image
           src="/tentang-kami/hero.png"
           alt="Hero Image"
@@ -16,15 +17,15 @@ export default function TentangKamiPage() {
           height={400}
           className="w-full max-w-[280px] sm:max-w-[320px] md:max-w-[360px]"
         />
-        <div className="[&_p]:mt-4 md:[&_p]:mt-6 space-y-4 md:space-y-6">
-          <h1 className="font-bold text-black text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[3rem] mb-8 md:mb-13 leading-none">
+        <div className="space-y-4 md:space-y-6 [&_p]:mt-4 md:[&_p]:mt-6">
+          <h1 className="mb-8 text-4xl leading-none font-bold text-black sm:text-5xl md:mb-13 md:text-6xl lg:text-7xl xl:text-[3rem]">
             Tentang
             <br />{" "}
-            <span className="text-purple-400 text-6xl sm:text-7xl md:text-8xl lg:text-[7rem] xl:text-[8rem]">
+            <span className="text-6xl text-purple-400 sm:text-7xl md:text-8xl lg:text-[7rem] xl:text-[8rem]">
               Dompetin
             </span>
           </h1>
-          <p className="font-bold text-sm sm:text-base md:text-lg">
+          <p className="text-sm font-bold sm:text-base md:text-lg">
             Dompetin adalah gerakan yang membentuk generasi muda menjadi
             generasi yang mapan dan sadar finansial.
           </p>
@@ -32,16 +33,16 @@ export default function TentangKamiPage() {
             Kami membantu generasi muda memahami cara menabung, berinvestasi,
             dan mengelola uang dengan cerdas.
           </p>
-          <p className="font-bold text-[#A267DD] text-base md:text-lg lg:text-xl">
+          <p className="text-base font-bold text-[#A267DD] md:text-lg lg:text-xl">
             Dengan Dompetin, belajar finansial jadi sederhana, relevan, dan
             menyenangkan.
           </p>
         </div>
       </Container>
       <Container>
-        <hr className="text-gray-400 w-full" />
+        <hr className="w-full text-gray-400" />
       </Container>
-      <Container className="items-start justify-between grid grid-cols-1 sm:grid-cols-2 gap-18 lg:gap-28 xl:gap-32 pb-20 pt-10">
+      <Container className="grid grid-cols-1 items-start justify-between gap-18 pt-10 pb-20 sm:grid-cols-2 lg:gap-28 xl:gap-32">
         <div className="md:mt-3">
           <Image
             src="/tentang-kami/visi.png"
@@ -49,9 +50,9 @@ export default function TentangKamiPage() {
             quality={100}
             width={900}
             height={400}
-            className="scale-70 sm:scale-80 md:scale-90 w-full"
+            className="w-full scale-70 sm:scale-80 md:scale-90"
           />
-          <p className="text-pretty text-justify">
+          <p className="text-justify text-pretty">
             Menumbuhkan generasi muda Indonesia yang cerdas finansial dan
             mandiri, dengan meningkatkan tingkat literasi keuangan nasional dari
             65,4% menjadi 85% dalam 5–10 tahun ke depan, serta membangun
@@ -65,9 +66,9 @@ export default function TentangKamiPage() {
             quality={100}
             width={900}
             height={400}
-            className="scale-70 sm:scale-80 md:scale-90 w-full"
+            className="w-full scale-70 sm:scale-80 md:scale-90"
           />
-          <ul className="list-decimal *:text-pretty *:text-justify text-[#601679] font-bold text-lg [&_span]:text-black [&_span]:font-normal [&_span]:text-base ml-5 sm:ml-7">
+          <ul className="ml-5 list-decimal text-lg font-bold text-[#601679] *:text-justify *:text-pretty sm:ml-7 [&_span]:text-base [&_span]:font-normal [&_span]:text-black">
             <li>
               Edukasi Finansial yang Relevan
               <br />

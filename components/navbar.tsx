@@ -14,28 +14,18 @@ const LINKS = [
 ] as const;
 
 const Navbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
     <nav
       className={cn(
-        `h-20 bg-background flex justify-center items-center fixed top-0 inset-x-0 transition-all duration-300 ease-out z-50`,
-        isScrolled &&
-          "shadow-lg top-2 inset-x-2 md:inset-x-6 md:top-6 rounded-full"
-      )}>
-      <div className="flex justify-between items-center w-full px-6 sm:px-8">
+        `bg-background fixed z-50 flex h-20 items-center justify-center shadow-lg transition-all duration-300 ease-out
+        inset-x-2 top-2 rounded-full md:inset-x-6 md:top-4`,
+      )}
+    >
+      <div className="flex w-full items-center justify-between px-6 sm:px-8">
         <Link
           href={`/`}
-          className="font-bold text-lg flex items-center text-secondary">
+          className="text-secondary flex items-center text-lg font-bold"
+        >
           <Image src="/logo.svg" alt="Dompetin" width={32} height={32} />
           Dompetin
         </Link>
@@ -47,18 +37,15 @@ const Navbar = () => {
 };
 
 const DesktopLinks = () => {
-  const pathname = usePathname();
-
   return (
     <div className="flex gap-1 max-md:hidden">
       {LINKS.map((link) => (
         <Button
           key={link.href}
-          variant={pathname === link.href ? "default" : "ghost"}
+          variant={"ghost"}
           asChild
-          className={`font-bold ${
-            pathname !== link.href && "text-neutral-600"
-          }`}>
+          className={`font-bold text-neutral-700`}
+        >
           <Link href={link.href}>{link.name}</Link>
         </Button>
       ))}

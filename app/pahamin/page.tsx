@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+import { Pattern } from "@/components/pattern";
 import Container from "@/components/container";
 import {
   Accordion,
@@ -179,39 +180,45 @@ const KNOWLEDGE_ITEMS: KnowledgeItem[] = [
 
 const PahaminPage = () => {
   return (
-    <Container className="mt-20 gap-12">
-      <div className="space-y-2 text-center">
-        <p className="text-lg md:text-2xl">
-          Sebelum uang sisamu di-
-          <span className="font-bold text-primary">Dompetin</span>,
-        </p>
-        <p className="text-3xl md:text-5xl font-bold text-primary">
-          Pahami dulu cara mainnya.
-        </p>
-      </div>
+    <main className="relative min-h-screen pt-30">
+      <Pattern className="top-0 bottom-auto h-auto rotate-180 opacity-50" />
 
-      <div className="rounded-3xl ">
-        <Accordion type="single" collapsible className="space-y-2">
-          {KNOWLEDGE_ITEMS.map((item) => (
-            <AccordionItem key={item.value} value={item.value} className="">
-              <AccordionTrigger className="">
-                <div className="flex w-full flex-col gap-1 text-left">
-                  <span className="text-2xl font-bold sm:text-3xl">
-                    {item.title}
-                  </span>
-                  <span className="text-base font-bold text-muted-foreground sm:text-lg">
-                    {item.description}
-                  </span>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="space-y-3 px-2 text-left text-base leading-relaxed text-muted-foreground sm:px-4 sm:text-lg">
-                {item.content}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      </div>
-    </Container>
+      <Container className="gap-12">
+        <div className="space-y-2 text-center">
+          <p className="text-lg md:text-2xl">
+            Sebelum uang sisamu di-
+            <span className="text-primary font-bold">Dompetin</span>,
+          </p>
+          <p className="text-primary text-3xl font-bold md:text-5xl">
+            Pahami dulu cara mainnya.
+          </p>
+        </div>
+
+        <div className="rounded-3xl">
+          <Accordion type="single" collapsible className="space-y-2">
+            {KNOWLEDGE_ITEMS.map((item) => (
+              <AccordionItem key={item.value} value={item.value} className="">
+                <AccordionTrigger className="">
+                  <div className="flex w-full flex-col gap-1 text-left">
+                    <span className="text-2xl font-bold sm:text-3xl">
+                      {item.title}
+                    </span>
+                    <span className="text-muted-foreground text-base font-bold sm:text-lg">
+                      {item.description}
+                    </span>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground space-y-3 px-2 text-left text-base leading-relaxed sm:px-4 sm:text-lg">
+                  {item.content}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
+      </Container>
+
+      <Pattern className="h-auto opacity-50" />
+    </main>
   );
 };
 

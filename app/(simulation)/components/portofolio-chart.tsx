@@ -49,7 +49,7 @@ const PortofolioChart = ({ data }: { data: InvestmentSimulationResult[] }) => {
           <span className="font-bold">25 tahun</span>
         </p>
 
-        <div className="flex max-sm:flex-col gap-2 items-center">
+        <div className="flex max-sm:flex-col gap-2 *:data-[slot=card]:bg-neutral-50 *:data-[slot=card]:shadow-lg items-center">
           <Card className="">
             <CardContent className="text-sm">
               Jika diinvestasikan menjadi{" "}
@@ -62,7 +62,7 @@ const PortofolioChart = ({ data }: { data: InvestmentSimulationResult[] }) => {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="">
             <CardContent className="text-sm">
               Jika ditabung biasa{" "}
               <p className="text-lg font-bold">

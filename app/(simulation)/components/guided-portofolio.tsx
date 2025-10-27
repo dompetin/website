@@ -43,7 +43,7 @@ const GuidedPortofolio = () => {
   }, [formData]);
 
   return (
-    <Container className="border-b-2 max-w-4xl mt-20 border-accent">
+    <Container className="border-accent max-w-4xl border-b-2">
       <h2 className="text-5xl font-bold">
         Berapa yang bisa aku dompetin kalau...
       </h2>
@@ -124,6 +124,10 @@ const GuidedPortofolio = () => {
         </FieldGroup>
 
         <PortofolioChart data={chartData} />
+        <p className="mt-4 w-full max-w-lg text-xs text-gray-400 sm:min-w-lg lg:max-w-none">
+          *Bukan ajakan berinvestasi, selalu lakukan riset sendiri sebelum
+          mengambil keputusan finansial
+        </p>
       </div>
     </Container>
   );

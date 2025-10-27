@@ -33,7 +33,6 @@ export default function RootLayout({
       >
         <MotionProvider>
           <Navbar />
-          <Pattern className="rotate-180 h-auto top-0 bottom-auto" />
           {children}
         </MotionProvider>
       </body>
