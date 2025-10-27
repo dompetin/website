@@ -13,7 +13,7 @@ const getAssetImage = (asset: string, index: number): string => {
 };
 
 export function ResultScreen() {
-  const { getResult, getNumericResult, reset } = useQuizStore();
+  const { getResult, getNumericResult } = useQuizStore();
   const category = getResult();
   const numeric = getNumericResult();
   const result = resultDescriptions[category];

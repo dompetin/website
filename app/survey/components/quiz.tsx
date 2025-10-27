@@ -15,8 +15,8 @@ export function Quiz() {
     useQuizStore();
   const question = questions[current];
   const rawAnswer = answers[question?.id] ?? "";
-  const trimmedAnswer =
-    typeof rawAnswer === "string" ? rawAnswer.trim() : String(rawAnswer).trim();
+  // const trimmedAnswer =
+  //   typeof rawAnswer === "string" ? rawAnswer.trim() : String(rawAnswer).trim();
 
   const canProceed = (() => {
     if (!question) return false;
