@@ -13,7 +13,7 @@ const InstagramCTA = () => (
           alt="Wallet Image"
           fill
           sizes="100%"
-          className="object-cover"
+          className="object-cover z-10"
         />
       </div>
       <div className="relative flex w-full items-center justify-end overflow-clip rounded-4xl bg-transparent p-6">

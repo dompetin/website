@@ -22,7 +22,7 @@ const Hero = () => (
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
-          className="text-7xl font-bold md:text-8xl"
+          className="text-5xl sm:text-7xl font-bold md:text-8xl"
         >
           <span className="text-primary">Dompetin</span> Aja!
         </m.h1>

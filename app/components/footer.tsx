@@ -19,16 +19,16 @@ const LINKS = [
 ] as const;
 
 const Footer = () => (
-  <footer className="bg-secondary relative overflow-clip text-background flex flex-col md:flex-row md:justify-between gap-8 pt-40 px-6 md:px-14 py-12 mt-40">
+  <footer className="bg-secondary text-background relative mt-40 flex flex-col gap-8 overflow-clip px-6 py-12 pt-40 md:flex-row md:justify-between md:px-14">
     <div
-      className="absolute -top-20 left-1/2 z-30 -translate-x-1/2 bg-background w-[150vw] md:w-[102vw] h-40"
+      className="bg-background absolute -top-20 left-1/2 z-30 h-40 w-[150vw] -translate-x-1/2 md:w-[102vw]"
       style={{ borderRadius: "0 0 50% 50%" }}
     />
 
-    <div className="space-y-4 z-20">
+    <div className="z-20 space-y-4">
       <div className="flex items-center gap-2">
         <Image src={"/logo.svg"} alt="Dompetin Logo" width={40} height={40} />
-        <p className="font-bold text-xl text-white">Dompetin</p>
+        <p className="text-xl font-bold text-white">Dompetin</p>
       </div>
 
       <p>
@@ -36,23 +36,30 @@ const Footer = () => (
       </p>
 
       <div>
-        <Instagram />
+        <Link
+          href={"https://www.instagram.com/dompetin/"}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-white hover:text-white/80"
+        >
+          <Instagram />
+        </Link>
       </div>
     </div>
 
-    <div className="flex flex-col z-20 justify-center gap-2 md:pl-10 md:border-l border-background *:font-bold">
+    <div className="border-background z-20 flex flex-col justify-center gap-2 *:font-bold md:border-l md:pl-10">
       {LINKS.map((link) => (
         <Link
           key={link.href}
           href={link.href}
-          className="mx-4 text-white hover:underline"
+          className="text-white hover:underline"
         >
           {link.label}
         </Link>
       ))}
     </div>
 
-    <Pattern className="z-10 h-auto -bottom-30 bg-gradient-to-b from-secondary to-transparent opacity-10" />
+    <Pattern className="from-secondary -bottom-30 z-10 h-auto bg-gradient-to-b to-transparent opacity-10" />
   </footer>
 );
 
