@@ -1,12 +1,6 @@
 import { Footer } from "@/app/components/footer";
 import Container from "@/components/container";
 import { Pattern } from "@/components/pattern";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { Sectors } from "./components/sectors";
 
 const Kupas1Page = () => {

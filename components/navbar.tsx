@@ -1,10 +1,8 @@
 "use client";
-import Link from "next/link";
-import { useState, useEffect } from "react";
-import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import Link from "next/link";
+import { Button } from "./ui/button";
 
 const LINKS = [
   { name: "Simulasi", href: "/simulasi-imbal-hasil" },
@@ -17,8 +15,7 @@ const Navbar = () => {
   return (
     <nav
       className={cn(
-        `bg-background fixed z-50 flex h-20 items-center justify-center shadow-lg transition-all duration-300 ease-out
-        inset-x-2 top-2 rounded-full md:inset-x-6 md:top-4`,
+        `bg-background fixed inset-x-2 top-2 z-50 flex h-20 items-center justify-center rounded-full shadow-lg transition-all duration-300 ease-out md:inset-x-6 md:top-4`,
       )}
     >
       <div className="flex w-full items-center justify-between px-6 sm:px-8">

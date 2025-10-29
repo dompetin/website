@@ -216,7 +216,10 @@ export const Sectors = () => (
 
           <div className="mx-auto flex w-full max-w-lg flex-wrap justify-center gap-2">
             {item.topStocks.map((stock) => (
-              <div className="text-primary flex w-fit items-center justify-center rounded-3xl bg-white px-3 py-2 font-bold shadow-lg">
+              <div
+                key={stock}
+                className="text-primary flex w-fit items-center justify-center rounded-3xl bg-white px-3 py-2 font-bold shadow-lg"
+              >
                 {stock}
               </div>
             ))}

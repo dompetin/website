@@ -1,9 +1,8 @@
 import Navbar from "@/components/navbar";
+import { MotionProvider } from "@/lib/motion";
 import type { Metadata } from "next";
 import { JetBrains_Mono, Poppins } from "next/font/google";
 import "./globals.css";
-import { MotionProvider } from "@/lib/motion";
-import { Pattern } from "@/components/pattern";
 
 const poppins = Poppins({
   variable: "--font-poppins",
