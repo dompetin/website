@@ -5,7 +5,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-const CONTENT = [
+export const SECTOR_ITEMS = [
   {
     title: "Kesehatan",
     description:
@@ -200,7 +200,7 @@ export const Sectors = () => (
     type="single"
     className="mx-auto w-full max-w-3xl space-y-2"
   >
-    {CONTENT.map((item, i) => (
+    {SECTOR_ITEMS.map((item, i) => (
       <AccordionItem value={String(i)} key={i} className="">
         <AccordionTrigger className="">
           <div className="flex w-full flex-col gap-1 text-left">

@@ -2,6 +2,8 @@ import { Footer } from "@/app/components/footer";
 import Container from "@/components/container";
 import { Pattern } from "@/components/pattern";
 import { Sectors } from "./components/sectors";
+import SectorPerformance from "./components/sector-performance";
+import KupasPortofolioChart from "./components/kupas-portofolio-chart";
 
 const Kupas1Page = () => {
   return (
@@ -40,6 +42,8 @@ const Kupas1Page = () => {
           Yuk cek performa saham berdasarkan sektor
         </h3>
 
+        <SectorPerformance />
+
         <h3 className="text-center text-5xl font-bold">
           Sektor berdasarkan IDX
         </h3>
@@ -49,6 +53,8 @@ const Kupas1Page = () => {
         <h3 className="text-center text-5xl font-bold">
           Mau lihat pendapatanmu jika uangmu di investasikan ke sektor tertentu?
         </h3>
+
+        <KupasPortofolioChart />
       </Container>
       <Footer />
     </main>
