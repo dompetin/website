@@ -21,14 +21,9 @@ import {
 import { formatCurrency } from "@/lib/utils";
 
 import { SECTOR_ITEMS } from "./sectors";
+import { getSectorReturnRange, projectSectorReturn } from "./kupas-sector-data";
 
-const YEARS = [5, 10, 15, 20, 25] as const;
-const BASE_SERIES = [
-  [90, 110, 140, 150, 165],
-  [120, 130, 145, 150, 160],
-  [100, 115, 135, 140, 155],
-  [140, 155, 175, 170, 185],
-] as const;
+const YEARS = [1, 2, 3, 4, 5] as const;
 const LINE_COLORS = [
   "oklch(60% 0.22 315)",
   "oklch(70% 0.13 312)",
@@ -45,21 +40,43 @@ type SectorPoint = {
   stock3: number;
 };
 
-const getSectorDataset = (sectorIndex: number): SectorPoint[] =>
-  YEARS.map((year, pointIndex) => {
-    const baseValues = BASE_SERIES.map(
-      (series) => series[pointIndex] + sectorIndex * 6,
-    );
+/**
+ * Generate dataset for sector chart using real sector returns
+ * Individual stock values vary around sector mean (±10-30% variation)
+ */
+const getSectorDataset = (sectorName: string): SectorPoint[] => {
+  const { min, max, mean } = getSectorReturnRange(sectorName);
+
+  return YEARS.map((year) => {
+    // Project sector return for this year
+    const yearsSinceStart = year; // Assume we're projecting from 2025
+    const sectorReturn = projectSectorReturn(sectorName, yearsSinceStart - 1);
+
+    // Base value: 100 (index baseline)
+    // Compound growth: (1 + return/100)^years
+    const compoundFactor = Math.pow(1 + sectorReturn / 100, year);
+    const baseMoney = 100 * compoundFactor;
+
+    // Create 4 stock variations around the sector performance
+    // Stock 0: perform slightly below mean
+    const stock0 = baseMoney * (1 - (mean - sectorReturn) / 100 * 0.5);
+    // Stock 1: outperformer (mean + 15% of stdDev)
+    const stock1 = baseMoney * (1 + (max - sectorReturn) / 100 * 0.4);
+    // Stock 2: underperformer (mean - 20% of stdDev)
+    const stock2 = baseMoney * (1 - (sectorReturn - min) / 100 * 0.4);
+    // Stock 3: close to mean performance
+    const stock3 = baseMoney * (1 + (sectorReturn - min) / 100 * 0.3);
 
     return {
       year,
       label: `${year} tahun`,
-      stock0: baseValues[0],
-      stock1: baseValues[1] + 4,
-      stock2: baseValues[2] - 2,
-      stock3: baseValues[3] + 2,
+      stock0: Math.round(stock0 * 10) / 10,
+      stock1: Math.round(stock1 * 10) / 10,
+      stock2: Math.round(stock2 * 10) / 10,
+      stock3: Math.round(stock3 * 10) / 10,
     };
   });
+};
 
 const SectorPerformance = () => {
   const [selectedSector, setSelectedSector] = useState(
@@ -85,8 +102,8 @@ const SectorPerformance = () => {
   );
 
   const dataset = useMemo(
-    () => getSectorDataset(Math.max(activeSectorIndex, 0)),
-    [activeSectorIndex],
+    () => getSectorDataset(selectedSector),
+    [selectedSector],
   );
 
   const chartConfig = useMemo<ChartConfig>(() => {
