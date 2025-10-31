@@ -87,7 +87,7 @@ export function Quiz() {
       return;
     }
 
-    if (e.key === "ArrowLeft") {
+    if (e.altKey && e.key === "ArrowLeft") {
       if (canGoBack) {
         e.preventDefault();
         e.stopPropagation();
