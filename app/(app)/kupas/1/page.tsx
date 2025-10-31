@@ -1,4 +1,4 @@
-import { Footer } from "@/app/components/footer";
+import { Footer } from "../../components/footer";
 import Container from "@/components/container";
 import { Pattern } from "@/components/pattern";
 import { Sectors } from "./components/sectors";
