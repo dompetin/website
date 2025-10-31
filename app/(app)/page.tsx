@@ -4,6 +4,7 @@ import FinancialMyths from "./components/financial-myths";
 import { Footer } from "./components/footer";
 import Hero from "./components/hero";
 import InstagramCTA from "./components/instagram-cta";
+import DownloadTemplates from "./components/download-templates";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <Hero />
       <BelajarInvestasi />
       <FinancialMyths />
+      <DownloadTemplates />
       <InstagramCTA />
       <Footer />
     </main>

@@ -6,15 +6,18 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import type { PahaminPage } from "@/payload-types";
 import config from "@payload-config";
 import { getPayload } from "payload";
+
+export const revalidate = 3600;
 
 const PahaminPage = async () => {
   const pahaminData = await getPahaminData();
 
   const title = pahaminData?.title || "Pahami dulu cara mainnya";
   const subtitle = pahaminData?.subtitle || "Sebelum uang sisamu di-Dompetin";
-  const accordionItems = pahaminData?.accordionItems;
+  const accordionItems = pahaminData?.accordionItems || [];
 
   return (
     <main className="relative min-h-screen pt-30">
@@ -106,13 +109,20 @@ const PahaminPage = async () => {
 
 async function getPahaminData() {
   const payload = await getPayload({ config });
-  const {
-    docs: [result],
-  } = await payload.find({
-    collection: "pahamin-page",
-  });
+  let data: PahaminPage | null = null;
 
-  return result;
+  try {
+    const {
+      docs: [page],
+    } = await payload.find({
+      collection: "pahamin-page",
+    });
+    data = page;
+  } catch (err) {
+    console.error("[ERR] Unknown error fetching CMS data: ", err);
+  }
+
+  return data;
 }
 
 export default PahaminPage;

@@ -26,7 +26,7 @@ const BelajarInvestasi = () => (
 );
 
 const CardPortofolio = () => (
-  <div className="relative rounded-3xl bg-gradient-to-tl from-pink-300 to-pink-200 shadow-xl">
+  <div className="relative rounded-3xl bg-linear-to-tl from-pink-300 to-pink-200 shadow-xl">
     <div className="relative h-full overflow-hidden rounded-3xl p-10">
       <div className="flex h-full flex-col justify-between gap-6 *:z-10 md:ml-30">
         <h3 className="w-full text-xl font-bold text-white md:text-3xl">
