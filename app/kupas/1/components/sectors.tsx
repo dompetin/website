@@ -176,7 +176,7 @@ export const SECTOR_ITEMS = [
     ],
   },
   {
-    title: "Infrakstruktur",
+    title: "Infrastruktur",
     description:
       "Membangun dan memelihara fasilitas publik seperti jalan, jembatan, dan transportasi yang menjadi tulang punggung pertumbuhan ekonomi nasional.",
     topStocks: [

@@ -31,6 +31,7 @@ import { formatCurrency } from "@/lib/utils";
 import { Area, AreaChart, XAxis, YAxis } from "recharts";
 
 import { SECTOR_ITEMS } from "./sectors";
+import { getSectorReturnRange } from "./kupas-sector-data";
 
 type SectorDatasetMap = Record<string, InvestmentSimulationResult[]>;
 
@@ -49,13 +50,13 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const YEARS = [5, 10, 15, 20, 25] as const;
+const YEARS = [1, 2, 3, 4, 5] as const;
 const NON_INVEST_LOSS_RATE = 0.025;
 
 const projectSectorReturns = (
   currentSavings: number,
   savingsPerMonth: number,
-  sectorIndex: number,
+  sectorName: string,
 ): InvestmentSimulationResult[] => {
   if (!currentSavings && !savingsPerMonth) {
     return [];
@@ -64,8 +65,12 @@ const projectSectorReturns = (
   const maxYear = YEARS[YEARS.length - 1];
   const targets = new Set<number>(YEARS);
 
-  const minRate = 0.045 + sectorIndex * 0.0035;
-  const maxRate = minRate + 0.032;
+  // Get real min/max rates from sector data (mean ± stdDev)
+  const { min: minRate, max: maxRate } = getSectorReturnRange(sectorName);
+
+  // Convert annual rates to decimal (e.g., 25% -> 0.25)
+  const minAnnualRate = minRate / 100;
+  const maxAnnualRate = maxRate / 100;
 
   let minBalance = currentSavings;
   let maxBalance = currentSavings;
@@ -75,8 +80,8 @@ const projectSectorReturns = (
 
   for (let year = 1; year <= maxYear; year++) {
     for (let month = 1; month <= 12; month++) {
-      minBalance = minBalance * (1 + minRate / 12) + savingsPerMonth;
-      maxBalance = maxBalance * (1 + maxRate / 12) + savingsPerMonth;
+      minBalance = minBalance * (1 + minAnnualRate / 12) + savingsPerMonth;
+      maxBalance = maxBalance * (1 + maxAnnualRate / 12) + savingsPerMonth;
       savingsBalance =
         savingsBalance * (1 - NON_INVEST_LOSS_RATE / 12) + savingsPerMonth;
     }
@@ -102,11 +107,11 @@ const buildSectorDatasets = (
     return {};
   }
 
-  return SECTOR_ITEMS.reduce<SectorDatasetMap>((acc, sector, index) => {
+  return SECTOR_ITEMS.reduce<SectorDatasetMap>((acc, sector) => {
     acc[sector.title] = projectSectorReturns(
       currentSavings,
       savingsPerMonth,
-      index,
+      sector.title,
     );
     return acc;
   }, {});
@@ -236,7 +241,7 @@ const KupasPortofolioChart = () => {
       <div className="flex flex-col items-center gap-4 *:data-[slot=card]:bg-neutral-50 *:data-[slot=card]:shadow-lg">
         <p>
           Uang yang kamu dompetin selama{" "}
-          <span className="font-semibold">25 tahun </span>
+          <span className="font-semibold">5 tahun </span>
         </p>
         <Card className="w-full max-w-md text-center shadow-lg">
           <CardContent className="">
