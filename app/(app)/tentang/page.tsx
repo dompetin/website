@@ -1,6 +1,7 @@
 import Container from "@/components/container";
 import { Pattern } from "@/components/pattern";
 import Image from "next/image";
+import { Footer } from "../components/footer";
 
 // bg-gradient-to-b from-[#E6D8F2] to-30%
 
@@ -96,6 +97,7 @@ export default function TentangKamiPage() {
           </ul>
         </div>
       </Container>
+      <Footer />
     </main>
   );
 }

@@ -6,6 +6,7 @@ import { resultDescriptions } from "../constants/results";
 import Container from "@/components/container";
 import Image from "next/image";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import { Footer } from "../../components/footer";
 
 const getAssetImage = (asset: string, index: number): string => {
   const assetKey = asset.toLowerCase().replace(/\s+/g, "-");
@@ -171,6 +172,7 @@ export function ResultScreen() {
           ))}
         </div>
       </Container>
+      <Footer />
     </main>
   );
 }

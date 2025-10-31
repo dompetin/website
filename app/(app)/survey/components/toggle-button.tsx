@@ -23,11 +23,11 @@ export function ToggleButton({
   total,
 }: ToggleButtonProps) {
   return (
-    <div className="w-full fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 flex justify-between items-center z-50 shadow-lg md:relative md:bottom-auto md:left-auto md:right-auto md:border-t-0 md:shadow-none md:bg-transparent md:p-0 md:mt-8">
+    <div className="fixed right-0 bottom-0 left-0 z-50 flex w-full items-center justify-between border-t border-gray-200 bg-white p-4 shadow-lg md:relative md:right-auto md:bottom-auto md:left-auto md:mt-8 md:border-t-0 md:bg-transparent md:p-0 md:shadow-none">
       <div className="flex items-center gap-2">
         <Button
           size="icon"
-          className="bg-purple-200 text-primary hover:bg-purple-300 rounded-full p-3"
+          className="text-primary rounded-full bg-purple-200 p-3 hover:bg-purple-300"
           onClick={onPrevious}
           disabled={!canGoBack}
           aria-disabled={!canGoBack}
@@ -35,16 +35,15 @@ export function ToggleButton({
           title="Sebelumnya"
         >
           <ChevronLeftIcon />
+          <KbdGroup>
+            <Kbd>Alt</Kbd>
+            <span>+</span>
+            <Kbd>&larr;</Kbd>
+          </KbdGroup>
         </Button>
-        <KbdGroup>
-          <Kbd>Alt</Kbd>
-          <span>+</span>
-          <Kbd>&larr;</Kbd>
-        </KbdGroup>
       </div>
 
       <div className="flex items-center gap-2">
-        <Kbd>Enter</Kbd>
         <Button
           className="px-5 py-4"
           onClick={(e) => {
@@ -61,15 +60,15 @@ export function ToggleButton({
           title={current === total - 1 ? "Lihat Hasil" : "Selanjutnya"}
         >
           {current === total - 1 ? (
-            <span className="flex items-center gap-2 justify-between">
+            <>
               Lihat Hasil
-              <ChevronRightIcon />
-            </span>
+              <Kbd>Enter</Kbd>
+            </>
           ) : (
-            <span className="flex items-center gap-2">
+            <>
               Selanjutnya
-              <ChevronRightIcon />
-            </span>
+              <Kbd>Enter</Kbd>
+            </>
           )}
         </Button>
       </div>
