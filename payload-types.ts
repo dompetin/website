@@ -177,10 +177,13 @@ export interface PahaminPage {
     recommendations?:
       | {
           title: string;
-          content: {
-            title: string;
-            description: string;
-          };
+          content?:
+            | {
+                title: string;
+                description: string;
+                id?: string | null;
+              }[]
+            | null;
           id?: string | null;
         }[]
       | null;
@@ -335,6 +338,7 @@ export interface PahaminPageSelect<T extends boolean = true> {
                 | {
                     title?: T;
                     description?: T;
+                    id?: T;
                   };
               id?: T;
             };

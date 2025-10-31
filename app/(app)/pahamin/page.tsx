@@ -1,13 +1,13 @@
-import { Pattern } from "@/components/pattern";
 import Container from "@/components/container";
+import { Pattern } from "@/components/pattern";
 import {
   Accordion,
+  AccordionContent,
   AccordionItem,
   AccordionTrigger,
-  AccordionContent,
 } from "@/components/ui/accordion";
-import { getPayload } from "payload";
 import config from "@payload-config";
+import { getPayload } from "payload";
 
 const PahaminPage = async () => {
   const pahaminData = await getPahaminData();
@@ -22,9 +22,7 @@ const PahaminPage = async () => {
 
       <Container className="gap-12">
         <div className="space-y-2 text-center">
-          <p className="text-lg md:text-2xl">
-            {subtitle}
-          </p>
+          <p className="text-lg md:text-2xl">{subtitle}</p>
           <p className="text-primary text-3xl font-bold md:text-5xl">{title}</p>
         </div>
 
@@ -34,45 +32,61 @@ const PahaminPage = async () => {
               accordionItems.map((item, index) => (
                 <AccordionItem key={index} value={`item-${index}`}>
                   <AccordionTrigger>
-                    <div className="flex flex-col text-left">
-                      <span className="text-2xl font-bold md:text-3xl">
-                        {item.title}
-                      </span>
-                      <span className="text-muted-foreground text-sm">
+                    <div className="flex flex-col text-left font-bold">
+                      <span className="text-2xl md:text-3xl">{item.title}</span>
+                      <span className="text-muted-foreground text-base">
                         {item.subtitle}
                       </span>
                     </div>
                   </AccordionTrigger>
-                  <AccordionContent>
+                  <AccordionContent className="text-base">
                     <div className="space-y-4">
                       <div>
                         <p className="mb-2 font-bold">Definisi</p>
                         <p>{item.definition}</p>
                       </div>
+
                       <div>
                         <p className="mb-2 font-bold">Risiko</p>
                         <p>{item.risks}</p>
                       </div>
+
                       <div>
                         <p className="mb-2 font-bold">Keuntungan</p>
                         <p>{item.benefits}</p>
                       </div>
+
                       {item.recommendations &&
                         item.recommendations.length > 0 && (
-                          <div>
+                          <>
                             <p className="mb-2 font-bold">Rekomendasi</p>
-                            <div className="space-y-2">
+                            <div className="flex gap-4 overflow-x-auto">
                               {item.recommendations.map((rec, recIndex) => (
-                                <div key={recIndex}>
-                                  <p className="font-semibold">{rec.title}</p>
-                                  <p className="ml-4">
-                                    <strong>{rec.content.title}:</strong>{" "}
-                                    {rec.content.description}
+                                <div
+                                  key={recIndex}
+                                  className="border-accent w-sm shrink-0 rounded-lg border p-4 shadow-md"
+                                >
+                                  <p className="text-center text-xl font-semibold">
+                                    {rec.title.toUpperCase()}
                                   </p>
+                                  {rec.content && (
+                                    <div className="space-y-2">
+                                      {rec.content.map((cardContent, i) => (
+                                        <div key={i} className="font-bold">
+                                          <p className="text-lg">
+                                            {cardContent.title}
+                                          </p>
+                                          <p className="text-primary">
+                                            {cardContent.description}
+                                          </p>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  )}
                                 </div>
                               ))}
                             </div>
-                          </div>
+                          </>
                         )}
                     </div>
                   </AccordionContent>

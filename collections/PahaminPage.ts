@@ -27,60 +27,72 @@ export const PahaminPage: CollectionConfig = {
       required: true,
       fields: [
         {
-          name: "title",
-          type: "text",
-          required: true,
-          label: "Product Name",
-        },
-        {
-          name: "subtitle",
-          type: "text",
-          required: true,
-          label: "Product Tagline",
-        },
-        {
-          name: "definition",
-          type: "textarea",
-          required: true,
-          label: "Definition",
-        },
-        {
-          name: "risks",
-          type: "textarea",
-          required: true,
-          label: "Risks",
-        },
-        {
-          name: "benefits",
-          type: "textarea",
-          required: true,
-          label: "Benefits",
-        },
-        {
-          name: "recommendations",
-          type: "array",
+          type: "group",
+          label: "Accordion Trigger",
           fields: [
             {
               name: "title",
               type: "text",
               required: true,
-              label: "Recommendation Title",
+              label: "Product Name",
             },
             {
-              name: "content",
-              type: "group",
+              name: "subtitle",
+              type: "text",
+              required: true,
+              label: "Product Tagline",
+            },
+          ],
+        },
+        {
+          type: "group",
+          label: "Accordion Content",
+          fields: [
+            {
+              name: "definition",
+              type: "textarea",
+              required: true,
+              label: "Definition",
+            },
+            {
+              name: "risks",
+              type: "textarea",
+              required: true,
+              label: "Risks",
+            },
+            {
+              name: "benefits",
+              type: "textarea",
+              required: true,
+              label: "Benefits",
+            },
+            {
+              name: "recommendations",
+              type: "array",
               fields: [
                 {
                   name: "title",
                   type: "text",
                   required: true,
-                  label: "Content Title",
+                  label: "Recommendation Title",
                 },
                 {
-                  name: "description",
-                  type: "textarea",
-                  required: true,
-                  label: "Content Description",
+                  name: "content",
+                  type: "array",
+                  fields: [
+                    {
+                      name: "title",
+                      type: "text",
+                      required: true,
+                      label: "Content Title",
+                    },
+                    {
+                      name: "description",
+                      type: "textarea",
+                      required: true,
+                      label: "Content Description",
+                    },
+                  ],
                 },
               ],
             },
