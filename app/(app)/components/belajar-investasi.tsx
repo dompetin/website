@@ -57,12 +57,12 @@ const CardPortofolio = () => (
 );
 
 const CardImbal = () => (
-  <div className="relative rounded-3xl bg-gradient-to-tl from-purple-300 to-purple-200 shadow-xl">
+  <div className="relative rounded-3xl bg-linear-to-tl from-purple-300 to-purple-200 shadow-xl">
     <div className="relative h-full overflow-hidden rounded-3xl p-10">
       <div className="flex h-full flex-col justify-between gap-6 *:z-10 md:mr-20">
         <h3 className="w-full text-xl font-bold md:text-3xl">
-          Mau lihat hasil dari{" "}
-          <span className="text-secondary"> emas, saham, dan lainnya?</span>
+          atau mau coba nabung di{" "}
+          <span className="text-secondary">di satu aset aja?</span>
         </h3>
 
         <Button asChild variant={`secondary`} className="ml-auto">

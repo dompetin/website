@@ -14,7 +14,7 @@ import {
 } from "./ui/sheet";
 
 const LINKS = [
-  { name: "Simulasi", href: "/simulasi-imbal-hasil" },
+  { name: "Simulasi", href: "/simulasi-portofolio" },
   { name: "Akademi", href: "/pahamin" },
   { name: "Kupas", href: "/kupas" },
   { name: "Tentang Kami", href: "/tentang" },

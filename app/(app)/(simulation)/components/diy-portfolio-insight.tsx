@@ -65,7 +65,7 @@ const DiyPortfolioInsight = ({
     <section className="bg-muted/20 mt-24 flex flex-col gap-10 rounded-3xl px-8 py-10">
       <div className="text-center">
         <h3 className="text-3xl font-semibold md:text-4xl">
-          Menginvestasikan Tabunganmu ada Langkah pertama yang baik!
+          Menginvestasikan Tabunganmu adalah Langkah pertama yang baik!
         </h3>
         <p className="text-muted-foreground mt-4 text-base">
           {latestProjectionCopy}
@@ -145,8 +145,8 @@ const DiyPortfolioInsight = ({
 
         <div className="grid gap-8 md:grid-cols-2">
           <div className="flex flex-col overflow-clip rounded-3xl shadow-md">
-            <div className="flex h-28 items-center justify-center bg-gradient-to-r from-pink-200/70 via-purple-200/60 to-purple-100/60 text-center text-3xl font-bold">
-              Disverifikasi
+            <div className="flex h-28 items-center justify-center bg-linear-to-r from-pink-200/70 via-purple-200/60 to-purple-100/60 text-center text-3xl font-bold">
+              Diversifikasi
             </div>
             <div className="flex flex-col items-center gap-3 bg-white p-6 text-center">
               <p className="text-4xl font-bold">
@@ -158,7 +158,7 @@ const DiyPortfolioInsight = ({
           </div>
 
           <div className="flex flex-col overflow-clip rounded-3xl shadow-md">
-            <div className="from-primary/70 via-primary/40 flex h-28 items-center justify-center bg-gradient-to-r to-indigo-200/80 text-center text-3xl font-bold">
+            <div className="from-primary/70 via-primary/40 flex h-28 items-center justify-center bg-linear-to-r to-indigo-200/80 text-center text-3xl font-bold">
               Risk-to-Reward Ratio
             </div>
             <div className="flex flex-col items-center gap-3 bg-white p-6 text-center">

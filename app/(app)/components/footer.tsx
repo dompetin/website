@@ -20,6 +20,10 @@ const LINKS = [
     label: "Tentang Kami",
     href: "/tentang",
   },
+  {
+    label: "Privacy Policy",
+    href: "/privacy-policy",
+  },
 ] as const;
 
 const Footer = () => (
@@ -63,7 +67,7 @@ const Footer = () => (
       ))}
     </div>
 
-    <Pattern className="from-secondary -bottom-30 z-10 h-auto bg-gradient-to-b to-transparent opacity-10" />
+    <Pattern className="from-secondary -bottom-30 z-10 h-auto bg-linear-to-b to-transparent opacity-10" />
   </footer>
 );
 
