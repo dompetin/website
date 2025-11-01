@@ -4,6 +4,7 @@ export const PahaminPage: CollectionConfig = {
   slug: "pahamin-page",
   admin: {
     useAsTitle: "title",
+    group: "Pages",
   },
   access: {
     read: () => true,

@@ -15,7 +15,6 @@ const CARDS = [
   },
   {
     title: "Simulasi Pelunasan Uang",
-    href: null,
   },
 ];
 
@@ -40,8 +39,8 @@ const DownloadTemplates = () => {
 
 const DownloadCard = (props: {
   title: string;
-  src?: string | null;
-  href: string;
+  src?: string ;
+  href?: string;
 }) => (
   <Card className="bg-primary text-background rounded-3xl">
     <CardHeader>
