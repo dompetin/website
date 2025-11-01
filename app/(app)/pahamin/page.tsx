@@ -62,21 +62,23 @@ const PahaminPage = async () => {
                       {item.recommendations &&
                         item.recommendations.length > 0 && (
                           <>
-                            <p className="mb-2 font-bold">Rekomendasi</p>
+                            <p className="mb-2 font-bold">
+                              Rekomendasi {item.title}
+                            </p>
                             <div className="flex gap-4 overflow-x-auto">
                               {item.recommendations.map((rec, recIndex) => (
                                 <div
                                   key={recIndex}
                                   className="border-accent w-sm shrink-0 rounded-lg border p-4 shadow-md"
                                 >
-                                  <p className="text-center text-xl font-semibold">
-                                    {rec.title.toUpperCase()}
+                                  <p className="text-center mb-2 text-3xl font-semibold">
+                                    {rec.title}
                                   </p>
                                   {rec.content && (
                                     <div className="space-y-2">
                                       {rec.content.map((cardContent, i) => (
-                                        <div key={i} className="font-bold">
-                                          <p className="text-lg">
+                                        <div key={i} className="*:text-center">
+                                          <p className="text-secondary text-lg font-bold">
                                             {cardContent.title}
                                           </p>
                                           <p className="text-primary">

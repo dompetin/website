@@ -3,6 +3,7 @@ import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 const InstagramCTA = () => (
   <Container className="md:mt-12">
@@ -13,7 +14,7 @@ const InstagramCTA = () => (
           alt="Wallet Image"
           fill
           sizes="100%"
-          className="object-cover z-10"
+          className="z-10 object-cover"
         />
       </div>
       <div className="relative flex w-full items-center justify-end overflow-clip rounded-4xl bg-transparent p-6">
@@ -25,8 +26,15 @@ const InstagramCTA = () => (
             variant={`white`}
             size="sm"
             className="text-secondary ml-auto"
+            asChild
           >
-            Ikuti kami di Instagram <ChevronRight />
+            <Link
+              href={`https://www.instagram.com/dompetin.aja/`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Ikuti kami di Instagram <ChevronRight />
+            </Link>
           </Button>
         </div>
 

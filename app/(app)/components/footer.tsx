@@ -5,21 +5,25 @@ import Link from "next/link";
 
 const LINKS = [
   {
-    label: "About Us",
-    href: "/about",
+    label: "Simulasi",
+    href: "/simulasi-portofolio",
   },
   {
-    label: "Contact",
-    href: "/contact",
+    label: "Pahamin",
+    href: "/pahamin",
   },
   {
-    label: "Privacy Policy",
-    href: "/privacy",
+    label: "Kupas",
+    href: "/kupas",
+  },
+  {
+    label: "Tentang Kami",
+    href: "/tentang",
   },
 ] as const;
 
 const Footer = () => (
-  <footer className="bg-secondary text-background relative mt-40 flex flex-col gap-8 overflow-clip px-6 py-12 pt-40 md:flex-row md:justify-between md:px-14">
+  <footer className="bg-secondary text-background relative mt-40 flex w-full flex-col gap-8 overflow-clip px-6 py-12 pt-40 md:flex-row md:justify-between md:px-14">
     <div
       className="bg-background absolute -top-20 left-1/2 z-30 h-40 w-[150vw] -translate-x-1/2 md:w-[102vw]"
       style={{ borderRadius: "0 0 50% 50%" }}
@@ -37,10 +41,10 @@ const Footer = () => (
 
       <div>
         <Link
-          href={"https://www.instagram.com/dompetin/"}
+          href={"https://www.instagram.com/dompetin.aja/"}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-white hover:text-white/80"
+          className="text-white hover:text-white/80 transition-colors"
         >
           <Instagram />
         </Link>

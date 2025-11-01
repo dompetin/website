@@ -7,15 +7,15 @@ import Link from "next/link";
 const CARDS = [
   {
     title: "Template Budget Finansial dan Manajemen Finansial",
-    href: "#",
+    href: "https://docs.google.com/spreadsheets/d/1_uGwZjk9UdApDLu5CpTEDbM6Bzrlk2qEhI8BSG-QdSk/edit?gid=0#gid=0",
   },
   {
-    title: "Template2 Budget Finansial dan Manajemen Finansial",
-    href: "#",
+    title: "Tracker Portofolio Investasi",
+    href: "https://docs.google.com/spreadsheets/d/14bc53zItZ6cvPJte5WlM9kADPKjG6Pp7ILgmoWH9UwI/edit?gid=0#gid=0",
   },
   {
-    title: "Template3 Budget Finansial dan Manajemen Finansial",
-    href: "#",
+    title: "Simulasi Pelunasan Uang",
+    href: null,
   },
 ];
 
@@ -38,35 +38,45 @@ const DownloadTemplates = () => {
   );
 };
 
-const DownloadCard = (props: { title: string; src?: string; href: string }) => (
+const DownloadCard = (props: {
+  title: string;
+  src?: string | null;
+  href: string;
+}) => (
   <Card className="bg-primary text-background rounded-3xl">
     <CardHeader>
-      <CardTitle className="border-background border-b pb-3">
+      <CardTitle className="border-background border-b pb-3 text-lg">
         {props.title}
       </CardTitle>
     </CardHeader>
-    <CardContent className="relative">
-      <div className="relative my-6 h-40">
-        <div className="bg-secondary/50 absolute inset-0 z-0 h-40 -translate-y-6 scale-90 overflow-clip rounded-3xl" />
-        <div className="bg-secondary absolute inset-0 z-10 h-40 -translate-y-3 scale-95 overflow-clip rounded-3xl" />
-        <div className="absolute inset-0 z-20 h-40 overflow-clip rounded-3xl bg-white"></div>
-      </div>
+    <CardContent className={`relative ${props.href ? "mt-auto" : "my-auto"}`}>
+      {props.href ? (
+        <>
+          <div className="relative my-6 h-40">
+            <div className="bg-secondary/50 absolute inset-0 z-0 h-40 -translate-y-6 scale-90 overflow-clip rounded-3xl" />
+            <div className="bg-secondary absolute inset-0 z-10 h-40 -translate-y-3 scale-95 overflow-clip rounded-3xl" />
+            <div className="absolute inset-0 z-20 h-40 overflow-clip rounded-3xl bg-white"></div>
+          </div>
 
-      <Button
-        asChild
-        variant={"white"}
-        size={"icon"}
-        className="border-accent absolute right-4 bottom-0 z-20 border shadow-md"
-      >
-        <Link
-          href={props.href}
-          target="_blank"
-          rel="noopener noreferer"
-          className=""
-        >
-          <ArrowUpRight />
-        </Link>
-      </Button>
+          <Button
+            asChild
+            variant={"secondary"}
+            size={"icon"}
+            className="absolute right-4 bottom-0 z-20 shadow-md"
+          >
+            <Link
+              href={props.href}
+              target="_blank"
+              rel="noopener noreferer"
+              className=""
+            >
+              <ArrowUpRight />
+            </Link>
+          </Button>
+        </>
+      ) : (
+        <p className="text-background text-5xl font-bold">Coming Soon</p>
+      )}
     </CardContent>
   </Card>
 );

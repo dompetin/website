@@ -22,7 +22,7 @@ const Hero = () => (
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4, ease: "easeOut" }}
-          className="text-5xl sm:text-7xl font-bold md:text-8xl"
+          className="text-5xl font-bold sm:text-7xl md:text-8xl"
         >
           <span className="text-primary">Dompetin</span> Aja!
         </m.h1>
@@ -30,7 +30,12 @@ const Hero = () => (
         <p className="md:mt-10">Mau tau portofolio yang cocok untuk kamu?</p>
         <Button size={"lg"} className="w-fit font-semibold max-md:mt-8" asChild>
           <Link href="/survey">
-            Cari tahu sekarang
+            <span className="max-sm:hidden">
+              Lewat quiz Dompetin, yuk cari tahu!
+            </span>
+            <span className="sm:hidden">
+              Yuk cari tahu!
+            </span>
             <ArrowRight />
           </Link>
         </Button>

@@ -1,9 +1,8 @@
 "use client";
 
-import React from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
+import { ChevronLeftIcon } from "lucide-react";
 
 type ToggleButtonProps = {
   onPrevious: () => void;

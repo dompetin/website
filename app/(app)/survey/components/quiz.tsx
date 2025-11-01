@@ -1,20 +1,15 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
+import { Kbd } from "@/components/ui/kbd";
+import { MaskInput } from "@/components/ui/mask-input";
+import Image from "next/image";
+import React, { useEffect, useRef } from "react";
 import { questions } from "../constants/questions";
 import { useQuizStore } from "../store/quiz-store";
 import { QuizProgress } from "./progress";
 import { ResultScreen } from "./result-screen";
 import { ToggleButton } from "./toggle-button";
-import { Kbd } from "@/components/ui/kbd";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupMaskInput,
-} from "@/components/ui/input-group";
-import Image from "next/image";
-import { MaskInput } from "@/components/ui/mask-input";
 
 export function Quiz() {
   const { current, total, answers, setAnswer, onPrevious, onNext } =
