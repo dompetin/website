@@ -8,9 +8,9 @@ import Link from "next/link";
 const CONTENT = [
   {
     src: "/home/laptop.png",
-    title: "Pahamin Dompet",
+    title: "Akademi Dompetin",
     description: "Belajar literasi keuangan gak harus ribet",
-    href: "/pahamin",
+    href: "/akademi",
   },
   {
     src: "/home/writing.png",

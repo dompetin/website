@@ -15,7 +15,7 @@ import {
 
 const LINKS = [
   { name: "Simulasi", href: "/simulasi-portofolio" },
-  { name: "Akademi", href: "/pahamin" },
+  { name: "Akademi", href: "/akademi" },
   { name: "Kupas", href: "/kupas" },
   { name: "Tentang Kami", href: "/tentang" },
 ] as const;

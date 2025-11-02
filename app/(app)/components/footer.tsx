@@ -9,8 +9,8 @@ const LINKS = [
     href: "/simulasi-portofolio",
   },
   {
-    label: "Pahamin",
-    href: "/pahamin",
+    label: "Akademi",
+    href: "/akademi",
   },
   {
     label: "Kupas",
