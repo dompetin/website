@@ -17,7 +17,8 @@ const jetbrains = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "Dompetin | Visualizing Investments Made Simple",
-  description: "Track and visualize your investments with ease using Dompetin.",
+  description:
+    "Platform edukasi untuk memvisualisasikan investasi dan keuangan pribadi Anda.",
 };
 
 export default function RootLayout({
