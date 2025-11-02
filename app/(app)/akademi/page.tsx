@@ -1,130 +1,120 @@
 import Container from "@/components/container";
 import { Pattern } from "@/components/pattern";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import type { PahaminPage } from "@/payload-types";
+import { Button } from "@/components/ui/button";
+import { ChevronRight } from "lucide-react";
+import { Route } from "next";
+import Link from "next/link";
+import Image from "next/image";
+import { Footer } from "../components/footer";
+import type { AkademiArticle } from "@/payload-types";
 import config from "@payload-config";
 import { getPayload } from "payload";
 
 export const revalidate = 3600;
 
-const PahaminPage = async () => {
-  const pahaminData = await getPahaminData();
+const COVER_IMAGES = [
+  "/kupas/jumping.png",
+  "/home/cooking.png",
+  "/home/eating.png",
+  "/home/laptop.png",
+  "/home/walking.png",
+  "/home/writing.png",
+];
 
-  const title = pahaminData?.title || "Pahami dulu cara mainnya";
-  const subtitle = pahaminData?.subtitle || "Sebelum uang sisamu di-Dompetin";
-  const accordionItems = pahaminData?.accordionItems || [];
+const AkademiPage = async () => {
+  const articles = await getAkademiArticles();
 
   return (
     <main className="relative min-h-screen pt-30">
       <Pattern className="top-0 bottom-auto h-auto rotate-180 opacity-50" />
-
-      <Container className="gap-12">
-        <div className="space-y-2 text-center">
-          <p className="text-lg md:text-2xl">{subtitle}</p>
-          <p className="text-primary text-3xl font-bold md:text-5xl">{title}</p>
+      <Container className="max-w-4xl gap-20">
+        <div className="flex flex-col gap-4 text-center">
+          <h3 className="text-lg md:text-2xl">
+            Sebelum uang sisamu di-
+            <span className="text-primary font-bold">Dompetin</span>
+          </h3>
+          <h2 className="text-4xl font-bold md:text-6xl">
+            Pahami dulu cara mainnya
+          </h2>
+          <p>
+            Pelajari berbagai instrumen investasi dan strategi keuangan untuk
+            memaksimalkan potensi uang kamu
+          </p>
         </div>
 
-        <div className="rounded-3xl">
-          <Accordion type="single" collapsible className="space-y-2">
-            {accordionItems.length > 0 ? (
-              accordionItems.map((item, index) => (
-                <AccordionItem key={index} value={`item-${index}`}>
-                  <AccordionTrigger>
-                    <div className="flex flex-col text-left font-bold">
-                      <span className="text-2xl md:text-3xl">{item.title}</span>
-                      <span className="text-muted-foreground text-base">
-                        {item.subtitle}
-                      </span>
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent className="text-base">
-                    <div className="space-y-4">
-                      <div>
-                        <p className="mb-2 font-bold">Definisi</p>
-                        <p>{item.definition}</p>
-                      </div>
-
-                      <div>
-                        <p className="mb-2 font-bold">Risiko</p>
-                        <p>{item.risks}</p>
-                      </div>
-
-                      <div>
-                        <p className="mb-2 font-bold">Keuntungan</p>
-                        <p>{item.benefits}</p>
-                      </div>
-
-                      {item.recommendations &&
-                        item.recommendations.length > 0 && (
-                          <>
-                            <p className="mb-2 font-bold">
-                              Rekomendasi {item.title}
-                            </p>
-                            <div className="flex gap-4 overflow-x-auto">
-                              {item.recommendations.map((rec, recIndex) => (
-                                <div
-                                  key={recIndex}
-                                  className="border-accent w-sm shrink-0 rounded-lg border p-4 shadow-md"
-                                >
-                                  <p className="text-center mb-2 text-3xl font-semibold">
-                                    {rec.title}
-                                  </p>
-                                  {rec.content && (
-                                    <div className="space-y-2">
-                                      {rec.content.map((cardContent, i) => (
-                                        <div key={i} className="*:text-center">
-                                          <p className="text-secondary text-lg font-bold">
-                                            {cardContent.title}
-                                          </p>
-                                          <p className="text-primary">
-                                            {cardContent.description}
-                                          </p>
-                                        </div>
-                                      ))}
-                                    </div>
-                                  )}
-                                </div>
-                              ))}
-                            </div>
-                          </>
-                        )}
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              ))
-            ) : (
-              <p className="text-muted-foreground text-center">
-                Belum ada data tersedia.
-              </p>
-            )}
-          </Accordion>
+        <div className="grid auto-rows-fr grid-cols-1 gap-3 p-4 md:grid-cols-2 md:gap-8">
+          {articles.length > 0 &&
+            articles.map((article, index) => (
+              <AkademiCard
+                key={article.slug}
+                title={article.title}
+                description={article.subtitle || ""}
+                href={`/akademi/${article.slug}`}
+                src={COVER_IMAGES[index % COVER_IMAGES.length]}
+              />
+            ))}
+          <div className="flex items-center">
+            <p className="text-2xl font-bold text-neutral-500 md:text-6xl">
+              ...lebih banyak lagi segera hadir
+            </p>
+          </div>
         </div>
       </Container>
+
+      <Footer />
     </main>
   );
 };
 
-async function getPahaminData() {
+async function getAkademiArticles() {
   const payload = await getPayload({ config });
-  let data: PahaminPage | null = null;
+  let articles: AkademiArticle[] = [];
 
   try {
-    const {
-      docs: [page],
-    } = await payload.find({
-      collection: "pahamin-page",
+    const { docs } = await payload.find({
+      collection: "akademi-article",
+      sort: "-createdAt",
     });
-    data = page;
+    articles = docs;
   } catch (err) {
-    console.error("[ERR] Unknown error fetching CMS data: ", err);
+    console.error("[ERR] Error fetching akademi articles: ", err);
   }
 
-  return data;
+  return articles;
 }
 
-export default PahaminPage;
+interface AkademiCardProps {
+  title: string | React.ReactNode;
+  src?: string;
+  description: string | React.ReactNode;
+  href: string | Route;
+}
+
+const AkademiCard = (props: AkademiCardProps) => (
+  <div className="grid auto-rows-fr rounded-3xl bg-white shadow-lg">
+    <div className="bg-purple relative rounded-t-3xl">
+      {props.src && (
+        <div className="absolute -top-10 left-0 aspect-square w-full sm:-top-20 sm:max-md:left-1/2 sm:max-md:w-1/2 sm:max-md:-translate-x-1/2">
+          <Image
+            src={props.src}
+            alt={`Dompetin | ${props.title} Cover Image`}
+            fill
+            sizes="10%"
+            className="object-contain"
+          />
+        </div>
+      )}
+    </div>
+    <div className="z-20 flex flex-col items-center gap-4 rounded-b-3xl bg-white p-6 text-center">
+      <h3 className="text-2xl font-bold">{props.title}</h3>
+      <p className="text-sm">{props.description}</p>
+      <Button asChild>
+        <Link href={props.href as Route}>
+          Lihat Selengkapnya <ChevronRight />
+        </Link>
+      </Button>
+    </div>
+  </div>
+);
+
+export default AkademiPage;

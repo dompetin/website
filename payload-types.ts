@@ -69,7 +69,7 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
-    'pahamin-page': PahaminPage;
+    'akademi-article': AkademiArticle;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -79,7 +79,7 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
-    'pahamin-page': PahaminPageSelect<false> | PahaminPageSelect<true>;
+    'akademi-article': AkademiArticleSelect<false> | AkademiArticleSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -162,33 +162,34 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "pahamin-page".
+ * via the `definition` "akademi-article".
  */
-export interface PahaminPage {
+export interface AkademiArticle {
   id: number;
   title: string;
-  subtitle: string;
-  accordionItems: {
-    title: string;
-    subtitle: string;
-    definition: string;
-    risks: string;
-    benefits: string;
-    recommendations?:
-      | {
-          title: string;
-          content?:
-            | {
-                title: string;
-                description: string;
-                id?: string | null;
-              }[]
-            | null;
-          id?: string | null;
-        }[]
-      | null;
-    id?: string | null;
-  }[];
+  /**
+   * Auto-generated from title. Must be unique.
+   */
+  slug: string;
+  /**
+   * Short description shown on list page
+   */
+  subtitle?: string | null;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -225,8 +226,8 @@ export interface PayloadLockedDocument {
         value: number | Media;
       } | null)
     | ({
-        relationTo: 'pahamin-page';
-        value: number | PahaminPage;
+        relationTo: 'akademi-article';
+        value: number | AkademiArticle;
       } | null)
     | ({
         relationTo: 'payload-kv';
@@ -316,34 +317,13 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "pahamin-page_select".
+ * via the `definition` "akademi-article_select".
  */
-export interface PahaminPageSelect<T extends boolean = true> {
+export interface AkademiArticleSelect<T extends boolean = true> {
   title?: T;
+  slug?: T;
   subtitle?: T;
-  accordionItems?:
-    | T
-    | {
-        title?: T;
-        subtitle?: T;
-        definition?: T;
-        risks?: T;
-        benefits?: T;
-        recommendations?:
-          | T
-          | {
-              title?: T;
-              content?:
-                | T
-                | {
-                    title?: T;
-                    description?: T;
-                    id?: T;
-                  };
-              id?: T;
-            };
-        id?: T;
-      };
+  content?: T;
   updatedAt?: T;
   createdAt?: T;
 }
