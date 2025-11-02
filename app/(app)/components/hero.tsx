@@ -28,14 +28,16 @@ const Hero = () => (
         </m.h1>
 
         <p className="md:mt-10">Mau tau portofolio yang cocok untuk kamu?</p>
-        <Button size={"lg"} className="w-fit font-semibold max-md:mt-8" asChild>
+        <Button
+          size={"xl"}
+          className="w-fit text-xl font-semibold max-md:mt-8"
+          asChild
+        >
           <Link href="/survey">
             <span className="max-sm:hidden">
               Lewat quiz Dompetin, yuk cari tahu!
             </span>
-            <span className="sm:hidden">
-              Yuk cari tahu!
-            </span>
+            <span className="sm:hidden">Yuk cari tahu!</span>
             <ArrowRight />
           </Link>
         </Button>

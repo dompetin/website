@@ -30,15 +30,16 @@ const AkademiPage = async () => {
       <Container className="max-w-4xl gap-20">
         <div className="flex flex-col gap-4 text-center">
           <h3 className="text-lg md:text-2xl">
-            Sebelum uang sisamu di-
-            <span className="text-primary font-bold">Dompetin</span>
+            Bingung mulai belajar manajemen keuangan dari mana
           </h3>
           <h2 className="text-4xl font-bold md:text-6xl">
-            Pahami dulu cara mainnya
+            Yuk Belajar di
+            <span className="text-primary"> Akademi </span>
+            <span className="text-neutral-900">Dompetin</span>
           </h2>
           <p>
-            Pelajari berbagai instrumen investasi dan strategi keuangan untuk
-            memaksimalkan potensi uang kamu
+            Mulai perjalanan finansial di sini dari dasar menabung sampai
+            strategi investasi
           </p>
         </div>
 
