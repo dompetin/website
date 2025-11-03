@@ -34,7 +34,7 @@ import {
 } from "@/lib/custom-portfolio";
 import { InvestmentSimulationResult } from "@/lib/simulate-investments";
 import { generateRowId } from "@/lib/utils";
-import { PlusCircle } from "lucide-react";
+import { MinusCircle, PlusCircle } from "lucide-react";
 
 type AssetAllocationRow = {
   id: string;
@@ -153,6 +153,10 @@ const DiyPortofolio = () => {
     ]);
   };
 
+  const handleRemoveAsset = (id: string) => {
+    setAssets((prev) => prev.filter((row) => row.id !== id));
+  };
+
   return (
     <Container className="border-b-2 max-w-7xl border-accent">
       <h2 className="text-5xl font-bold">
@@ -220,6 +224,14 @@ const DiyPortofolio = () => {
                     <div
                       key={assetRow.id}
                       className="flex flex-col gap-2 md:flex-row md:items-center">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        disabled={assets.length === 1}
+                        onClick={() => handleRemoveAsset(assetRow.id)}
+                        className="text-destructive hover:text-destructive/80">
+                        <MinusCircle />
+                      </Button>
                       <div className="flex-1">
                         <Select
                           name={`asset_type_${assetRow.id}`}

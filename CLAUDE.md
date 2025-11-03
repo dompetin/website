@@ -21,14 +21,14 @@ Dompetin is an Indonesian investment education platform helping users visualize 
 
 ```bash
 # Development
-pnpm dev           # Start Turbopack dev server on http://localhost:3000
+bun dev           # Start Turbopack dev server on http://localhost:3000
 
 # Build & Production
-pnpm build         # Production build with Turbopack
-pnpm start         # Run production server
+bun build         # Production build with Turbopack
+bun start         # Run production server
 
 # Code Quality
-pnpm lint          # Run ESLint v9
+bun lint          # Run ESLint v9
 ```
 
 ## Architecture & Code Organization
