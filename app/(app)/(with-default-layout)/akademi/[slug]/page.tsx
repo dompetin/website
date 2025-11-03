@@ -48,7 +48,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${article.title} | Dompetin Akademi`,
+    title: `${article.title} | Dompetin`,
     description: article.subtitle || article.title,
   };
 }

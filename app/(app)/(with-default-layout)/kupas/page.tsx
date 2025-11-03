@@ -1,9 +1,13 @@
 import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
-import { Route } from "next";
+import { Metadata, Route } from "next";
 import Link from "next/link";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "Kupas | Dompetin",
+};
 
 const CARDS: KupasCardProps[] = [
   {

@@ -1,5 +1,10 @@
 import { Pattern } from "@/components/pattern";
 import DiyPortofolio from "../components/diy-portofolio";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Simulasi Portofolio | Dompetin",
+};
 
 const PortofolioSimulationPage = () => {
   return (

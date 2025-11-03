@@ -2,6 +2,11 @@ import Container from "@/components/container";
 import { Sectors } from "./components/sectors";
 import SectorPerformance from "./components/sector-performance";
 import KupasPortofolioChart from "./components/kupas-portofolio-chart";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Sektor mana yang paling cuan di bursa saham? | Dompetin",
+};
 
 const Kupas1Page = () => {
   return (

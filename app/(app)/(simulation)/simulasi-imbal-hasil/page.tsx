@@ -1,5 +1,10 @@
 import { Pattern } from "@/components/pattern";
 import GuidedPortofolio from "../components/guided-portofolio";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Simulasi Imbal Hasil | Dompetin",
+};
 
 const InvestmentReturnSimulationPage = () => {
   return (

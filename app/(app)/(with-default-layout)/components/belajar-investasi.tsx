@@ -7,7 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const BelajarInvestasi = () => (
-  <Container className="text-center">
+  <Container className="overflow-x-clip text-center">
     <h2 className="text-primary text-3xl font-bold md:text-5xl">
       Belajar investasi tanpa risiko
     </h2>

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import {
   Field,
   FieldContent,
+  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
@@ -35,6 +36,7 @@ import {
 import { InvestmentSimulationResult } from "@/lib/simulate-investments";
 import { generateRowId } from "@/lib/utils";
 import { MinusCircle, PlusCircle } from "lucide-react";
+import Link from "next/link";
 
 type AssetAllocationRow = {
   id: string;
@@ -75,7 +77,7 @@ const DiyPortofolio = () => {
 
         return acc;
       },
-      { totalPercentage: 0, minReturn: 0, maxReturn: 0 }
+      { totalPercentage: 0, minReturn: 0, maxReturn: 0 },
     );
   }, [assets]);
 
@@ -129,7 +131,7 @@ const DiyPortofolio = () => {
 
   const handleAssetTypeChange = (id: string, type: AssetType) => {
     setAssets((prev) =>
-      prev.map((row) => (row.id === id ? { ...row, type } : row))
+      prev.map((row) => (row.id === id ? { ...row, type } : row)),
     );
   };
 
@@ -137,8 +139,8 @@ const DiyPortofolio = () => {
     const sanitizedValue = rawValue.replace(/[^0-9.]/g, "");
     setAssets((prev) =>
       prev.map((row) =>
-        row.id === id ? { ...row, percentage: sanitizedValue } : row
-      )
+        row.id === id ? { ...row, percentage: sanitizedValue } : row,
+      ),
     );
   };
 
@@ -158,13 +160,13 @@ const DiyPortofolio = () => {
   };
 
   return (
-    <Container className="border-b-2 max-w-7xl border-accent">
+    <Container className="border-accent max-w-7xl border-b-2">
       <h2 className="text-5xl font-bold">
         Mau Coba Bikin Portfoliomu Sendiri?
       </h2>
 
-      <div className="flex flex-col md:flex-row gap-6 justify-between w-full mt-6">
-        <div className="flex flex-col w-full gap-6 ">
+      <div className="mt-6 flex w-full flex-col justify-between gap-6 md:flex-row">
+        <div className="flex w-full flex-col gap-6">
           <FieldGroup className="flex flex-row flex-wrap gap-3">
             <Field className="flex-1">
               <FieldLabel>Portofolioku isinya</FieldLabel>
@@ -187,6 +189,11 @@ const DiyPortofolio = () => {
                   />
                   <InputGroupAddon align="inline-end">IDR</InputGroupAddon>
                 </InputGroup>
+                <FieldDescription>
+                  <Link href={`/privacy-policy`} className="underline">
+                    Cek kebijakan privasi kami
+                  </Link>
+                </FieldDescription>
               </FieldContent>
             </Field>
 
@@ -223,13 +230,15 @@ const DiyPortofolio = () => {
                   {assets.map((assetRow, index) => (
                     <div
                       key={assetRow.id}
-                      className="flex flex-col gap-2 md:flex-row md:items-center">
+                      className="flex flex-col gap-2 md:flex-row md:items-center"
+                    >
                       <Button
                         variant="ghost"
                         size="icon"
                         disabled={assets.length === 1}
                         onClick={() => handleRemoveAsset(assetRow.id)}
-                        className="text-destructive hover:text-destructive/80">
+                        className="text-destructive hover:text-destructive/80"
+                      >
                         <MinusCircle />
                       </Button>
                       <div className="flex-1">
@@ -239,10 +248,11 @@ const DiyPortofolio = () => {
                           onValueChange={(value) =>
                             handleAssetTypeChange(
                               assetRow.id,
-                              value as AssetType
+                              value as AssetType,
                             )
-                          }>
-                          <SelectTrigger className="w-full bg-muted text-muted-foreground border-0 justify-center ">
+                          }
+                        >
+                          <SelectTrigger className="bg-muted text-muted-foreground w-full justify-center border-0">
                             <SelectValue
                               placeholder={`Pilih aset ${index + 1}`}
                             />
@@ -253,7 +263,7 @@ const DiyPortofolio = () => {
                                 <SelectItem key={value} value={value}>
                                   {data.label}
                                 </SelectItem>
-                              )
+                              ),
                             )}
                           </SelectContent>
                         </Select>
@@ -271,7 +281,7 @@ const DiyPortofolio = () => {
                             onChange={(event) =>
                               handleAssetPercentageChange(
                                 assetRow.id,
-                                event.target.value
+                                event.target.value,
                               )
                             }
                           />
@@ -284,12 +294,13 @@ const DiyPortofolio = () => {
                   ))}
                 </div>
 
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between pt-3">
+                <div className="flex flex-col gap-2 pt-3 sm:flex-row sm:items-center sm:justify-between">
                   <Button
                     variant="ghost"
                     size="sm"
                     className="text-primary hover:text-primary/80"
-                    onClick={handleAddAsset}>
+                    onClick={handleAddAsset}
+                  >
                     <PlusCircle />
                     add item
                   </Button>
@@ -298,7 +309,8 @@ const DiyPortofolio = () => {
                       allocationIsValid
                         ? "text-muted-foreground"
                         : "text-destructive font-medium"
-                    }`}>
+                    }`}
+                  >
                     Total: {totalAllocationRounded.toFixed(2)}%
                   </span>
                 </div>

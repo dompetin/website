@@ -1,6 +1,11 @@
 "use client";
 import Container from "@/components/container";
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import {
   InputGroup,
   InputGroupAddon,
@@ -19,6 +24,7 @@ import {
 } from "@/lib/simulate-investments";
 import { useEffect, useState } from "react";
 import PortofolioChart from "./portofolio-chart";
+import Link from "next/link";
 
 const GuidedPortofolio = () => {
   const [formData, setFormData] = useState<{
@@ -70,6 +76,11 @@ const GuidedPortofolio = () => {
               />
               <InputGroupAddon align={`inline-end`}>IDR</InputGroupAddon>
             </InputGroup>
+            <FieldDescription>
+              <Link href={`/privacy-policy`} className="underline">
+                Cek kebijakan privasi kami
+              </Link>
+            </FieldDescription>
           </Field>
 
           <Field>

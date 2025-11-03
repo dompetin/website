@@ -1,7 +1,10 @@
 import Container from "@/components/container";
+import { Metadata } from "next";
 import Image from "next/image";
 
-// bg-gradient-to-b from-[#E6D8F2] to-30%
+export const metadata: Metadata = {
+  title: "Tentang Kami | Dompetin",
+};
 
 export default function TentangKamiPage() {
   return (

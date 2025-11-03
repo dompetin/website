@@ -1,7 +1,7 @@
 import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
-import { Route } from "next";
+import { Metadata, Route } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import type { AkademiArticle } from "@/payload-types";
@@ -9,6 +9,10 @@ import config from "@payload-config";
 import { getPayload } from "payload";
 
 export const revalidate = 3600;
+
+export const metadata: Metadata = {
+  title: "Akademi | Dompetin",
+};
 
 const COVER_IMAGES = [
   "/kupas/jumping.png",
