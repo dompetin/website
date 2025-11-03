@@ -1,14 +1,11 @@
-import { Footer } from "../../components/footer";
 import Container from "@/components/container";
-import { Pattern } from "@/components/pattern";
 import { Sectors } from "./components/sectors";
 import SectorPerformance from "./components/sector-performance";
 import KupasPortofolioChart from "./components/kupas-portofolio-chart";
 
 const Kupas1Page = () => {
   return (
-    <main className="relative min-h-screen pt-30">
-      <Pattern className="top-0 bottom-auto h-auto rotate-180 opacity-50" />
+    <>
       <Container className="[&_p]:text-justify [&>h3]:my-2">
         <div>
           <h3 className="text-primary text-4xl font-bold">Kupas #1</h3>
@@ -56,8 +53,7 @@ const Kupas1Page = () => {
 
         <KupasPortofolioChart />
       </Container>
-      <Footer />
-    </main>
+    </>
   );
 };
 

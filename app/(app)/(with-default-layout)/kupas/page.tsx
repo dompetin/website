@@ -1,10 +1,8 @@
 import Container from "@/components/container";
-import { Pattern } from "@/components/pattern";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import { Route } from "next";
 import Link from "next/link";
-import { Footer } from "../components/footer";
 import Image from "next/image";
 
 const CARDS: KupasCardProps[] = [
@@ -19,8 +17,7 @@ const CARDS: KupasCardProps[] = [
 
 const KupasPage = () => {
   return (
-    <main className="relative min-h-screen pt-30">
-      <Pattern className="top-0 bottom-auto h-auto rotate-180 opacity-50" />
+    <>
       <Container className="max-w-4xl gap-20">
         <div className="flex flex-col gap-4 text-center">
           <h2 className="text-lg md:text-2xl">Cerita dibalik data?</h2>
@@ -44,9 +41,7 @@ const KupasPage = () => {
           </div>
         </div>
       </Container>
-
-      <Footer />
-    </main>
+    </>
   );
 };
 

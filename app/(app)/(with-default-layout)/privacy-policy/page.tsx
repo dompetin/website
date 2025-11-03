@@ -1,6 +1,5 @@
 import Container from "@/components/container";
 import { LexicalRenderer } from "@/components/lexical-renderer";
-import { Pattern } from "@/components/pattern";
 import type { PrivacyPolicyPage } from "@/payload-types";
 import config from "@payload-config";
 import { notFound } from "next/navigation";
@@ -24,15 +23,14 @@ const PrivacyPolicyPage = async () => {
   }
 
   return (
-    <main className="relative min-h-screen pt-30">
-      <Pattern className="top-0 bottom-auto h-auto rotate-180 opacity-50" />
+    <>
       <Container className="max-w-4xl gap-8">
 
         <article className="space-y-8">
           {page.content && <LexicalRenderer content={page.content} />}
         </article>
       </Container>
-    </main>
+    </>
   )
 };
 

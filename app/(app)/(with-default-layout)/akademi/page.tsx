@@ -1,11 +1,9 @@
 import Container from "@/components/container";
-import { Pattern } from "@/components/pattern";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import { Route } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { Footer } from "../components/footer";
 import type { AkademiArticle } from "@/payload-types";
 import config from "@payload-config";
 import { getPayload } from "payload";
@@ -25,8 +23,7 @@ const AkademiPage = async () => {
   const articles = await getAkademiArticles();
 
   return (
-    <main className="relative min-h-screen pt-30">
-      <Pattern className="top-0 bottom-auto h-auto rotate-180 opacity-50" />
+    <>
       <Container className="max-w-4xl gap-20">
         <div className="flex flex-col gap-4 text-center">
           <h3 className="text-lg md:text-2xl">
@@ -61,9 +58,7 @@ const AkademiPage = async () => {
           </div>
         </div>
       </Container>
-
-      <Footer />
-    </main>
+    </>
   );
 };
 

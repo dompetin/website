@@ -1,5 +1,4 @@
 import Container from "@/components/container";
-import { Pattern } from "@/components/pattern";
 import { Button } from "@/components/ui/button";
 import { LexicalRenderer } from "@/components/lexical-renderer";
 import { ArrowLeft } from "lucide-react";
@@ -63,8 +62,7 @@ const AkademiArticlePage = async ({ params }: PageProps) => {
   }
 
   return (
-    <main className="relative min-h-screen pt-30">
-      <Pattern className="top-0 bottom-auto h-auto rotate-180 opacity-50" />
+    <>
       <Container className="max-w-4xl gap-8">
         <Button asChild variant="ghost" className="w-fit px-3">
           <Link href="/akademi">
@@ -88,7 +86,7 @@ const AkademiArticlePage = async ({ params }: PageProps) => {
           {article.content && <LexicalRenderer content={article.content} />}
         </article>
       </Container>
-    </main>
+    </>
   );
 };
 

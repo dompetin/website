@@ -1,14 +1,11 @@
 import Container from "@/components/container";
-import { Pattern } from "@/components/pattern";
 import Image from "next/image";
-import { Footer } from "../components/footer";
 
 // bg-gradient-to-b from-[#E6D8F2] to-30%
 
 export default function TentangKamiPage() {
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-center">
-      <Pattern className="top-0 bottom-auto h-auto rotate-180 opacity-50" />
+    <div className="flex flex-col items-center justify-center">
       <Container className="my-32 flex flex-col items-center justify-center gap-8 md:flex-row md:gap-12 lg:gap-16">
         <Image
           src="/tentang-kami/hero.png"
@@ -19,7 +16,7 @@ export default function TentangKamiPage() {
           className="w-full max-w-[280px] sm:max-w-[320px] md:max-w-[360px]"
         />
         <div className="space-y-4 md:space-y-6 [&_p]:mt-4 md:[&_p]:mt-6">
-          <h1 className="mb-8 text-4xl leading-none font-bold text-black sm:text-5xl md:mb-13 md:text-6xl lg:text-7xl xl:text-[3rem]">
+          <h1 className="mb-8 text-4xl font-bold leading-none text-black sm:text-5xl md:mb-13 md:text-6xl lg:text-7xl xl:text-[3rem]">
             Tentang
             <br />{" "}
             <span className="text-6xl text-purple-400 sm:text-7xl md:text-8xl lg:text-[7rem] xl:text-[8rem]">
@@ -97,7 +94,6 @@ export default function TentangKamiPage() {
           </ul>
         </div>
       </Container>
-      <Footer />
-    </main>
+    </div>
   );
 }
