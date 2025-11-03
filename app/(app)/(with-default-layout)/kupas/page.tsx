@@ -2,6 +2,7 @@ import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import { Metadata, Route } from "next";
+import * as m from "@/lib/motion";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -25,8 +26,23 @@ const KupasPage = () => {
       <Container className="max-w-4xl gap-20">
         <div className="flex flex-col gap-4 text-center">
           <h2 className="text-lg md:text-2xl">Cerita dibalik data?</h2>
-          <h1 className="text-4xl font-bold md:text-6xl">
-            Yuk Kita <span className="text-primary">Kupas</span>
+          <h1 className="flex flex-wrap items-center justify-center gap-3 text-4xl font-bold md:text-6xl">
+            Yuk Kita{" "}
+            <m.span
+              initial={{
+                opacity: 0,
+                filter: "blur(4px)",
+              }}
+              animate={{
+                opacity: 1,
+                filter: "blur(0px)",
+              }}
+              transition={{ duration: 0.5, delay: 1, ease: "easeOut" }}
+              className="text-primary"
+            >
+              {" "}
+              Kupas
+            </m.span>
           </h1>
           <p>
             Lewat visual, data dan insight, kita cari tahu fenomena keuangan di
@@ -35,14 +51,27 @@ const KupasPage = () => {
         </div>
 
         <div className="grid auto-rows-fr grid-cols-1 gap-3 p-4 md:grid-cols-2 md:gap-8">
-          {CARDS.map((card) => (
-            <KupasCard key={card.href} {...card} />
+          {CARDS.map((card, i) => (
+            <m.div
+              key={card.href}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+            >
+              <KupasCard {...card} />
+            </m.div>
           ))}
-          <div className="flex items-center">
+          <m.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: CARDS.length * 0.1 }}
+            viewport={{ once: true }}
+            className="flex items-center"
+          >
             <p className="text-2xl font-bold text-neutral-500 md:text-6xl">
               ...lebih banyak lagi segera hadir
             </p>
-          </div>
+          </m.div>
         </div>
       </Container>
     </>

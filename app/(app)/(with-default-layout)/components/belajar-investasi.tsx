@@ -9,24 +9,13 @@ import * as m from "@/lib/motion";
 
 const BelajarInvestasi = () => (
   <Container className="overflow-x-clip text-center xl:overflow-x-visible">
-    <m.h2
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.4 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
-      className="text-primary text-3xl font-bold md:text-5xl"
-    >
+    <h2 className="text-primary text-3xl font-bold md:text-5xl">
       Belajar investasi tanpa risiko
-    </m.h2>
-    <m.p
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.4 }}
-      transition={{ duration: 0.4, delay: 0.1, ease: "easeOut" }}
-    >
+    </h2>
+    <p>
       Bangun portofoliomu sendiri dan lihat bagaimana uangmu bisa tumbuh dari
       berbagai instrumen mulai dari emas, saham, hingga reksa dana.
-    </m.p>
+    </p>
 
     <div className="mt-16 grid grid-cols-1 gap-4 text-start md:grid-cols-2">
       <CardPortofolio />

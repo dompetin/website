@@ -26,24 +26,13 @@ const CARDS = [
 const DownloadTemplates = () => {
   return (
     <Container>
-      <m.p
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.4 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
-        className="text-center text-xl"
-      >
+      <p className="text-center text-xl">
         Mau coba terapin pengetahuan finansialmu ke dunia nyata?
-      </m.p>
-      <m.h2
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.4 }}
-        transition={{ duration: 0.4, delay: 0.1, ease: "easeOut" }}
-        className="text-primary text-center text-3xl font-bold md:text-5xl"
-      >
+      </p>
+
+      <h2 className="text-primary text-center text-3xl font-bold md:text-5xl">
         Yuk, download template gratis dari Dompetin
-      </m.h2>
+      </h2>
 
       <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
         {CARDS.map((card, index) => (

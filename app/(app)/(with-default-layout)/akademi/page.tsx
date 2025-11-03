@@ -1,4 +1,5 @@
 import Container from "@/components/container";
+import * as m from "@/lib/motion";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import { Metadata, Route } from "next";
@@ -31,35 +32,63 @@ const AkademiPage = async () => {
       <Container className="max-w-4xl gap-20">
         <div className="flex flex-col gap-4 text-center">
           <h3 className="text-lg md:text-2xl">
-            Bingung mulai belajar manajemen keuangan dari mana
-          </h3>
-          <h2 className="text-4xl font-bold md:text-6xl">
-            Yuk Belajar di
-            <span className="text-primary"> Akademi </span>
-            <span className="text-neutral-900">Dompetin</span>
-          </h2>
+            {" "}
+            Bingung mulai belajar manajemen keuangan dari mana{" "}
+          </h3>{" "}
+          <h2 className="flex flex-wrap items-center justify-center gap-3 text-4xl font-bold md:text-6xl">
+            {" "}
+            Yuk Belajar di{" "}
+            <m.span
+              initial={{
+                opacity: 0,
+                filter: "blur(4px)",
+              }}
+              animate={{
+                opacity: 1,
+                filter: "blur(0px)",
+              }}
+              transition={{ duration: 0.5, delay: 1, ease: "easeOut" }}
+              className="text-primary"
+            >
+              {" "}
+              Akademi{" "}
+            </m.span>{" "}
+            <span className="text-neutral-900">Dompetin</span>{" "}
+          </h2>{" "}
           <p>
+            {" "}
             Mulai perjalanan finansial di sini dari dasar menabung sampai
-            strategi investasi
-          </p>
-        </div>
-
+            strategi investasi{" "}
+          </p>{" "}
+        </div>{" "}
         <div className="grid auto-rows-fr grid-cols-1 gap-3 p-4 md:grid-cols-2 md:gap-8">
+          {" "}
           {articles.length > 0 &&
             articles.map((article, index) => (
-              <AkademiCard
-                key={article.slug}
-                title={article.title}
-                description={article.subtitle || ""}
-                href={`/akademi/${article.slug}`}
-                src={COVER_IMAGES[index % COVER_IMAGES.length]}
-              />
+              <m.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <AkademiCard
+                  key={article.slug}
+                  title={article.title}
+                  description={article.subtitle || ""}
+                  href={`/akademi/${article.slug}`}
+                  src={COVER_IMAGES[index % COVER_IMAGES.length]}
+                />
+              </m.div>
             ))}
-          <div className="flex items-center">
+          <m.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: articles.length * 0.1 }}
+            className="flex items-center"
+          >
             <p className="text-2xl font-bold text-neutral-500 md:text-6xl">
               ...lebih banyak lagi segera hadir
             </p>
-          </div>
+          </m.div>
         </div>
       </Container>
     </>
