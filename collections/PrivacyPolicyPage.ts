@@ -3,7 +3,7 @@ import { CollectionConfig } from "payload";
 export const PrivacyPolicyPage: CollectionConfig = {
   slug: "privacy-policy-page",
   admin: {
-    group: "content",
+    group: "Content",
   },
   access: {
     read: () => true,
