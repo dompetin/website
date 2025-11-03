@@ -33,9 +33,10 @@ const CardPortofolio = () => (
           Mau coba bikin{" "}
           <span className="text-secondary">portofoliomu sendiri?</span>
         </h3>
-        <Button asChild variant={`secondary`} className="ml-auto">
+        <Button asChild variant={`secondary`} className="group ml-auto">
           <Link href="/simulasi-portofolio">
-            Simulasikan Sekarang <ChevronRight />
+            Simulasikan Sekarang{" "}
+            <ChevronRight className="transition-transform ease-out group-hover:translate-x-1" />
           </Link>
         </Button>
       </div>
@@ -65,9 +66,10 @@ const CardImbal = () => (
           <span className="text-secondary">di satu aset aja?</span>
         </h3>
 
-        <Button asChild variant={`secondary`} className="ml-auto">
+        <Button asChild variant={`secondary`} className="group ml-auto">
           <Link href="/simulasi-imbal-hasil">
-            Simulasikan Sekarang <ChevronRight />
+            Simulasikan Sekarang{" "}
+            <ChevronRight className="transition-transform ease-out group-hover:translate-x-1" />
           </Link>
         </Button>
       </div>

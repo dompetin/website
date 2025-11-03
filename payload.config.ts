@@ -9,6 +9,7 @@ import { fileURLToPath } from "url";
 import { AkademiArticle } from "./collections/AkademiArticle";
 import { Media } from "./collections/Media";
 import { Users } from "./collections/Users";
+import { PrivacyPolicyPage } from "./collections/PrivacyPolicyPage";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -20,7 +21,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, AkademiArticle],
+  collections: [Users, Media, AkademiArticle, PrivacyPolicyPage],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {

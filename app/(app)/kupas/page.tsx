@@ -75,7 +75,7 @@ const KupasCard = (props: KupasCardProps) => (
     <div className="z-20 flex flex-col items-center gap-4 rounded-b-3xl bg-white p-6 text-center">
       <h3 className="text-2xl font-bold">{props.title}</h3>
       <p className="text-sm">{props.description}</p>
-      <Button asChild>
+      <Button asChild transition={"scale"}>
         <Link href={props.href as Route}>
           Lihat Selengkapnya <ChevronRight />
         </Link>

@@ -30,7 +30,7 @@ const Hero = () => (
         <p className="md:mt-10">Mau tau portofolio yang cocok untuk kamu?</p>
         <Button
           size={"xl"}
-          className="w-fit text-xl font-semibold max-md:mt-8"
+          className="group w-fit text-xl font-semibold max-md:mt-8"
           asChild
         >
           <Link href="/survey">
@@ -38,7 +38,7 @@ const Hero = () => (
               Lewat quiz Dompetin, yuk cari tahu!
             </span>
             <span className="sm:hidden">Yuk cari tahu!</span>
-            <ArrowRight />
+            <ArrowRight className="transition-transform ease-out group-hover:translate-x-1" />
           </Link>
         </Button>
       </div>

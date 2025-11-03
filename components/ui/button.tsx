@@ -32,10 +32,15 @@ const buttonVariants = cva(
         "icon-sm": "size-8",
         "icon-lg": "size-10",
       },
+      transition: {
+        scale: "hover:scale-105 active:scale:95",
+        default: "",
+      },
     },
     defaultVariants: {
       variant: "default",
       size: "default",
+      transition: "default",
     },
   },
 );
@@ -44,6 +49,7 @@ function Button({
   className,
   variant,
   size,
+  transition,
   asChild = false,
   ...props
 }: React.ComponentProps<"button"> &
@@ -55,7 +61,7 @@ function Button({
   return (
     <Comp
       data-slot="button"
-      className={cn(buttonVariants({ variant, size }), className)}
+      className={cn(buttonVariants({ variant, size, transition }), className)}
       {...props}
     />
   );

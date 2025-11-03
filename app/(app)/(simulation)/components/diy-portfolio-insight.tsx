@@ -48,18 +48,31 @@ const DiyPortfolioInsight = ({
   totalDeposited,
   horizonYears = SIMULATION_HORIZON_YEARS,
 }: DiyPortfolioInsightProps) => {
-  const latestProjectionCopy = latestProjection
-    ? `Tanpa investasi, tabunganmu bisa menjadi sekitar ${formatCurrency(
-        latestProjection.moneyWithoutInvesting,
-      )} dalam ${horizonYears} tahun atau sekitar ${Math.max(
-        0,
-        Math.round(
-          ((totalDeposited - latestProjection.moneyWithoutInvesting) /
-            Math.max(totalDeposited, 1)) *
-            100,
-        ),
-      )}% nilainya tergerus inflasi.`
-    : "Masukkan tabungan awal dan setel alokasi asetmu untuk melihat analisa portofolio.";
+  const latestProjectionCopy = latestProjection ? (
+    <>
+      Tanpa investasi, tabunganmu dari{" "}
+      <strong className="text-lg">{formatCurrency(totalDeposited)} </strong>{" "}
+      bisa menjadi sekitar{" "}
+      <strong className="text-lg">
+        {formatCurrency(latestProjection.moneyWithoutInvesting)}
+      </strong>{" "}
+      dalam {horizonYears} tahun atau sekitar{" "}
+      <span className="text-destructive text-xl font-bold">
+        {Math.max(
+          0,
+          Math.round(
+            ((totalDeposited - latestProjection.moneyWithoutInvesting) /
+              Math.max(totalDeposited, 1)) *
+              100,
+          ),
+        )}
+        %{" "}
+      </span>
+      nilainya tergerus inflasi.
+    </>
+  ) : (
+    "Masukkan tabungan awal dan setel alokasi asetmu untuk melihat analisa portofolio."
+  );
 
   return (
     <section className="bg-muted/20 mt-24 flex flex-col gap-10 rounded-3xl px-8 py-10">

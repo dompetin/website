@@ -1,7 +1,5 @@
 import Container from "@/components/container";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -22,36 +20,47 @@ const CONTENT = [
 
 const FinancialMyths = () => (
   <Container className="">
-    <div className="">
+    <div className="mb-12 flex flex-col gap-8 xl:gap-20">
       {CONTENT.map((section) => (
         <Section key={section.title} {...section} />
       ))}
     </div>
-    <Separator className="mt-10 data-[orientation=horizontal]:h-[2px]" />
+    <Separator className="mt-10 data-[orientation=horizontal]:h-0.5" />
   </Container>
 );
 
 const Section = (props: (typeof CONTENT)[number]) => (
-  <div className="mx-auto flex max-w-3xl items-center gap-6 p-2 max-md:flex-col max-md:items-center md:gap-16">
-    <div className="relative size-45 shrink-0 overflow-clip rounded-full">
-      <Image
-        src={props.src}
-        alt={props.title}
-        fill
-        className="object-contain"
-      />
+  <Link
+    href={props.href}
+    className="relative mx-auto w-full max-w-3xl transition-all ease-out hover:scale-105 hover:cursor-pointer hover:shadow-md active:scale-95"
+  >
+    <div className="absolute z-10 hidden xl:-bottom-12 xl:-left-20 xl:block">
+      <div className="relative shrink-0 overflow-clip rounded-full bg-white xl:size-45">
+        <Image
+          src={props.src}
+          alt={props.title}
+          fill
+          className="object-contain"
+        />
+      </div>
     </div>
 
-    <div className="flex flex-col gap-2 max-md:items-center max-md:text-center">
-      <h3 className="text-primary text-3xl font-bold">{props.title}</h3>
-      <p className="text-muted-foreground text-2xl">{props.description}</p>
-      <Button asChild variant={"secondary"} className="mt-6 w-fit">
-        <Link href={props.href}>
-          Mulai dari sini <ChevronRight />
-        </Link>
-      </Button>
+    <h3 className="text-secondary flex w-fit translate-y-4 items-center gap-2 rounded-3xl bg-white px-12 py-3 text-center text-3xl font-bold shadow-xl xl:ml-20">
+      <div className="relative size-10 shrink-0 overflow-clip rounded-full bg-white xl:hidden">
+        <Image
+          src={props.src}
+          alt={props.title}
+          fill
+          className="object-contain"
+        />
+      </div>
+      {props.title}
+    </h3>
+
+    <div className="bg-secondary rounded-3xl p-6 text-white">
+      <p className="text-xl font-bold xl:ml-30">{props.description}</p>
     </div>
-  </div>
+  </Link>
 );
 
 export default FinancialMyths;

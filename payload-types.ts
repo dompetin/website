@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     media: Media;
     'akademi-article': AkademiArticle;
+    'privacy-policy-page': PrivacyPolicyPage;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -80,6 +81,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'akademi-article': AkademiArticleSelect<false> | AkademiArticleSelect<true>;
+    'privacy-policy-page': PrivacyPolicyPageSelect<false> | PrivacyPolicyPageSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -195,6 +197,30 @@ export interface AkademiArticle {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "privacy-policy-page".
+ */
+export interface PrivacyPolicyPage {
+  id: number;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -228,6 +254,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'akademi-article';
         value: number | AkademiArticle;
+      } | null)
+    | ({
+        relationTo: 'privacy-policy-page';
+        value: number | PrivacyPolicyPage;
       } | null)
     | ({
         relationTo: 'payload-kv';
@@ -323,6 +353,15 @@ export interface AkademiArticleSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   subtitle?: T;
+  content?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "privacy-policy-page_select".
+ */
+export interface PrivacyPolicyPageSelect<T extends boolean = true> {
   content?: T;
   updatedAt?: T;
   createdAt?: T;
