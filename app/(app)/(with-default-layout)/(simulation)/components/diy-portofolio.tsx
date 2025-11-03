@@ -37,6 +37,8 @@ import { InvestmentSimulationResult } from "@/lib/simulate-investments";
 import { generateRowId } from "@/lib/utils";
 import { MinusCircle, PlusCircle } from "lucide-react";
 import Link from "next/link";
+import * as m from "@/lib/motion";
+import { AnimatePresence } from "motion/react";
 
 type AssetAllocationRow = {
   id: string;
@@ -226,72 +228,82 @@ const DiyPortofolio = () => {
             <Field>
               <FieldLabel>Komposisi aset</FieldLabel>
               <FieldContent>
-                <div className="flex flex-col gap-4">
-                  {assets.map((assetRow, index) => (
-                    <div
-                      key={assetRow.id}
-                      className="flex flex-col gap-2 md:flex-row md:items-center"
-                    >
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        disabled={assets.length === 1}
-                        onClick={() => handleRemoveAsset(assetRow.id)}
-                        className="text-destructive hover:text-destructive/80"
+                <div className="flex flex-col">
+                  <AnimatePresence>
+                    {assets.map((assetRow, index) => (
+                      <m.div
+                        key={assetRow.id}
+                        initial={{ opacity: 0, height: 0, marginBottom: 0 }}
+                        animate={{
+                          opacity: 1,
+                          height: "auto",
+                          marginBottom: 8,
+                        }}
+                        exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+                        transition={{ duration: 0.4, type: "spring" }}
+                        className="flex flex-col gap-2 md:flex-row md:items-center"
                       >
-                        <MinusCircle />
-                      </Button>
-                      <div className="flex-1">
-                        <Select
-                          name={`asset_type_${assetRow.id}`}
-                          value={assetRow.type}
-                          onValueChange={(value) =>
-                            handleAssetTypeChange(
-                              assetRow.id,
-                              value as AssetType,
-                            )
-                          }
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          disabled={assets.length === 1}
+                          onClick={() => handleRemoveAsset(assetRow.id)}
+                          className="text-destructive hover:text-destructive/80"
                         >
-                          <SelectTrigger className="bg-muted text-muted-foreground w-full justify-center border-0">
-                            <SelectValue
-                              placeholder={`Pilih aset ${index + 1}`}
-                            />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {Object.entries(assetCatalog).map(
-                              ([value, data]) => (
-                                <SelectItem key={value} value={value}>
-                                  {data.label}
-                                </SelectItem>
-                              ),
-                            )}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="w-full md:w-[100px]">
-                        <InputGroup>
-                          <InputGroupInput
-                            type="number"
-                            inputMode="decimal"
-                            min={0}
-                            max={100}
-                            step="0.1"
-                            value={assetRow.percentage}
-                            placeholder="0"
-                            onChange={(event) =>
-                              handleAssetPercentageChange(
+                          <MinusCircle />
+                        </Button>
+                        <div className="flex-1">
+                          <Select
+                            name={`asset_type_${assetRow.id}`}
+                            value={assetRow.type}
+                            onValueChange={(value) =>
+                              handleAssetTypeChange(
                                 assetRow.id,
-                                event.target.value,
+                                value as AssetType,
                               )
                             }
-                          />
-                          <InputGroupAddon align="inline-end">
-                            %
-                          </InputGroupAddon>
-                        </InputGroup>
-                      </div>
-                    </div>
-                  ))}
+                          >
+                            <SelectTrigger className="bg-muted text-muted-foreground w-full justify-center border-0">
+                              <SelectValue
+                                placeholder={`Pilih aset ${index + 1}`}
+                              />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {Object.entries(assetCatalog).map(
+                                ([value, data]) => (
+                                  <SelectItem key={value} value={value}>
+                                    {data.label}
+                                  </SelectItem>
+                                ),
+                              )}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="w-full md:w-[100px]">
+                          <InputGroup>
+                            <InputGroupInput
+                              type="number"
+                              inputMode="decimal"
+                              min={0}
+                              max={100}
+                              step="0.1"
+                              value={assetRow.percentage}
+                              placeholder="0"
+                              onChange={(event) =>
+                                handleAssetPercentageChange(
+                                  assetRow.id,
+                                  event.target.value,
+                                )
+                              }
+                            />
+                            <InputGroupAddon align="inline-end">
+                              %
+                            </InputGroupAddon>
+                          </InputGroup>
+                        </div>
+                      </m.div>
+                    ))}
+                  </AnimatePresence>
                 </div>
 
                 <div className="flex flex-col gap-2 pt-3 sm:flex-row sm:items-center sm:justify-between">
