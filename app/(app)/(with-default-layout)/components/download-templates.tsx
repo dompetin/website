@@ -2,15 +2,19 @@ import Container from "@/components/container";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowUpRight } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
+// images are placed relative to /home/templates
 const CARDS = [
   {
     title: "Template Budget Finansial dan Manajemen Finansial",
+    src: "/budget.png",
     href: "https://docs.google.com/spreadsheets/d/1_uGwZjk9UdApDLu5CpTEDbM6Bzrlk2qEhI8BSG-QdSk/edit?gid=0#gid=0",
   },
   {
     title: "Tracker Portofolio Investasi",
+    src: "/tracker.png",
     href: "https://docs.google.com/spreadsheets/d/14bc53zItZ6cvPJte5WlM9kADPKjG6Pp7ILgmoWH9UwI/edit?gid=0#gid=0",
   },
   {
@@ -39,7 +43,7 @@ const DownloadTemplates = () => {
 
 const DownloadCard = (props: {
   title: string;
-  src?: string ;
+  src?: string;
   href?: string;
 }) => (
   <Card className="bg-primary text-background rounded-3xl">
@@ -52,9 +56,21 @@ const DownloadCard = (props: {
       {props.href ? (
         <>
           <div className="relative my-6 h-40">
-            <div className="bg-secondary/50 absolute inset-0 z-0 h-40 -translate-y-6 scale-90 overflow-clip rounded-3xl" />
-            <div className="bg-secondary absolute inset-0 z-10 h-40 -translate-y-3 scale-95 overflow-clip rounded-3xl" />
-            <div className="absolute inset-0 z-20 h-40 overflow-clip rounded-3xl bg-white"></div>
+            <div className="bg-secondary/20 absolute inset-0 z-0 h-40 -translate-y-6 scale-90 overflow-clip rounded-3xl" />
+            <div className="bg-secondary/50 absolute inset-0 z-10 h-40 -translate-y-3 scale-95 overflow-clip rounded-3xl" />
+            <div className="bg-secondary absolute inset-0 z-20 h-40 overflow-clip rounded-3xl">
+              {props.src && (
+                <div className="relative h-full w-full">
+                  <Image
+                    src={`/home/templates${props.src}`}
+                    alt={props.title}
+                    fill
+                    sizes="100%"
+                    className="object-cover"
+                  />
+                </div>
+              )}
+            </div>
           </div>
 
           <Button
