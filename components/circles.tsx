@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-
+import * as m from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 type CirclesProps = {
@@ -57,15 +57,24 @@ export const Circles = forwardRef<HTMLDivElement, CirclesProps>(
     return (
       <div ref={ref} className={cn("pointer-events-none", className)}>
         <div className="relative h-full w-full">
-          <div
+          <m.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 1, ease: "easeOut" }}
             style={{ backgroundColor: shades[0] }}
             className="absolute inset-0 rounded-full"
           />
-          <div
+          <m.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 1, delay: 0.25, ease: "easeOut" }}
             style={{ backgroundColor: shades[1] }}
             className="absolute inset-[12%] rounded-full"
           />
-          <div
+          <m.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
             style={{ backgroundColor: shades[2] }}
             className="absolute inset-[24%] rounded-full"
           />

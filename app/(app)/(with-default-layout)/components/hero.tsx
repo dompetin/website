@@ -27,23 +27,41 @@ const Hero = () => (
           <span className="text-primary">Dompetin</span> Aja!
         </m.h1>
 
-        <p className="md:mt-10">Mau tau portofolio yang cocok untuk kamu?</p>
-        <Button
-          size={"xl"}
-          className="group w-fit text-xl font-semibold max-md:mt-8"
-          asChild
+        <m.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.6, ease: "easeOut" }}
+          className="md:mt-10"
         >
-          <Link href="/survey">
-            <span className="max-sm:hidden">
-              Lewat quiz Dompetin, yuk cari tahu!
-            </span>
-            <span className="sm:hidden">Yuk cari tahu!</span>
-            <ArrowRight className="transition-transform ease-out group-hover:translate-x-1" />
-          </Link>
-        </Button>
+          Mau tau portofolio yang cocok untuk kamu?
+        </m.p>
+        <m.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.8, ease: "easeOut" }}
+        >
+          <Button
+            size={"xl"}
+            className="group w-fit text-xl font-semibold max-md:mt-8"
+            asChild
+          >
+            <Link href="/survey">
+              <span className="max-sm:hidden">
+                Lewat quiz Dompetin, yuk cari tahu!
+              </span>
+              <span className="sm:hidden">Yuk cari tahu!</span>
+              <ArrowRight className="transition-transform ease-out group-hover:translate-x-1" />
+            </Link>
+          </Button>
+        </m.div>
       </div>
 
-      <div className="relative size-100 max-md:hidden">
+      <m.div
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5, delay: 1, ease: "easeOut" }}
+        className="relative size-100 max-md:hidden"
+      >
         <Image
           src={`/home/walking.png`}
           alt="Wally Walking"
@@ -51,7 +69,7 @@ const Hero = () => (
           fill
           className="object-contain"
         />
-      </div>
+      </m.div>
     </div>
 
     <Separator className="mt-20 data-[orientation=horizontal]:h-[2px]" />

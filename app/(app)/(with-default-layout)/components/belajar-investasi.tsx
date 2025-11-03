@@ -5,16 +5,28 @@ import { Separator } from "@/components/ui/separator";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import * as m from "@/lib/motion";
 
 const BelajarInvestasi = () => (
-  <Container className="overflow-x-clip text-center">
-    <h2 className="text-primary text-3xl font-bold md:text-5xl">
+  <Container className="overflow-x-clip text-center xl:overflow-x-visible">
+    <m.h2
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.4 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+      className="text-primary text-3xl font-bold md:text-5xl"
+    >
       Belajar investasi tanpa risiko
-    </h2>
-    <p>
+    </m.h2>
+    <m.p
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.4 }}
+      transition={{ duration: 0.4, delay: 0.1, ease: "easeOut" }}
+    >
       Bangun portofoliomu sendiri dan lihat bagaimana uangmu bisa tumbuh dari
-      berbagai instrumen mulai dari emas, saham, hingga reksa dana.
-    </p>
+      berbagai instrumen mulai dari emas, saham, hingga reksa dana.
+    </m.p>
 
     <div className="mt-16 grid grid-cols-1 gap-4 text-start md:grid-cols-2">
       <CardPortofolio />
@@ -26,7 +38,13 @@ const BelajarInvestasi = () => (
 );
 
 const CardPortofolio = () => (
-  <div className="relative rounded-3xl bg-linear-to-tl from-pink-300 to-pink-200 shadow-xl">
+  <m.div
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, amount: 0.4 }}
+    transition={{ duration: 0.4, ease: "easeOut" }}
+    className="relative rounded-3xl bg-linear-to-tl from-pink-300 to-pink-200 shadow-xl"
+  >
     <div className="relative h-full overflow-hidden rounded-3xl p-10">
       <div className="flex h-full flex-col justify-between gap-6 *:z-10 md:ml-30">
         <h3 className="w-full text-xl font-bold text-white md:text-3xl">
@@ -43,7 +61,7 @@ const CardPortofolio = () => (
 
       <Circles
         color="#f9a8d4"
-        className="absolute -right-30 -bottom-30 size-60"
+        className="absolute -right-30 -bottom-30 size-80"
       />
     </div>
 
@@ -54,11 +72,17 @@ const CardPortofolio = () => (
       height={250}
       className="absolute bottom-0 -left-20 max-md:hidden"
     />
-  </div>
+  </m.div>
 );
 
 const CardImbal = () => (
-  <div className="relative rounded-3xl bg-linear-to-tl from-purple-300 to-purple-200 shadow-xl">
+  <m.div
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, amount: 0.4 }}
+    transition={{ duration: 0.4, delay: 0.15, ease: "easeOut" }}
+    className="relative rounded-3xl bg-linear-to-tl from-purple-300 to-purple-200 shadow-xl"
+  >
     <div className="relative h-full overflow-hidden rounded-3xl p-10">
       <div className="flex h-full flex-col justify-between gap-6 *:z-10 md:mr-20">
         <h3 className="w-full text-xl font-bold md:text-3xl">
@@ -74,7 +98,7 @@ const CardImbal = () => (
         </Button>
       </div>
 
-      <Circles className="absolute -bottom-30 -left-30 size-60" />
+      <Circles className="absolute -bottom-30 -left-30 size-80" />
     </div>
 
     <Image
@@ -84,7 +108,7 @@ const CardImbal = () => (
       height={250}
       className="absolute -right-20 bottom-0 max-md:hidden"
     />
-  </div>
+  </m.div>
 );
 
 export default BelajarInvestasi;
