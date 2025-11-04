@@ -15,11 +15,11 @@ export const metadata: Metadata = {
   title: "Akademi | Dompetin",
 };
 
-const ArticlesByCategoryPage = async ({
-  params,
-}: {
+type PageProps = {
   params: Promise<{ category: string }>;
-}) => {
+};
+
+const ArticlesByCategoryPage = async ({ params }: PageProps) => {
   const { category: categorySlug } = await params;
   const category = await getCategoryArticles(categorySlug);
 
@@ -30,7 +30,7 @@ const ArticlesByCategoryPage = async ({
   return (
     <>
       <Container className="max-w-4xl gap-20">
-        <Button asChild variant="ghost" className="mb-10 w-fit px-3">
+        <Button asChild variant="ghost" className="w-fit px-3">
           <Link href="/akademi">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Kembali
@@ -42,7 +42,7 @@ const ArticlesByCategoryPage = async ({
           </h2>
           <p>{category.subtitle}</p>
         </div>{" "}
-        <div className="grid auto-rows-fr grid-cols-1 gap-3 p-4 lg:grid-cols-2 lg:gap-8">
+        <div className="grid auto-rows-fr grid-cols-1 gap-3 p-4 lg:gap-8">
           {" "}
           {articles.length > 0 &&
             articles.map((article, index) => (
@@ -76,6 +76,46 @@ const ArticleCard = (props: AkademiArticle & { categorySlug: string }) => {
     </div>
   );
 };
+
+export async function generateStaticParams() {
+  const payload = await getPayload({ config });
+
+  try {
+    const { docs } = await payload.find({
+      collection: "akademi-categories",
+      sort: "-createdAt",
+      limit: 100,
+    });
+
+    return docs.map((category) => ({
+      slug: category.slug,
+    }));
+  } catch (err) {
+    console.error(
+      "[ERR] Error generating static params in /akademi/[category]: ",
+      err,
+    );
+    return [];
+  }
+}
+
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { category: slug } = await params;
+  const category = await getCategoryArticles(slug);
+
+  if (!category) {
+    return {
+      title: "Akademi Category Not Found | Dompetin",
+    };
+  }
+
+  return {
+    title: `${category.title} | Dompetin`,
+    description: category.subtitle || category.title,
+  };
+}
 
 async function getCategoryArticles(categorySlug: string) {
   const payload = await getPayload({ config });

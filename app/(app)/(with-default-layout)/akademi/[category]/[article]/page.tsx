@@ -92,7 +92,10 @@ export async function generateStaticParams() {
       slug: article.slug,
     }));
   } catch (err) {
-    console.error("[ERR] Error generating static params: ", err);
+    console.error(
+      "[ERR] Error generating static params /akademi/[category]/[article]: ",
+      err,
+    );
     return [];
   }
 }

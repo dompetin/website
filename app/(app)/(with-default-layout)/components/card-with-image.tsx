@@ -30,7 +30,7 @@ export const CardWithImage = (props: CardWithImageProps) => (
       <h3 className="text-2xl font-bold">{props.title}</h3>
       <p className="text-sm">{props.description}</p>
       <Button asChild transition={"scale"}>
-        <Link href={props.href as Route}>
+        <Link href={props.href as Route} prefetch>
           Lihat Selengkapnya <ChevronRight />
         </Link>
       </Button>
