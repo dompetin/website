@@ -26,7 +26,13 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const PortofolioChart = ({ data }: { data: InvestmentSimulationResult[] }) => {
+const PortofolioChart = ({
+  data,
+  horizonYears,
+}: {
+  data: InvestmentSimulationResult[];
+  horizonYears: number;
+}) => {
   const [latestDataPoint, setLatestDataPoint] =
     useState<InvestmentSimulationResult>({
       year: 0,
@@ -46,7 +52,7 @@ const PortofolioChart = ({ data }: { data: InvestmentSimulationResult[] }) => {
       <div className="flex flex-col items-center gap-2 mt-6">
         <p className="text-sm">
           Uang yang kamu dompetin selama{" "}
-          <span className="font-bold">25 tahun</span>
+          <span className="font-bold">{horizonYears} tahun</span>
         </p>
 
         <div className="flex max-sm:flex-col gap-2 *:data-[slot=card]:bg-neutral-50 *:data-[slot=card]:shadow-lg items-center">

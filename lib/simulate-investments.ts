@@ -7,6 +7,7 @@ export interface InvestmentSimulationParams {
     | "gold"
     | "deposit"
     | "obligation";
+  horizonYears: number;
 }
 
 export interface InvestmentSimulationResult {
@@ -51,10 +52,10 @@ export function simulateInvestments(
 
   const baseReturn = productMap[data.product];
 
-  for (let year = initialYear; year <= initialYear + 10; year++) {
+  for (let year = initialYear; year <= initialYear + data.horizonYears; year++) {
     let investedMin, investedMax, nonInvested;
     // if it's the first year, just set the initial savings
-    if (year === 2025) {
+    if (year === initialYear) {
       investedMin = data.currentSavings;
       investedMax = data.currentSavings;
       nonInvested = data.currentSavings;

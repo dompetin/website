@@ -47,6 +47,7 @@ export interface CustomSimulationInputs {
   savingsPerMonth: number;
   minReturn: number;
   maxReturn: number;
+  horizonYears: number;
 }
 
 export type PortfolioSlice = {
@@ -81,6 +82,7 @@ export const simulateCustomPortfolio = ({
   savingsPerMonth,
   minReturn,
   maxReturn,
+  horizonYears,
 }: CustomSimulationInputs): InvestmentSimulationResult[] => {
   const startYear = new Date().getFullYear();
   const yearlyContribution = savingsPerMonth * 12;
@@ -98,7 +100,7 @@ export const simulateCustomPortfolio = ({
     },
   ];
 
-  for (let yearIndex = 1; yearIndex <= SIMULATION_HORIZON_YEARS; yearIndex++) {
+  for (let yearIndex = 1; yearIndex <= horizonYears; yearIndex++) {
     minBalance = minBalance * (1 + minReturn) + yearlyContribution;
     maxBalance = maxBalance * (1 + maxReturn) + yearlyContribution;
     savingsBalance = savingsBalance * (1 - 0.025) + yearlyContribution;

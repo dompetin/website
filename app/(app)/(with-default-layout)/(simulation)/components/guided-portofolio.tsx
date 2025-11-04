@@ -36,6 +36,7 @@ const GuidedPortofolio = () => {
     savingsPerMonth: "100000",
     product: "mutual_fund",
   });
+  const [horizonYears, setHorizonYears] = useState(25);
   const [chartData, setChartData] = useState<InvestmentSimulationResult[]>([]);
 
   useEffect(() => {
@@ -43,10 +44,11 @@ const GuidedPortofolio = () => {
       currentSavings: Number(formData.currentSavings),
       savingsPerMonth: Number(formData.savingsPerMonth),
       product: formData.product,
+      horizonYears,
     });
 
     setChartData(newChartData);
-  }, [formData]);
+  }, [formData, horizonYears]);
 
   return (
     <Container className="border-accent max-w-4xl border-b-2">
@@ -134,9 +136,29 @@ const GuidedPortofolio = () => {
               </SelectContent>
             </Select>
           </Field>
+
+          <Field>
+            <FieldLabel>Jangka waktu</FieldLabel>
+            <Select
+              name="horizon_years"
+              value={String(horizonYears)}
+              onValueChange={(value) => setHorizonYears(Number(value))}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Pilih jangka waktu" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="5">5 tahun</SelectItem>
+                <SelectItem value="10">10 tahun</SelectItem>
+                <SelectItem value="15">15 tahun</SelectItem>
+                <SelectItem value="20">20 tahun</SelectItem>
+                <SelectItem value="25">25 tahun</SelectItem>
+              </SelectContent>
+            </Select>
+          </Field>
         </FieldGroup>
 
-        <PortofolioChart data={chartData} />
+        <PortofolioChart data={chartData} horizonYears={horizonYears} />
         <p className="mt-4 w-full max-w-lg text-xs text-gray-400 sm:min-w-lg lg:max-w-none">
           *Bukan ajakan berinvestasi, selalu lakukan riset sendiri sebelum
           mengambil keputusan finansial

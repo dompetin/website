@@ -24,7 +24,7 @@ Dompetin is an Indonesian investment education platform helping users visualize 
 bun dev           # Start Turbopack dev server on http://localhost:3000
 
 # Build & Production
-bun build         # Production build with Turbopack
+bun run build         # Production build with Turbopack
 bun start         # Run production server
 
 # Code Quality
@@ -313,7 +313,7 @@ Run `pnpm lint` to check for issues.
 | Task | Command | Notes |
 |------|---------|-------|
 | Start dev server | `bun dev` | Turbopack on port 3000 |
-| Build for production | `bun build` then `pnpm start` | Optimized Turbopack build |
+| Build for production | `bun run build` then `bun start` | Optimized Turbopack build |
 | Check types & linting | `bun lint` | ESLint v9 rules |
 | Add UI component | `bunx shadcn@latest add button` | Auto-configured to project |
 | Format currency | `formatCurrency(15000000)` | Returns "Rp15.000.000" |

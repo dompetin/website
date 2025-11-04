@@ -27,7 +27,6 @@ import {
 import PortofolioChart from "./portofolio-chart";
 import DiyPortfolioInsight from "./diy-portfolio-insight";
 import {
-  SIMULATION_HORIZON_YEARS,
   analyzeCustomPortfolio,
   assetCatalog,
   AssetType,
@@ -60,6 +59,7 @@ const DiyPortofolio = () => {
     currentSavings: "1000000",
     savingsPerMonth: "100000",
   });
+  const [horizonYears, setHorizonYears] = useState(25);
   const [chartData, setChartData] = useState<InvestmentSimulationResult[]>([]);
   const latestProjection = chartData.length
     ? chartData[chartData.length - 1]
@@ -105,8 +105,8 @@ const DiyPortofolio = () => {
   const totalDeposited = useMemo(() => {
     const currentSavings = Number(formData.currentSavings) || 0;
     const savingsPerMonth = Number(formData.savingsPerMonth) || 0;
-    return currentSavings + savingsPerMonth * 12 * SIMULATION_HORIZON_YEARS;
-  }, [formData]);
+    return currentSavings + savingsPerMonth * 12 * horizonYears;
+  }, [formData, horizonYears]);
 
   useEffect(() => {
     const currentSavings = Number(formData.currentSavings) || 0;
@@ -126,10 +126,11 @@ const DiyPortofolio = () => {
       savingsPerMonth,
       minReturn,
       maxReturn,
+      horizonYears,
     });
 
     setChartData(results);
-  }, [allocationIsValid, formData, maxReturn, minReturn]);
+  }, [allocationIsValid, formData, maxReturn, minReturn, horizonYears]);
 
   const handleAssetTypeChange = (id: string, type: AssetType) => {
     setAssets((prev) =>
@@ -220,6 +221,28 @@ const DiyPortofolio = () => {
                   />
                   <InputGroupAddon align="inline-end">IDR</InputGroupAddon>
                 </InputGroup>
+              </FieldContent>
+            </Field>
+
+            <Field className="flex-1">
+              <FieldLabel>Jangka waktu</FieldLabel>
+              <FieldContent>
+                <Select
+                  name="horizon_years"
+                  value={String(horizonYears)}
+                  onValueChange={(value) => setHorizonYears(Number(value))}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Pilih jangka waktu" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="5">5 tahun</SelectItem>
+                    <SelectItem value="10">10 tahun</SelectItem>
+                    <SelectItem value="15">15 tahun</SelectItem>
+                    <SelectItem value="20">20 tahun</SelectItem>
+                    <SelectItem value="25">25 tahun</SelectItem>
+                  </SelectContent>
+                </Select>
               </FieldContent>
             </Field>
           </FieldGroup>
@@ -336,14 +359,14 @@ const DiyPortofolio = () => {
             </Field>
           </FieldGroup>
         </div>
-        <PortofolioChart data={chartData} />
+        <PortofolioChart data={chartData} horizonYears={horizonYears} />
       </div>
 
       <DiyPortfolioInsight
         analysis={portfolioAnalysis}
         latestProjection={latestProjection}
         totalDeposited={totalDeposited}
-        horizonYears={SIMULATION_HORIZON_YEARS}
+        horizonYears={horizonYears}
       />
     </Container>
   );
