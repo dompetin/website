@@ -34,7 +34,7 @@ const KupasPage = () => {
                 opacity: 1,
                 filter: "blur(0px)",
               }}
-              transition={{ duration: 0.5, delay: 1, ease: "easeOut" }}
+              transition={{ duration: 0.5, delay: 0.75, ease: "easeOut" }}
               className="text-primary"
             >
               {" "}
