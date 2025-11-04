@@ -2,7 +2,6 @@ export interface InvestmentSimulationParams {
   currentSavings: number;
   savingsPerMonth: number;
   product:
-    | "mixed"
     | "stocks"
     | "mutual_fund"
     | "gold"
