@@ -30,7 +30,7 @@ const GuidedPortofolio = () => {
   const [formData, setFormData] = useState<{
     currentSavings: string;
     savingsPerMonth: string;
-    product: "mixed" | "stocks" | "mutual_fund" | "obligation" | "deposit" | "gold";
+    product: "stocks" | "mutual_fund" | "obligation" | "deposit" | "gold";
   }>({
     currentSavings: "1000000",
     savingsPerMonth: "100000",
