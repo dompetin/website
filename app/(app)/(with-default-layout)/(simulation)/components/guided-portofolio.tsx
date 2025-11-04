@@ -114,7 +114,6 @@ const GuidedPortofolio = () => {
                 setFormData((prev) => ({
                   ...prev,
                   product: value as
-                    | "mixed"
                     | "stocks"
                     | "mutual_fund"
                     | "obligation"
