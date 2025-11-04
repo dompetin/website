@@ -1,7 +1,13 @@
 export interface InvestmentSimulationParams {
   currentSavings: number;
   savingsPerMonth: number;
-  product: "mixed" | "stocks" | "mutual_fund" | "obligation";
+  product:
+    | "mixed"
+    | "stocks"
+    | "mutual_fund"
+    | "gold"
+    | "deposit"
+    | "obligation";
 }
 
 export interface InvestmentSimulationResult {
@@ -12,21 +18,29 @@ export interface InvestmentSimulationResult {
 }
 
 const productMap = {
-  obligation: {
-    min: 0.01,
-    max: 0.02,
-  },
-  mixed: {
-    min: 0.03,
+  deposit: {
+    min: 0.02,
     max: 0.05,
   },
-  mutual_fund: {
+  obligation: {
     min: 0.05,
-    max: 0.07,
+    max: 0.06,
+  },
+  gold: {
+    min: 0.08,
+    max: 0.11,
+  },
+  // mixed: {
+  //   min: 0.03,
+  //   max: 0.05,
+  // },
+  mutual_fund: {
+    min: -0.02,
+    max: 0.11,
   },
   stocks: {
-    min: 0.07,
-    max: 0.1,
+    min: -0.19,
+    max: 0.22,
   },
 };
 
@@ -48,17 +62,17 @@ export function simulateInvestments(
     } else {
       investedMin =
         newChartData[newChartData.length - 1].moneyWithInvestingMin *
-        (1 + baseReturn.min) +
+          (1 + baseReturn.min) +
         data.savingsPerMonth * 12;
 
       investedMax =
         newChartData[newChartData.length - 1].moneyWithInvestingMax *
-        (1 + baseReturn.max) +
+          (1 + baseReturn.max) +
         data.savingsPerMonth * 12;
 
       nonInvested =
         newChartData[newChartData.length - 1].moneyWithoutInvesting *
-        (1 - 0.025) +
+          (1 - 0.025) +
         data.savingsPerMonth * 12;
     }
 

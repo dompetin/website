@@ -5,27 +5,33 @@ export const SIMULATION_HORIZON_YEARS = 25;
 export const assetCatalog = {
   reksadana_pasar_uang: {
     label: "Reksadana Pasar Uang",
-    minReturn: 0.03,
-    maxReturn: 0.045,
-    riskLevel: 1,
-  },
-  saham_as: {
-    label: "Saham AS",
-    minReturn: 0.06,
-    maxReturn: 0.1,
-    riskLevel: 5,
+    minReturn: -0.02,
+    maxReturn: 0.11,
+    riskLevel: 3,
   },
   obligasi: {
     label: "Obligasi",
-    minReturn: 0.04,
+    minReturn: 0.05,
     maxReturn: 0.06,
     riskLevel: 2,
   },
-  saham_indonesia: {
-    label: "Saham Indonesia",
-    minReturn: 0.05,
-    maxReturn: 0.085,
-    riskLevel: 4,
+  saham: {
+    label: "Saham",
+    minReturn: -0.19,
+    maxReturn: 0.22,
+    riskLevel: 5,
+  },
+  deposit: {
+    label: "Deposito",
+    minReturn: 0.02,
+    maxReturn: 0.05,
+    riskLevel: 1,
+  },
+  gold: {
+    label: "Emas",
+    minReturn: 0.08,
+    maxReturn: 0.11,
+    riskLevel: 3,
   },
 } as const;
 

@@ -66,12 +66,12 @@ const AkademiPage = async () => {
           {articles.length > 0 &&
             articles.map((article, index) => (
               <m.div
+                key={article.slug}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
                 <AkademiCard
-                  key={article.slug}
                   title={article.title}
                   description={article.subtitle || ""}
                   href={`/akademi/${article.slug}`}

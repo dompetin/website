@@ -30,7 +30,7 @@ const GuidedPortofolio = () => {
   const [formData, setFormData] = useState<{
     currentSavings: string;
     savingsPerMonth: string;
-    product: "mixed" | "stocks" | "mutual_fund" | "obligation";
+    product: "mixed" | "stocks" | "mutual_fund" | "obligation" | "deposit" | "gold";
   }>({
     currentSavings: "1000000",
     savingsPerMonth: "100000",
@@ -55,7 +55,7 @@ const GuidedPortofolio = () => {
       </h2>
 
       <div className="flex flex-col gap-4">
-        <FieldGroup className="flex flex-row items-center gap-2">
+        <FieldGroup className="flex flex-row items-start gap-2">
           <Field>
             <FieldLabel>Tabunganku sekarang isinya</FieldLabel>
             <InputGroup>
@@ -117,7 +117,9 @@ const GuidedPortofolio = () => {
                     | "mixed"
                     | "stocks"
                     | "mutual_fund"
-                    | "obligation",
+                    | "obligation"
+                    | "deposit"
+                    | "gold",
                 }));
               }}
             >
@@ -129,6 +131,8 @@ const GuidedPortofolio = () => {
                 <SelectItem value="mutual_fund">Reksadana</SelectItem>
                 <SelectItem value="stocks">Saham</SelectItem>
                 <SelectItem value="obligation">Obligasi</SelectItem>
+                <SelectItem value="deposit">Deposito</SelectItem>
+                <SelectItem value="gold">Emas</SelectItem>
               </SelectContent>
             </Select>
           </Field>
