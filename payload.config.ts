@@ -1,4 +1,3 @@
-// storage-adapter-import-placeholder
 import { vercelPostgresAdapter } from "@payloadcms/db-vercel-postgres";
 import { payloadCloudPlugin } from "@payloadcms/payload-cloud";
 import {
@@ -13,6 +12,7 @@ import { AkademiArticle } from "./collections/AkademiArticle";
 import { Media } from "./collections/Media";
 import { Users } from "./collections/Users";
 import { PrivacyPolicyPage } from "./collections/PrivacyPolicyPage";
+import { AkademiCategories } from "./collections/AkademiCategories";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -24,7 +24,13 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, AkademiArticle, PrivacyPolicyPage],
+  collections: [
+    Users,
+    Media,
+    AkademiArticle,
+    AkademiCategories,
+    PrivacyPolicyPage,
+  ],
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures,
@@ -40,8 +46,5 @@ export default buildConfig({
       connectionString: process.env.POSTGRES_URL || "",
     },
   }),
-  plugins: [
-    payloadCloudPlugin(),
-    // storage-adapter-placeholder
-  ],
+  plugins: [payloadCloudPlugin()],
 });

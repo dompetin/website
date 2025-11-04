@@ -30,3 +30,12 @@ export function generateRowId() {
     ? crypto.randomUUID()
     : Math.random().toString(36).slice(2, 9);
 }
+
+export function formatSlug(val: string): string {
+  return val
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "") // Remove special characters
+    .replace(/\s+/g, "-") // Replace spaces with hyphens
+    .replace(/-+/g, "-"); // Replace multiple hyphens with single hyphen
+}

@@ -1,16 +1,12 @@
 import { formatSlug } from "@/lib/utils";
-import {
-  EXPERIMENTAL_TableFeature,
-  lexicalEditor,
-} from "@payloadcms/richtext-lexical";
-import type { CollectionConfig } from "payload";
+import { CollectionConfig } from "payload";
 
-export const AkademiArticle: CollectionConfig = {
-  slug: "akademi-article",
+export const AkademiCategories: CollectionConfig = {
+  slug: "akademi-categories",
   admin: {
     useAsTitle: "title",
     group: "Akademi",
-    defaultColumns: ["title", "slug", "updatedAt"],
+    defaultColumns: ["name", "slug", "createdAt"],
   },
   access: {
     read: () => true,
@@ -20,7 +16,7 @@ export const AkademiArticle: CollectionConfig = {
       name: "title",
       type: "text",
       required: true,
-      label: "Article Title",
+      label: "Akademi Category Title",
     },
     {
       name: "subtitle",
@@ -29,12 +25,6 @@ export const AkademiArticle: CollectionConfig = {
       admin: {
         description: "Short description shown on list page",
       },
-    },
-    {
-      name: "category",
-      type: "relationship",
-      relationTo: "akademi-categories",
-      label: "Category",
     },
     {
       name: "slug",
@@ -61,17 +51,10 @@ export const AkademiArticle: CollectionConfig = {
       },
     },
     {
-      name: "content",
-      type: "richText",
-      required: true,
-      editor: lexicalEditor({
-        features: ({ defaultFeatures }) => [
-          ...defaultFeatures,
-          EXPERIMENTAL_TableFeature(),
-        ],
-      }),
-      label: "Article Content",
+      name: "relatedArticles",
+      type: "join",
+      collection: "akademi-article",
+      on: "category",
     },
   ],
-  timestamps: true,
 };

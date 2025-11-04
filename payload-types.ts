@@ -70,17 +70,23 @@ export interface Config {
     users: User;
     media: Media;
     'akademi-article': AkademiArticle;
+    'akademi-categories': AkademiCategory;
     'privacy-policy-page': PrivacyPolicyPage;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    'akademi-categories': {
+      relatedArticles: 'akademi-article';
+    };
+  };
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     'akademi-article': AkademiArticleSelect<false> | AkademiArticleSelect<true>;
+    'akademi-categories': AkademiCategoriesSelect<false> | AkademiCategoriesSelect<true>;
     'privacy-policy-page': PrivacyPolicyPageSelect<false> | PrivacyPolicyPageSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -170,13 +176,14 @@ export interface AkademiArticle {
   id: number;
   title: string;
   /**
-   * Auto-generated from title. Must be unique.
-   */
-  slug: string;
-  /**
    * Short description shown on list page
    */
   subtitle?: string | null;
+  category?: (number | null) | AkademiCategory;
+  /**
+   * Auto-generated from title. Must be unique.
+   */
+  slug: string;
   content: {
     root: {
       type: string;
@@ -191,6 +198,29 @@ export interface AkademiArticle {
       version: number;
     };
     [k: string]: unknown;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "akademi-categories".
+ */
+export interface AkademiCategory {
+  id: number;
+  title: string;
+  /**
+   * Short description shown on list page
+   */
+  subtitle?: string | null;
+  /**
+   * Auto-generated from title. Must be unique.
+   */
+  slug: string;
+  relatedArticles?: {
+    docs?: (number | AkademiArticle)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
   };
   updatedAt: string;
   createdAt: string;
@@ -254,6 +284,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'akademi-article';
         value: number | AkademiArticle;
+      } | null)
+    | ({
+        relationTo: 'akademi-categories';
+        value: number | AkademiCategory;
       } | null)
     | ({
         relationTo: 'privacy-policy-page';
@@ -351,9 +385,22 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface AkademiArticleSelect<T extends boolean = true> {
   title?: T;
-  slug?: T;
   subtitle?: T;
+  category?: T;
+  slug?: T;
   content?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "akademi-categories_select".
+ */
+export interface AkademiCategoriesSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  slug?: T;
+  relatedArticles?: T;
   updatedAt?: T;
   createdAt?: T;
 }

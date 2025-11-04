@@ -1,19 +1,11 @@
-import Container from "@/components/container";
-import * as m from "@/lib/motion";
-import { Button } from "@/components/ui/button";
-import { ChevronRight } from "lucide-react";
-import { Metadata, Route } from "next";
-import Link from "next/link";
-import Image from "next/image";
-import type { AkademiArticle } from "@/payload-types";
-import config from "@payload-config";
 import { getPayload } from "payload";
+import config from "@payload-config";
+import { AkademiCategory } from "@/payload-types";
+import * as m from "@/lib/motion"
+import Container from "@/components/container";
+import { CardWithImage } from "../components/card-with-image";
 
 export const revalidate = 3600;
-
-export const metadata: Metadata = {
-  title: "Akademi | Dompetin",
-};
 
 const COVER_IMAGES = [
   "/kupas/jumping.png",
@@ -24,8 +16,9 @@ const COVER_IMAGES = [
   "/home/writing.png",
 ];
 
+
 const AkademiPage = async () => {
-  const articles = await getAkademiArticles();
+  const categories = await getAkademiCategories();
 
   return (
     <>
@@ -63,18 +56,19 @@ const AkademiPage = async () => {
         </div>{" "}
         <div className="grid auto-rows-fr grid-cols-1 gap-3 p-4 md:grid-cols-2 md:gap-8">
           {" "}
-          {articles.length > 0 &&
-            articles.map((article, index) => (
+          {categories.length > 0 &&
+            categories.map((category, index) => (
               <m.div
-                key={article.slug}
+                key={category.slug}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="mt-8"
               >
-                <AkademiCard
-                  title={article.title}
-                  description={article.subtitle || ""}
-                  href={`/akademi/${article.slug}`}
+                <CardWithImage
+                  title={category.title}
+                  description={category.subtitle || ""}
+                  href={`/akademi/${category.slug}`}
                   src={COVER_IMAGES[index % COVER_IMAGES.length]}
                 />
               </m.div>
@@ -82,7 +76,7 @@ const AkademiPage = async () => {
           <m.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: articles.length * 0.1 }}
+            transition={{ duration: 0.5, delay: categories.length * 0.1 }}
             className="flex items-center"
           >
             <p className="text-2xl font-bold text-neutral-500 md:text-6xl">
@@ -95,55 +89,21 @@ const AkademiPage = async () => {
   );
 };
 
-async function getAkademiArticles() {
+async function getAkademiCategories() {
   const payload = await getPayload({ config });
-  let articles: AkademiArticle[] = [];
+  let categories: AkademiCategory[] = [];
 
   try {
     const { docs } = await payload.find({
-      collection: "akademi-article",
+      collection: "akademi-categories",
       sort: "-createdAt",
     });
-    articles = docs;
+    categories = docs;
   } catch (err) {
     console.error("[ERR] Error fetching akademi articles: ", err);
   }
 
-  return articles;
+  return categories;
 }
-
-interface AkademiCardProps {
-  title: string | React.ReactNode;
-  src?: string;
-  description: string | React.ReactNode;
-  href: string | Route;
-}
-
-const AkademiCard = (props: AkademiCardProps) => (
-  <div className="grid auto-rows-fr rounded-3xl bg-white shadow-lg">
-    <div className="bg-purple relative rounded-t-3xl">
-      {props.src && (
-        <div className="absolute -top-10 left-0 aspect-square w-full sm:-top-20 sm:max-md:left-1/2 sm:max-md:w-1/2 sm:max-md:-translate-x-1/2">
-          <Image
-            src={props.src}
-            alt={`Dompetin | ${props.title} Cover Image`}
-            fill
-            sizes="10%"
-            className="object-contain"
-          />
-        </div>
-      )}
-    </div>
-    <div className="z-20 flex flex-col items-center gap-4 rounded-b-3xl bg-white p-6 text-center">
-      <h3 className="text-2xl font-bold">{props.title}</h3>
-      <p className="text-sm">{props.description}</p>
-      <Button asChild>
-        <Link href={props.href as Route}>
-          Lihat Selengkapnya <ChevronRight />
-        </Link>
-      </Button>
-    </div>
-  </div>
-);
 
 export default AkademiPage;

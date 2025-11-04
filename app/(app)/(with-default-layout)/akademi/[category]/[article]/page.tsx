@@ -13,48 +13,12 @@ export const revalidate = 3600;
 
 interface PageProps {
   params: Promise<{
-    slug: string;
+    article: string;
   }>;
 }
 
-export async function generateStaticParams() {
-  const payload = await getPayload({ config });
-
-  try {
-    const { docs } = await payload.find({
-      collection: "akademi-article",
-      limit: 1000,
-    });
-
-    return docs.map((article) => ({
-      slug: article.slug,
-    }));
-  } catch (err) {
-    console.error("[ERR] Error generating static params: ", err);
-    return [];
-  }
-}
-
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const article = await getArticleBySlug(slug);
-
-  if (!article) {
-    return {
-      title: "Article Not Found",
-    };
-  }
-
-  return {
-    title: `${article.title} | Dompetin`,
-    description: article.subtitle || article.title,
-  };
-}
-
 const AkademiArticlePage = async ({ params }: PageProps) => {
-  const { slug } = await params;
+  const { article: slug } = await params;
   const article = await getArticleBySlug(slug);
 
   if (!article) {
@@ -113,6 +77,42 @@ async function getArticleBySlug(slug: string) {
   }
 
   return article;
+}
+
+export async function generateStaticParams() {
+  const payload = await getPayload({ config });
+
+  try {
+    const { docs } = await payload.find({
+      collection: "akademi-article",
+      limit: 1000,
+    });
+
+    return docs.map((article) => ({
+      slug: article.slug,
+    }));
+  } catch (err) {
+    console.error("[ERR] Error generating static params: ", err);
+    return [];
+  }
+}
+
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { article: slug } = await params;
+  const article = await getArticleBySlug(slug);
+
+  if (!article) {
+    return {
+      title: "Article Not Found",
+    };
+  }
+
+  return {
+    title: `${article.title} | Dompetin`,
+    description: article.subtitle || article.title,
+  };
 }
 
 export default AkademiArticlePage;
