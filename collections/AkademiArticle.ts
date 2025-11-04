@@ -1,3 +1,7 @@
+import {
+  EXPERIMENTAL_TableFeature,
+  lexicalEditor,
+} from "@payloadcms/richtext-lexical";
 import type { CollectionConfig } from "payload";
 
 const formatSlug = (val: string): string => {
@@ -62,6 +66,12 @@ export const AkademiArticle: CollectionConfig = {
       name: "content",
       type: "richText",
       required: true,
+      editor: lexicalEditor({
+        features: ({ defaultFeatures }) => [
+          ...defaultFeatures,
+          EXPERIMENTAL_TableFeature(),
+        ],
+      }),
       label: "Article Content",
     },
   ],
