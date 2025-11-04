@@ -161,7 +161,9 @@
 /* Images */
 .lexical-content img {
   border-radius: 0.5rem;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  box-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1);
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
   max-width: 100%;
@@ -177,28 +179,49 @@
 }
 
 /* Tables */
-.lexical-content table {
+.lexical-table {
   width: 100%;
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
   border-collapse: collapse;
 }
 
-.lexical-content th,
-.lexical-content td {
-  padding: 0.75rem;
+.lexical-table-container {
+  overflow-x: auto;
+}
+
+.lexical-table-row {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid #e5e5e5;
+}
+
+.lexical-table-row:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.lexical-table-cell {
   border: 1px solid #e5e5e5;
+  padding: 0.5rem 1rem;
   text-align: left;
 }
 
-.lexical-content th {
-  background-color: #fafafa;
-  font-weight: 600;
-  color: #171717;
+.lexical-table-cell > p {
+  margin: 0px 0px 0px 0px;
 }
 
-.lexical-content tr:nth-child(even) {
-  background-color: #fafafa;
+.lexical-table-cell[align="center"] {
+  text-align: center;
+}
+
+.lexical-table-cell[align="right"] {
+  text-align: right;
+}
+
+.lexical-table-cell-header-1 {
+  background-color: var(--color-neutral-300);
+  font-weight: 600;
+  color: var(--color-black);
 }
 
 /* First paragraph after heading */
