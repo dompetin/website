@@ -170,7 +170,7 @@ const DiyPortofolio = () => {
 
       <div className="mt-6 flex w-full flex-col justify-between gap-6 md:flex-row">
         <div className="flex w-full flex-col gap-6">
-          <FieldGroup className="flex flex-row flex-wrap gap-3">
+          <FieldGroup className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             <Field className="flex-1">
               <FieldLabel>Portofolioku isinya</FieldLabel>
               <FieldContent>
@@ -193,7 +193,7 @@ const DiyPortofolio = () => {
                   <InputGroupAddon align="inline-end">IDR</InputGroupAddon>
                 </InputGroup>
                 <FieldDescription>
-                  <Link href={`/privacy-policy`} className="underline">
+                  <Link href={`/privacy-policy`} className="underline text-xs">
                     Cek kebijakan privasi kami
                   </Link>
                 </FieldDescription>
@@ -232,7 +232,7 @@ const DiyPortofolio = () => {
                   value={String(horizonYears)}
                   onValueChange={(value) => setHorizonYears(Number(value))}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="w-full">
                     <SelectValue placeholder="Pilih jangka waktu" />
                   </SelectTrigger>
                   <SelectContent>

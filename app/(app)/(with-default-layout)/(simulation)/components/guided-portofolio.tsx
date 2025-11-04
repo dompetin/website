@@ -57,9 +57,9 @@ const GuidedPortofolio = () => {
       </h2>
 
       <div className="flex flex-col gap-4">
-        <FieldGroup className="flex flex-row items-start gap-2">
+        <FieldGroup className="grid grid-cols-1 items-start justify-center gap-2 sm:grid-cols-2 md:grid-cols-4">
           <Field>
-            <FieldLabel>Tabunganku sekarang isinya</FieldLabel>
+            <FieldLabel>Tabunganku isinya</FieldLabel>
             <InputGroup>
               <InputGroupMaskInput
                 name={"current_savings"}
@@ -79,7 +79,7 @@ const GuidedPortofolio = () => {
               <InputGroupAddon align={`inline-end`}>IDR</InputGroupAddon>
             </InputGroup>
             <FieldDescription>
-              <Link href={`/privacy-policy`} className="underline">
+              <Link href={`/privacy-policy`} className="underline text-xs">
                 Cek kebijakan privasi kami
               </Link>
             </FieldDescription>
