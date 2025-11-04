@@ -46,8 +46,9 @@ type AssetAllocationRow = {
 };
 
 const INITIAL_ASSETS: AssetAllocationRow[] = [
-  { id: "asset-0", type: "reksadana_pasar_uang", percentage: "60" },
-  { id: "asset-1", type: "obligasi", percentage: "40" },
+  { id: "asset-0", type: "reksadana_campuran", percentage: "50" },
+  { id: "asset-1", type: "reksadana_pendapatan_tetap", percentage: "30" },
+  { id: "asset-2", type: "reksadana_pasar_uang", percentage: "20" },
 ];
 
 const DiyPortofolio = () => {
@@ -74,19 +75,19 @@ const DiyPortofolio = () => {
         const weight = percentage / 100;
 
         acc.totalPercentage += percentage;
-        acc.minReturn += weight * asset.minReturn;
-        acc.maxReturn += weight * asset.maxReturn;
+        acc.upswing += weight * asset.upswing;
+        acc.downswing += weight * asset.downswing;
 
         return acc;
       },
-      { totalPercentage: 0, minReturn: 0, maxReturn: 0 },
+      { totalPercentage: 0, upswing: 0, downswing: 0 },
     );
   }, [assets]);
 
   const totalAllocation = allocationStats.totalPercentage;
   const totalAllocationRounded = Number(totalAllocation.toFixed(2));
   const allocationIsValid = Math.abs(totalAllocationRounded - 100) <= 0.1;
-  const { minReturn, maxReturn } = allocationStats;
+  const { upswing, downswing } = allocationStats;
 
   const portfolioAnalysis = useMemo(() => {
     const allocation = assets.map((assetRow) => ({
@@ -97,10 +98,8 @@ const DiyPortofolio = () => {
     return analyzeCustomPortfolio({
       allocation,
       allocationIsValid,
-      minReturn,
-      maxReturn,
     });
-  }, [allocationIsValid, assets, maxReturn, minReturn]);
+  }, [allocationIsValid, assets]);
 
   const totalDeposited = useMemo(() => {
     const currentSavings = Number(formData.currentSavings) || 0;
@@ -124,13 +123,13 @@ const DiyPortofolio = () => {
     const results = simulateCustomPortfolio({
       currentSavings,
       savingsPerMonth,
-      minReturn,
-      maxReturn,
+      upswing,
+      downswing,
       horizonYears,
     });
 
     setChartData(results);
-  }, [allocationIsValid, formData, maxReturn, minReturn, horizonYears]);
+  }, [allocationIsValid, formData, upswing, downswing, horizonYears]);
 
   const handleAssetTypeChange = (id: string, type: AssetType) => {
     setAssets((prev) =>

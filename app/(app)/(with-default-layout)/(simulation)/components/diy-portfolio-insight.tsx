@@ -19,19 +19,35 @@ import { Cell, Label, Pie, PieChart } from "recharts";
 const PORTFOLIO_CHART_CONFIG: ChartConfig = {
   reksadana_pasar_uang: {
     label: "Reksadana Pasar Uang",
-    color: "#cbb5ff",
+    color: "#e9d5ff",
+  },
+  reksadana_pendapatan_tetap: {
+    label: "Reksadana Pendapatan Tetap",
+    color: "#c084fc",
+  },
+  reksadana_campuran: {
+    label: "Reksadana Campuran",
+    color: "#a855f7",
+  },
+  reksadana_pasar_saham: {
+    label: "Reksadana Pasar Saham",
+    color: "#9333ea",
   },
   obligasi: {
     label: "Obligasi",
-    color: "#a267dd",
+    color: "#6366f1",
   },
-  saham_indonesia: {
-    label: "Saham Indonesia",
-    color: "#7c6cf4",
-  },
-  saham_as: {
-    label: "Saham AS",
+  saham: {
+    label: "Saham",
     color: "#4f46e5",
+  },
+  deposit: {
+    label: "Deposito",
+    color: "#94a3b8",
+  },
+  gold: {
+    label: "Emas",
+    color: "#fbbf24",
   },
 };
 
@@ -163,7 +179,7 @@ const DiyPortfolioInsight = ({
             </div>
             <div className="flex flex-col items-center gap-3 bg-white p-6 text-center">
               <p className="text-4xl font-bold">
-                {analysis.diversificationScore}/10
+                {Math.round(analysis.diversificationScore)}%
               </p>
 
               <p className="mt-auto text-sm">{analysis.diversificationNote}</p>

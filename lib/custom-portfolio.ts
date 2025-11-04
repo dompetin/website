@@ -5,32 +5,58 @@ export const SIMULATION_HORIZON_YEARS = 25;
 export const assetCatalog = {
   reksadana_pasar_uang: {
     label: "Reksadana Pasar Uang",
-    minReturn: -0.02,
-    maxReturn: 0.11,
+    upswing: 0.0562,
+    downswing: 0.0385,
+    riskFreeRate: -0.0198,
     riskLevel: 3,
+  },
+  reksadana_pendapatan_tetap: {
+    label: "Reksadana Pendapatan Tetap",
+    upswing: 0.078,
+    downswing: 0.0459,
+    riskFreeRate: 0.0459,
+    riskLevel: 3,
+  },
+  reksadana_campuran: {
+    label: "Reksadana Campuran",
+    upswing: 0.1531,
+    downswing: 0.0124,
+    riskFreeRate: 0.0124,
+    riskLevel: 3,
+  },
+  reksadana_pasar_saham: {
+    label: "Reksadana Pasar Saham",
+    upswing: 0.1226,
+    downswing: -0.0688,
+    riskFreeRate: -0.0688,
+    riskLevel: 5,
   },
   obligasi: {
     label: "Obligasi",
-    minReturn: 0.05,
-    maxReturn: 0.06,
+    upswing: 0.0623,
+    downswing: 0.0475,
+    riskFreeRate: 0.0475,
     riskLevel: 2,
   },
   saham: {
     label: "Saham",
-    minReturn: -0.19,
-    maxReturn: 0.22,
+    upswing: 0.2202,
+    downswing: -0.1873,
+    riskFreeRate: -0.1873,
     riskLevel: 5,
   },
   deposit: {
     label: "Deposito",
-    minReturn: 0.02,
-    maxReturn: 0.05,
+    upswing: 0.0475,
+    downswing: 0.0225,
+    riskFreeRate: 0.0225,
     riskLevel: 1,
   },
   gold: {
     label: "Emas",
-    minReturn: 0.08,
-    maxReturn: 0.11,
+    upswing: 0.11,
+    downswing: 0.08,
+    riskFreeRate: 0.08,
     riskLevel: 3,
   },
 } as const;
@@ -45,8 +71,8 @@ export type AssetAllocationInput = {
 export interface CustomSimulationInputs {
   currentSavings: number;
   savingsPerMonth: number;
-  minReturn: number;
-  maxReturn: number;
+  upswing: number;
+  downswing: number;
   horizonYears: number;
 }
 
@@ -65,23 +91,21 @@ export interface PortfolioAnalysisResult {
   riskRewardScore: number;
   riskRewardNote: string;
   topAsset: PortfolioSlice | null;
+  avgReturn: number;
+  portfolioStdDev: number;
+  weightedRiskFreeRate: number;
 }
 
 export interface PortfolioAnalysisParams {
   allocation: AssetAllocationInput[];
   allocationIsValid: boolean;
-  minReturn: number;
-  maxReturn: number;
 }
-
-const MIN_RISK_FLOOR = 0.5;
-const RISK_SCALER = 0.75;
 
 export const simulateCustomPortfolio = ({
   currentSavings,
   savingsPerMonth,
-  minReturn,
-  maxReturn,
+  upswing,
+  downswing,
   horizonYears,
 }: CustomSimulationInputs): InvestmentSimulationResult[] => {
   const startYear = new Date().getFullYear();
@@ -101,8 +125,8 @@ export const simulateCustomPortfolio = ({
   ];
 
   for (let yearIndex = 1; yearIndex <= horizonYears; yearIndex++) {
-    minBalance = minBalance * (1 + minReturn) + yearlyContribution;
-    maxBalance = maxBalance * (1 + maxReturn) + yearlyContribution;
+    minBalance = minBalance * (1 + downswing) + yearlyContribution;
+    maxBalance = maxBalance * (1 + upswing) + yearlyContribution;
     savingsBalance = savingsBalance * (1 - 0.025) + yearlyContribution;
 
     results.push({
@@ -119,8 +143,6 @@ export const simulateCustomPortfolio = ({
 export const analyzeCustomPortfolio = ({
   allocation,
   allocationIsValid,
-  minReturn,
-  maxReturn,
 }: PortfolioAnalysisParams): PortfolioAnalysisResult => {
   const totals = allocation.reduce((acc, entry) => {
     const value = Number.isFinite(entry.percentage) ? entry.percentage : 0;
@@ -132,7 +154,7 @@ export const analyzeCustomPortfolio = ({
     return acc;
   }, {} as Record<AssetType, number>);
 
-  const aggregated = (Object.entries(totals) as [AssetType, number][]) // typed entries
+  const aggregated = (Object.entries(totals) as [AssetType, number][])
     .filter(([, value]) => value > 0)
     .map(([type, value]) => ({
       type,
@@ -149,55 +171,67 @@ export const analyzeCustomPortfolio = ({
       }))
     : [];
 
-  const weights = normalized.map((item) => item.percentage / 100);
-  const entropy = weights.reduce((acc, weight) => {
-    if (weight <= 0) {
-      return acc;
-    }
-    return acc - weight * Math.log(weight);
-  }, 0);
+  const ready = allocationIsValid && normalized.length > 0;
 
-  const maxEntropy = weights.length > 1 ? Math.log(weights.length) : 0;
-  const diversificationScore =
-    allocationIsValid && maxEntropy > 0
-      ? Math.max(0, Math.min(10, Math.round((entropy / maxEntropy) * 10)))
-      : allocationIsValid && weights.length === 1
-      ? 0
-      : 0;
+  // Calculate weighted upswing and downswing
+  let totalWeightedUpswing = 0;
+  let totalWeightedDownswing = 0;
+  let weightedRiskFreeRate = 0;
 
-  const weightedRisk = weights.reduce((acc, weight, index) => {
-    const assetType = normalized[index]?.type;
-    if (!assetType) {
-      return acc;
-    }
-    return acc + weight * assetCatalog[assetType].riskLevel;
-  }, 0);
+  allocation.forEach((entry) => {
+    const weight = entry.percentage / 100;
+    const asset = assetCatalog[entry.type];
+    totalWeightedUpswing += weight * asset.upswing;
+    totalWeightedDownswing += weight * asset.downswing;
+    weightedRiskFreeRate += weight * asset.riskFreeRate;
+  });
 
-  const averageReturn = (minReturn + maxReturn) / 2;
+  // Calculate Average Return
+  const avgReturn = (totalWeightedUpswing + totalWeightedDownswing) / 2;
+
+  // Calculate Portfolio Standard Deviation
+  const portfolioStdDev = Math.sqrt(
+    (Math.pow(totalWeightedUpswing - avgReturn, 2) +
+      Math.pow(totalWeightedDownswing - avgReturn, 2)) /
+      2,
+  );
+
+  // Calculate Risk-to-Reward Ratio
   const rawRiskReward =
-    allocationIsValid && weights.length
-      ? (averageReturn * 100) /
-        Math.max(weightedRisk * RISK_SCALER, MIN_RISK_FLOOR)
+    ready && portfolioStdDev > 0
+      ? (avgReturn + weightedRiskFreeRate) / portfolioStdDev
       : 0;
   const riskRewardScore = Math.max(0, Math.min(10, Math.round(rawRiskReward)));
 
-  const ready = allocationIsValid && normalized.length > 0;
+  // Calculate Diversification (1 - SUMSQ of percentages as decimals)
+  const sumSquares = allocation.reduce((acc, entry) => {
+    const weight = entry.percentage / 100;
+    return acc + weight * weight;
+  }, 0);
+  const diversificationRaw = ready ? (1 - sumSquares) * 100 : 0;
+  const diversificationScore = Math.max(0, Math.min(100, diversificationRaw));
 
+  // Diversification notes based on percentage
   const diversificationNote = !ready
     ? "Lengkapi komposisi asetmu dulu supaya kami bisa analisa."
-    : diversificationScore <= 3
-    ? "Portofoliomu masih terpusat di sedikit aset."
-    : diversificationScore <= 7
-    ? "Sebaran asetmu cukup oke, coba tambah variasi kecil lagi."
-    : "Komposisi asetmu sudah tersebar dengan baik.";
+    : diversificationScore < 50
+    ? "Portofoliomu masih terpusat di sedikit aset (kurang)."
+    : diversificationScore < 70
+    ? "Sebaran asetmu lumayan, coba tambah variasi lagi."
+    : diversificationScore < 80
+    ? "Komposisi asetmu sudah bagus tersebar."
+    : "Komposisi asetmu sudah tersebar dengan sangat baik!";
 
+  // Risk-to-reward notes
   const riskRewardNote = !ready
     ? "Kami butuh alokasi yang valid untuk hitung rasio risiko."
     : riskRewardScore <= 3
     ? "Potensi imbal hasil belum sebanding dengan risiko."
-    : riskRewardScore <= 7
-    ? "Keuntunganmu impas dengan risikomu!"
-    : "Imbal hasilmu sudah melampaui risiko yang diambil.";
+    : riskRewardScore <= 6
+    ? "Keuntunganmu mulai sepadan dengan risikomu."
+    : riskRewardScore <= 8
+    ? "Keuntunganmu sudah bagus dibanding risikomu!"
+    : "Imbal hasilmu sangat melampaui risiko yang diambil!";
 
   const topAsset = normalized[0] ?? null;
 
@@ -209,5 +243,8 @@ export const analyzeCustomPortfolio = ({
     riskRewardScore,
     riskRewardNote,
     topAsset,
+    avgReturn,
+    portfolioStdDev,
+    weightedRiskFreeRate,
   };
 };

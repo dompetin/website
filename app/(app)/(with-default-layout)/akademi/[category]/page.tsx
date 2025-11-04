@@ -11,10 +11,6 @@ import { getPayload } from "payload";
 
 export const revalidate = 3600;
 
-export const metadata: Metadata = {
-  title: "Akademi | Dompetin",
-};
-
 type PageProps = {
   params: Promise<{ category: string }>;
 };
