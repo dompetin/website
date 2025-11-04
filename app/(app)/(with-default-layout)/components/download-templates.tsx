@@ -11,12 +11,12 @@ const CARDS = [
   {
     title: "Template Budget Finansial dan Manajemen Finansial",
     src: "/budget.png",
-    href: "https://docs.google.com/spreadsheets/d/1_uGwZjk9UdApDLu5CpTEDbM6Bzrlk2qEhI8BSG-QdSk/edit?gid=0#gid=0",
+    href: "https://docs.google.com/spreadsheets/d/1_uGwZjk9UdApDLu5CpTEDbM6Bzrlk2qEhI8BSG-QdSk/copy",
   },
   {
     title: "Tracker Portofolio Investasi",
     src: "/tracker.png",
-    href: "https://docs.google.com/spreadsheets/d/14bc53zItZ6cvPJte5WlM9kADPKjG6Pp7ILgmoWH9UwI/edit?gid=0#gid=0",
+    href: "https://docs.google.com/spreadsheets/d/1Z0fb0_RgoonuTLxXtU9cJu4U4ra3JODn1mp974JA620/copy",
   },
   {
     title: "Simulasi Pelunasan Uang",

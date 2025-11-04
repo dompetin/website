@@ -126,7 +126,6 @@ const GuidedPortofolio = () => {
                 <SelectValue placeholder="Pilih produk" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="mixed">Campur</SelectItem>
                 <SelectItem value="mutual_fund">Reksadana</SelectItem>
                 <SelectItem value="stocks">Saham</SelectItem>
                 <SelectItem value="obligation">Obligasi</SelectItem>
