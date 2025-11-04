@@ -10,6 +10,7 @@ import { useQuizStore } from "../store/quiz-store";
 import { QuizProgress } from "./progress";
 import { ResultScreen } from "./result-screen";
 import { ToggleButton } from "./toggle-button";
+import * as m from "@/lib/motion";
 
 export function Quiz() {
   const { current, total, answers, setAnswer, onPrevious, onNext } =
@@ -125,23 +126,43 @@ export function Quiz() {
         </div>
 
         <div
-          className="relative z-10 flex min-h-screen translate-y-[4rem] flex-col items-center justify-start px-4 py-8 focus:outline-none lg:translate-y-[5rem]"
+          className="relative z-10 flex min-h-screen translate-y-[5rem] flex-col items-center justify-start px-4 py-8 focus:outline-none lg:translate-y-[7rem]"
           tabIndex={0}
           ref={containerRef}
           onKeyDown={handleKeyDown}
           role="region"
           aria-label={`Pertanyaan ${current + 1} dari ${total}`}
         >
-          <div className="flex w-full max-w-4xl flex-col pb-24 md:min-h-[500px] md:pb-0">
-            <QuizProgress />
+          <m.div
+            key={current}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="flex w-full max-w-4xl flex-col pb-24 md:min-h-[500px] md:pb-0"
+          >
+            <m.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+            >
+              <QuizProgress />
+            </m.div>
 
             <div className="mb-8">
-              <h2 className="mb-4 text-2xl font-bold text-gray-800 md:text-[32px] lg:mb-10 lg:text-4xl">
+              <m.h2
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
+                className="mb-4 text-2xl font-bold text-gray-800 md:text-[32px] lg:mb-10 lg:text-4xl"
+              >
                 {question.text}
-              </h2>
+              </m.h2>
 
               {question.type === "choice" ? (
-                <div
+                <m.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3, delay: 0.3 }}
                   className="flex flex-col gap-2 lg:gap-4"
                   role="list"
                   aria-label="Pilihan jawaban"
@@ -153,59 +174,84 @@ export function Quiz() {
                         ? ans === opt.score
                         : ans === opt.text;
                     return (
-                      <Button
+                      <m.div
                         key={idx.toString()}
-                        onClick={() => setAnswer(question.id, opt.text)}
-                        aria-pressed={isSelected}
-                        // role="listitem"
-                        className={`flex h-auto w-full items-center justify-start gap-4 rounded-2xl border-2 px-4 py-2 text-left text-xs transition-all duration-200 sm:text-sm lg:text-base ${
-                          isSelected
-                            ? "bg-primary border-primary hover:bg-primary text-white shadow-lg hover:text-white"
-                            : "border-gray-200 bg-white text-gray-700 hover:bg-white hover:text-gray-700"
-                        }`}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{
+                          duration: 0.4,
+                          delay: 0.35 + idx * 0.08,
+                          ease: "easeOut",
+                        }}
                       >
-                        <Kbd className="hidden lg:flex">{opt.id}</Kbd>
-                        <span className="flex-1 wrap-break-word whitespace-pre-line">
-                          {opt.text}
-                        </span>
-                      </Button>
+                        <Button
+                          onClick={() => setAnswer(question.id, opt.text)}
+                          aria-pressed={isSelected}
+                          className={`flex h-auto w-full items-center justify-start gap-4 rounded-2xl border-2 px-4 py-2 text-left text-xs transition-all duration-200 sm:text-sm lg:text-base ${
+                            isSelected
+                              ? "bg-primary border-primary hover:bg-primary text-white shadow-lg hover:text-white"
+                              : "border-gray-200 bg-white text-gray-700 hover:bg-white hover:text-gray-700"
+                          }`}
+                        >
+                          <Kbd className="hidden lg:flex">{opt.id}</Kbd>
+                          <span className="flex-1 wrap-break-word whitespace-pre-line">
+                            {opt.text}
+                          </span>
+                        </Button>
+                      </m.div>
                     );
                   })}
-                  <p className="mt-4 hidden text-end text-xs text-gray-500 lg:block">
+                  <m.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3, delay: 0.7 }}
+                    className="mt-4 hidden text-end text-xs text-gray-500 lg:block"
+                  >
                     Tekan angka 1-{Math.min(9, question.options?.length ?? 1)}{" "}
                     untuk memilih jawaban cepat.
-                  </p>
-                </div>
+                  </m.p>
+                </m.div>
               ) : (
-                <MaskInput
-                  ref={inputRef}
-                  mask="currency"
-                  currency="IDR"
-                  locale="id-ID"
-                  value={
-                    typeof answers[question.id] === "string"
-                      ? (answers[question.id] as string)
-                      : ""
-                  }
-                  onValueChange={(maskedValue) =>
-                    setAnswer(question.id, maskedValue)
-                  }
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && canProceed) {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      onNext();
+                <m.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4, delay: 0.3, ease: "easeOut" }}
+                >
+                  <MaskInput
+                    ref={inputRef}
+                    mask="currency"
+                    currency="IDR"
+                    locale="id-ID"
+                    value={
+                      typeof answers[question.id] === "string"
+                        ? (answers[question.id] as string)
+                        : ""
                     }
-                  }}
-                  placeholder="..."
-                  aria-label="Jawaban"
-                  className="bg-background text-center rounded-full h-10 text-xl"
-                />
+                    onValueChange={(maskedValue) =>
+                      setAnswer(question.id, maskedValue)
+                    }
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && canProceed) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        onNext();
+                      }
+                    }}
+                    placeholder="..."
+                    aria-label="Jawaban"
+                    className="bg-background h-10 rounded-full text-center text-xl"
+                  />
+                </m.div>
               )}
             </div>
 
             {/* Desktop: ToggleButton inside content flow */}
-            <div className="mt-auto mb-0 hidden md:block">
+            <m.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.5, ease: "easeOut" }}
+              className="mt-auto mb-0 hidden md:block"
+            >
               <ToggleButton
                 onPrevious={onPrevious}
                 onNext={onNext}
@@ -214,13 +260,18 @@ export function Quiz() {
                 current={current}
                 total={total}
               />
-            </div>
-          </div>
+            </m.div>
+          </m.div>
         </div>
       </div>
 
       {/* Mobile: ToggleButton fixed at bottom */}
-      <div className="md:hidden">
+      <m.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.6, ease: "easeOut" }}
+        className="md:hidden"
+      >
         <ToggleButton
           onPrevious={onPrevious}
           onNext={onNext}
@@ -229,7 +280,7 @@ export function Quiz() {
           current={current}
           total={total}
         />
-      </div>
+      </m.div>
     </>
   );
 }

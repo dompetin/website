@@ -34,7 +34,7 @@ export function ToggleButton({
           title="Sebelumnya"
         >
           <ChevronLeftIcon />
-          <KbdGroup>
+          <KbdGroup className="hidden lg:flex">
             <Kbd>Alt</Kbd>
             <span>+</span>
             <Kbd>&larr;</Kbd>
@@ -61,12 +61,12 @@ export function ToggleButton({
           {current === total - 1 ? (
             <>
               Lihat Hasil
-              <Kbd>Enter</Kbd>
+              <Kbd className="hidden lg:flex">Enter</Kbd>
             </>
           ) : (
             <>
               Selanjutnya
-              <Kbd>Enter</Kbd>
+              <Kbd className="hidden lg:flex">Enter</Kbd>
             </>
           )}
         </Button>

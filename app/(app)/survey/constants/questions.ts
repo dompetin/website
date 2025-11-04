@@ -1,18 +1,6 @@
 export const questions = [
   {
     id: 1,
-    text: "Berapa tabunganmu sekarang?",
-    type: "input",
-    placeholder: "Rp...",
-  },
-  {
-    id: 2,
-    text: "Berapa yang kamu siap tabung per bulan?",
-    type: "input",
-    placeholder: "Rp...",
-  },
-  {
-    id: 3,
     text: "Kamu dapat uang lebih dari beasiswa atau kerja part-time. Apa yang kamu lakukan?",
     type: "choice",
     options: [
@@ -37,7 +25,7 @@ export const questions = [
     ],
   },
   {
-    id: 4,
+    id: 2,
     text: "Harga saham yang kamu beli turun 15% dalam sebulan. Apa reaksimu?",
     type: "choice",
     options: [
@@ -62,7 +50,7 @@ export const questions = [
     ],
   },
   {
-    id: 5,
+    id: 3,
     text: "Kalau kamu menabung atau berinvestasi, kamu ingin hasilnya terlihat dalam…",
     type: "choice",
     options: [
@@ -77,7 +65,7 @@ export const questions = [
     ],
   },
   {
-    id: 6,
+    id: 4,
     text: "Kamu mau beli laptop baru 1 tahun lagi, tapi juga ingin uangmu berkembang. Pilih mana?",
     type: "choice",
     options: [
@@ -102,7 +90,7 @@ export const questions = [
     ],
   },
   {
-    id: 7,
+    id: 5,
     text: "Temanmu ajak investasi di saham yang trennya lagi naik. Gimana responmu?",
     type: "choice",
     options: [
