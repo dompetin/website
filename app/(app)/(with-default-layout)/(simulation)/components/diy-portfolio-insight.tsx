@@ -174,7 +174,7 @@ const DiyPortfolioInsight = ({
 
         <div className="grid gap-8 md:grid-cols-2">
           <div className="flex flex-col overflow-clip rounded-3xl shadow-md">
-            <div className="flex h-28 items-center justify-center bg-linear-to-r from-pink-200/70 via-purple-200/60 to-purple-100/60 text-center text-3xl font-bold">
+            <div className="flex h-28 items-center justify-center bg-linear-to-r p-6 from-pink-200/70 via-purple-200/60 to-purple-100/60 text-center text-3xl font-bold">
               Diversifikasi
             </div>
             <div className="flex flex-col items-center gap-3 bg-white p-6 text-center">
@@ -187,7 +187,7 @@ const DiyPortfolioInsight = ({
           </div>
 
           <div className="flex flex-col overflow-clip rounded-3xl shadow-md">
-            <div className="from-primary/70 via-primary/40 flex h-28 items-center justify-center bg-linear-to-r to-indigo-200/80 text-center text-3xl font-bold">
+            <div className="from-primary/70 via-primary/40 flex h-28 p-6 items-center justify-center bg-linear-to-r to-indigo-200/80 text-center text-3xl font-bold">
               Risk-to-Reward Ratio
             </div>
             <div className="flex flex-col items-center gap-3 bg-white p-6 text-center">

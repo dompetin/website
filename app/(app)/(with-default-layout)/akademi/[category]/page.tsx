@@ -59,9 +59,9 @@ const ArticlesByCategoryPage = async ({ params }: PageProps) => {
 
 const ArticleCard = (props: AkademiArticle & { categorySlug: string }) => {
   return (
-    <div className="grid auto-rows-fr rounded-3xl bg-white shadow-lg">
-      <div className="z-20 flex flex-col items-center gap-4 rounded-b-3xl bg-white p-6">
-        <h3 className="text-2xl font-bold">{props.title}</h3>
+    <div className="grid auto-rows-fr rounded-4xl bg-white shadow-lg">
+      <div className="z-20 flex flex-col items-start gap-4 rounded-b-3xl bg-white p-6">
+        <h3 className="text-2xl md:text-4xl font-bold">{props.title}</h3>
         <p className="text-sm">{props.subtitle}</p>
         <Button asChild transition={"scale"} className="ml-auto">
           <Link href={`/akademi/${props.categorySlug}/${props.slug}` as Route}>
