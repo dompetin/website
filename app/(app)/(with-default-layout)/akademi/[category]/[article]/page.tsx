@@ -14,11 +14,12 @@ export const revalidate = 3600;
 interface PageProps {
   params: Promise<{
     article: string;
+    category: string;
   }>;
 }
 
 const AkademiArticlePage = async ({ params }: PageProps) => {
-  const { article: slug } = await params;
+  const { article: slug, category } = await params;
   const article = await getArticleBySlug(slug);
 
   if (!article) {
@@ -29,7 +30,7 @@ const AkademiArticlePage = async ({ params }: PageProps) => {
     <>
       <Container className="max-w-4xl gap-8">
         <Button asChild variant="ghost" className="w-fit px-3">
-          <Link href="/akademi">
+          <Link href={`/akademi/${category}`}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             Kembali
           </Link>
