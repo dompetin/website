@@ -9,19 +9,19 @@ import {
 import { InvestmentSimulationResult } from "@/lib/simulate-investments";
 import { formatCurrency } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import { Area, AreaChart, XAxis, YAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 const chartConfig = {
   moneyWithInvestingMax: {
-    label: "With Investing Max",
+    label: "Investasi (Maksimum)",
     color: "var(--primary)",
   },
   moneyWithInvestingMin: {
-    label: "With Investing Min",
+    label: "Investasi (Minimum)",
     color: "var(--primary)",
   },
   moneyWithoutInvesting: {
-    label: "Without Investing",
+    label: "Tanpa Investasi",
     color: "var(--black)",
   },
 } satisfies ChartConfig;
@@ -48,18 +48,18 @@ const PortofolioChart = ({
   }, [data]);
 
   return (
-    <div className="flex flex-col items-center w-full">
-      <div className="flex flex-col items-center gap-2 mt-6">
+    <div className="flex w-full flex-col items-center">
+      <div className="mt-6 flex flex-col items-center gap-2">
         <p className="text-sm">
           Uang yang kamu dompetin selama{" "}
           <span className="font-bold">{horizonYears} tahun</span>
         </p>
 
-        <div className="flex max-sm:flex-col gap-2 *:data-[slot=card]:bg-neutral-50 *:data-[slot=card]:shadow-lg items-center">
+        <div className="flex items-center gap-2 *:data-[slot=card]:bg-neutral-50 *:data-[slot=card]:shadow-lg max-sm:flex-col">
           <Card className="">
             <CardContent className="text-sm">
               Jika diinvestasikan menjadi{" "}
-              <p className="text-lg text-primary font-bold">
+              <p className="text-primary text-lg font-bold">
                 Rp{" "}
                 {(latestDataPoint.moneyWithInvestingMin / 10 ** 6).toFixed(1)} -{" "}
                 {(latestDataPoint.moneyWithInvestingMax / 10 ** 6).toFixed(1)}{" "}
@@ -88,12 +88,12 @@ const PortofolioChart = ({
           margin={{
             left: 12,
             right: 12,
-          }}>
-          {/* <CartesianGrid vertical={false} /> */}
+          }}
+        >
           <XAxis
             dataKey="year"
             tickLine={false}
-            axisLine={false}
+            axisLine={true}
             tickMargin={2}
           />
           <YAxis
@@ -128,11 +128,12 @@ const PortofolioChart = ({
           <Area
             dataKey="moneyWithoutInvesting"
             type="natural"
-            // fill="url(#fillMoneyWithoutInvesting)"
-            fill="var(--color-white)"
-            fillOpacity={1}
+            fill="none"
+            // fill="var(--color-white)"
+            // fillOpacity={1}
             stroke={"var(--color-black)"}
           />
+          <CartesianGrid vertical={false} />
         </AreaChart>
       </ChartContainer>
     </div>
