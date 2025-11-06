@@ -125,8 +125,10 @@ export function Quiz() {
           <div className="absolute top-1/2 left-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-purple-100/40 blur-3xl"></div>
         </div>
 
+        <div className="h-[5rem] lg:h-[7rem]" />
+
         <div
-          className="relative z-10 flex min-h-screen translate-y-[5rem] flex-col items-center justify-start px-4 py-8 focus:outline-none lg:translate-y-[7rem]"
+          className="relative z-10 flex min-h-screen flex-col items-center justify-start px-4 py-8 focus:outline-none"
           tabIndex={0}
           ref={containerRef}
           onKeyDown={handleKeyDown}
