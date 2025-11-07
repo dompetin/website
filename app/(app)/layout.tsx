@@ -2,6 +2,7 @@ import Navbar from "@/components/navbar";
 import { MotionProvider } from "@/lib/motion";
 import type { Metadata } from "next";
 import { JetBrains_Mono, Poppins } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -35,6 +36,7 @@ export default function RootLayout({
           <Navbar />
           {children}
         </MotionProvider>
+        <Analytics />
       </body>
     </html>
   );
