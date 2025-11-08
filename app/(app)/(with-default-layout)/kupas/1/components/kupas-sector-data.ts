@@ -1,3 +1,5 @@
+import { KUPAS_DATA } from "@/lib/kupas-data";
+
 /**
  * Kupas Sector Returns Data
  * Real historical returns from IDX sectors (2020-2025)
@@ -13,101 +15,146 @@ export type SectorReturnData = {
 };
 
 /**
- * Actual annual returns (%) from kupas.csv mapped to sector names
+ * Map Indonesian sector names to English names used in KUPAS_DATA
+ */
+const SECTOR_NAME_MAP: Record<string, string> = {
+  Kesehatan: "Healthcare",
+  "Bahan Dasar": "Basic Materials",
+  Keuangan: "Financials",
+  Teknologi: "Technology",
+  Energi: "Energy",
+  Properti: "Properties & Real Estate",
+  "Barang Konsumsi: Siklikal": "Consumer Cyclicals",
+  "Barang Konsumsi: Non-Siklikal": "Consumer Non-Cyclicals",
+  Industri: "Industrials",
+  "Transportasi & Logistik": "Transportation & Logistics",
+  Infrastruktur: "Infrastructure",
+};
+
+/**
+ * Translate Indonesian sector name to English
+ */
+const getEnglishSectorName = (indonesianName: string): string => {
+  return SECTOR_NAME_MAP[indonesianName] || indonesianName;
+};
+
+/**
+ * Calculate annual returns from weekly percentage changes
+ * Compounds weekly returns to get annual return for each year/sector
+ */
+function calculateAnnualReturns(): Record<string, SectorReturnData> {
+  const years = [2020, 2021, 2022, 2023, 2024, 2025];
+  const sectors: Set<string> = new Set();
+
+  // Collect all sector names
+  KUPAS_DATA.forEach((entry) => {
+    Object.keys(entry.sectors).forEach((sector) => {
+      if (sector !== "Average") {
+        sectors.add(sector);
+      }
+    });
+  });
+
+  const result: Record<string, SectorReturnData> = {};
+
+  sectors.forEach((sector) => {
+    const annualReturns: number[] = [];
+
+    years.forEach((year) => {
+      // Filter entries for the current year
+      const yearEntries = KUPAS_DATA.filter((entry) => {
+        const date = new Date(entry.date);
+        return date.getFullYear() === year;
+      });
+
+      if (yearEntries.length === 0) {
+        annualReturns.push(0);
+        return;
+      }
+
+      // Compound weekly returns: (1 + r1) * (1 + r2) * ... - 1
+      let compounded = 1;
+      yearEntries.forEach((entry) => {
+        const weeklyReturn = (entry.sectors[sector as keyof typeof entry.sectors] || 0) / 100;
+        compounded *= 1 + weeklyReturn;
+      });
+
+      const annualReturn = (compounded - 1) * 100;
+      annualReturns.push(parseFloat(annualReturn.toFixed(2)));
+    });
+
+    // Calculate mean
+    const mean = parseFloat(
+      (annualReturns.reduce((a, b) => a + b, 0) / annualReturns.length).toFixed(2)
+    );
+
+    // Calculate standard deviation
+    const variance =
+      annualReturns.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) /
+      annualReturns.length;
+    const stdDev = parseFloat(Math.sqrt(variance).toFixed(2));
+
+    // Calculate linear trend from last 5 years (2021-2025, indices 1-5)
+    const last5Years = annualReturns.slice(1, 6);
+    const xValues = [0, 1, 2, 3, 4];
+    const xMean = 2;
+    const yMean = last5Years.reduce((a, b) => a + b, 0) / 5;
+
+    const numerator = xValues.reduce(
+      (sum, x, i) => sum + (x - xMean) * (last5Years[i] - yMean),
+      0
+    );
+    const denominator = xValues.reduce((sum, x) => sum + Math.pow(x - xMean, 2), 0);
+    const trend = denominator > 0 ? parseFloat((numerator / denominator).toFixed(2)) : 0;
+
+    result[sector] = {
+      name: sector,
+      returns: annualReturns,
+      mean,
+      stdDev,
+      trend,
+    };
+  });
+
+  return result;
+}
+
+/**
+ * Actual annual returns (%) from KUPAS_DATA calculated from weekly data
  * Years: 2020, 2021, 2022, 2023, 2024, 2025
  */
-export const SECTOR_RETURNS: Record<string, SectorReturnData> = {
-  Kesehatan: {
-    name: "Kesehatan",
-    returns: [-2.56, 40.84, 24.89, 28.56, 24.52, 8.23],
-    mean: 20.91,
-    stdDev: 14.12,
-    trend: -6.32, // Linear trend from 2021-2025
-  },
-  "Bahan Dasar": {
-    name: "Bahan Dasar",
-    returns: [8.18, 70.31, 34.26, 23.19, 8.89, 39.38],
-    mean: 30.70,
-    stdDev: 23.41,
-    trend: -7.18,
-  },
-  Keuangan: {
-    name: "Keuangan",
-    returns: [2.25, 41.08, 24.13, 10.08, 50.57, 17.7],
-    mean: 24.30,
-    stdDev: 17.68,
-    trend: -5.25,
-  },
-  Teknologi: {
-    name: "Teknologi",
-    returns: [23.83, 238.49, -30.02, -32.78, 20.13, 127.47],
-    mean: 57.85,
-    stdDev: 110.03,
-    trend: 38.69,
-  },
-  Energi: {
-    name: "Energi",
-    returns: [-31.1, 40.81, 127.77, 60.48, 65.37, 29.13],
-    mean: 48.77,
-    stdDev: 53.57,
-    trend: -2.67,
-  },
-  Properti: {
-    name: "Properti",
-    returns: [-41.81, 46.16, 98.5, 57.52, 17.07, 13.91],
-    mean: 31.89,
-    stdDev: 50.47,
-    trend: -8.06,
-  },
-  "Barang Konsumsi: Siklikal": {
-    name: "Barang Konsumsi: Siklikal",
-    returns: [-22.98, 61.16, 78.97, 28.61, 58.76, 22.9],
-    mean: 37.90,
-    stdDev: 37.53,
-    trend: -8.87,
-  },
-  "Barang Konsumsi: Non-Siklikal": {
-    name: "Barang Konsumsi: Non-Siklikal",
-    returns: [2.34, -12.68, 23.9, -1.98, 7.14, 4.55],
-    mean: 3.88,
-    stdDev: 11.46,
-    trend: 4.31,
-  },
-  Industri: {
-    name: "Industri",
-    returns: [1.53, 42.57, 46.26, 2.57, 0.81, 8.21],
-    mean: 16.99,
-    stdDev: 19.64,
-    trend: -8.67,
-  },
-  "Transportasi & Logistik": {
-    name: "Transportasi & Logistik",
-    returns: [-14.92, 112.04, 88.09, 9.59, -7.83, 30.4],
-    mean: 36.23,
-    stdDev: 54.60,
-    trend: -20.58,
-  },
-  Infrastruktur: {
-    name: "Infrastruktur",
-    returns: [-4.42, 62.34, 5.5, 2.8, 59.77, 24.12],
-    mean: 25.02,
-    stdDev: 29.61,
-    trend: -8.08,
-  },
+export const SECTOR_RETURNS = calculateAnnualReturns();
+
+/**
+ * Get weekly sector performance data for charting
+ * Returns array of {date, value} for each sector
+ * Accepts Indonesian or English sector names
+ */
+export const getWeeklySectorData = (sectorName: string) => {
+  const englishName = getEnglishSectorName(sectorName);
+  return KUPAS_DATA.map((entry) => {
+    const sectorKey = englishName as keyof typeof entry.sectors;
+    return {
+      date: entry.date,
+      value: entry.sectors[sectorKey] || 0,
+    };
+  });
 };
 
 /**
  * Map sector display names to their data
- * Handles both singular and plural forms, and variations in naming
+ * Handles Indonesian and English sector names
  */
 export const getSectorReturnData = (sectorName: string): SectorReturnData => {
-  // Try exact match first
-  if (sectorName in SECTOR_RETURNS) {
-    return SECTOR_RETURNS[sectorName as keyof typeof SECTOR_RETURNS];
+  const englishName = getEnglishSectorName(sectorName);
+
+  // Try exact match with English name
+  if (englishName in SECTOR_RETURNS) {
+    return SECTOR_RETURNS[englishName as keyof typeof SECTOR_RETURNS];
   }
 
   // Fallback: return first sector if not found
-  console.warn(`Sector "${sectorName}" not found in SECTOR_RETURNS`);
+  console.warn(`Sector "${sectorName}" (${englishName}) not found in SECTOR_RETURNS`);
   return Object.values(SECTOR_RETURNS)[0]!;
 };
 

@@ -201,7 +201,7 @@ export const analyzeCustomPortfolio = ({
     ready && portfolioStdDev > 0
       ? (avgReturn + weightedRiskFreeRate) / portfolioStdDev
       : 0;
-  const riskRewardScore = Math.max(0, Math.min(10, Math.round(rawRiskReward)));
+  const riskRewardScore = Math.round(Math.max(-1, Math.min(1, rawRiskReward)) * 100) / 100;
 
   // Calculate Diversification (1 - SUMSQ of percentages as decimals)
   const sumSquares = allocation.reduce((acc, entry) => {
@@ -225,11 +225,11 @@ export const analyzeCustomPortfolio = ({
   // Risk-to-reward notes
   const riskRewardNote = !ready
     ? "Kami butuh alokasi yang valid untuk hitung rasio risiko."
-    : riskRewardScore <= 3
+    : riskRewardScore <= 0
     ? "Potensi imbal hasil belum sebanding dengan risiko."
-    : riskRewardScore <= 6
+    : riskRewardScore <= 0.3
     ? "Keuntunganmu mulai sepadan dengan risikomu."
-    : riskRewardScore <= 8
+    : riskRewardScore <= 0.6
     ? "Keuntunganmu sudah bagus dibanding risikomu!"
     : "Imbal hasilmu sangat melampaui risiko yang diambil!";
 

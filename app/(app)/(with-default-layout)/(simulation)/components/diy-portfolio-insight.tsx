@@ -192,7 +192,7 @@ const DiyPortfolioInsight = ({
             </div>
             <div className="flex flex-col items-center gap-3 bg-white p-6 text-center">
               <p className="text-4xl font-bold">
-                {analysis.riskRewardScore}/10
+                {analysis.riskRewardScore}
               </p>
 
               <p className="mt-auto text-sm">{analysis.riskRewardNote}</p>

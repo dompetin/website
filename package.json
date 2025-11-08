@@ -8,6 +8,7 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
+    "generate:kupas": "node scripts/generate-kupas-data.js",
     "db:start": "docker-compose up -d",
     "db:watch": "docker-compose up d",
     "db:down": "docker-compose down",
