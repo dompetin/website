@@ -16,7 +16,7 @@ import { InvestmentSimulationResult } from "@/lib/simulate-investments";
 import { formatCurrency } from "@/lib/utils";
 import { Cell, Label, Pie, PieChart } from "recharts";
 // IMPORT GLOSSARY
-import { GlossaryTerm } from "@/components/glossary";
+import { GlossaryTerm } from "./glossary";
 import { GlossaryKey } from "@/lib/glossary";
 
 const PORTFOLIO_CHART_CONFIG: ChartConfig = {

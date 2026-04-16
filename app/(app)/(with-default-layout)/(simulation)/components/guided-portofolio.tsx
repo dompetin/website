@@ -28,7 +28,7 @@ import {
 import PortofolioChart from "./portofolio-chart";
 
 // INTEGRASI GLOSSARY
-import { useGlossary, GlossaryTerm, GlossaryPanel } from "@/components/glossary";
+import { useGlossary, GlossaryTerm, GlossaryPanel } from "./glossary";
 import { GlossaryKey } from "@/lib/glossary";
 
 const GuidedPortofolio = () => {

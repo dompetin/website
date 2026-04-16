@@ -40,8 +40,8 @@ import * as m from "@/lib/motion";
 import { AnimatePresence } from "motion/react";
 
 // INTEGRASI GLOSSARY
-import { useGlossary, GlossaryTerm, GlossaryPanel } from "@/components/glossary";
-import { GlossaryKey } from "@/lib/glossary";
+import { useGlossary, GlossaryTerm, GlossaryPanel } from "./glossary";
+import { GlossaryKey } from "@/lib/glossary";;
 
 const assetMeta: Record<string, { risk: string; riskColor: string; returnRange: string }> = {
   reksadana_pasar_uang:      { risk: "Risiko Rendah",    riskColor: "text-green-600",  returnRange: "~4–6%/th" },
