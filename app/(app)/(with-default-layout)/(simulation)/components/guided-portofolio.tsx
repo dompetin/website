@@ -112,7 +112,7 @@ const GuidedPortofolio = () => {
               onValueChange={(value) => {
                 setFormData((prev) => ({
                   ...prev,
-                  product: value as any,
+                  product: value as unknown,
                 }));
               }}
             >
