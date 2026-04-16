@@ -5,7 +5,6 @@ import Link from "next/link";
 import Container from "@/components/container";
 import {
   Field,
-  FieldDescription,
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
@@ -31,14 +30,16 @@ import PortofolioChart from "./portofolio-chart";
 import { useGlossary, GlossaryTerm, GlossaryPanel } from "./glossary";
 import { GlossaryKey } from "@/lib/glossary";
 
+// Definisikan tipe produk agar konsisten
+type ProductType = "stocks" | "mutual_fund" | "obligation" | "deposit" | "gold";
+
 const GuidedPortofolio = () => {
-  // Hook untuk glossary
   const glossary = useGlossary();
 
   const [formData, setFormData] = useState<{
     currentSavings: string;
     savingsPerMonth: string;
-    product: "stocks" | "mutual_fund" | "obligation" | "deposit" | "gold";
+    product: ProductType;
   }>({
     currentSavings: "1000000",
     savingsPerMonth: "100000",
@@ -61,7 +62,6 @@ const GuidedPortofolio = () => {
 
   return (
     <Container className="border-accent max-w-5xl border-b-2 pb-16">
-      {/* IMPROVED COPYWRITING */}
       <div className="mb-10">
         <h2 className="text-5xl font-extrabold tracking-tight">
           Berapa yang bisa aku simpan kalau...
@@ -112,7 +112,7 @@ const GuidedPortofolio = () => {
               onValueChange={(value) => {
                 setFormData((prev) => ({
                   ...prev,
-                  product: value as unknown,
+                  product: value as ProductType, // Pakai tipe yang spesifik, jangan unknown/any
                 }));
               }}
             >
@@ -120,7 +120,6 @@ const GuidedPortofolio = () => {
                 <SelectValue placeholder="Pilih produk" />
               </SelectTrigger>
               <SelectContent>
-                {/* INJEKSI GLOSSARY PADA TIAP ITEM */}
                 <SelectItem value="mutual_fund">
                    <GlossaryTerm term="reksa_dana" onClick={glossary.show}>Reksadana</GlossaryTerm>
                 </SelectItem>
@@ -159,19 +158,17 @@ const GuidedPortofolio = () => {
           </Field>
         </FieldGroup>
 
-        {/* CHART SECTION */}
         <div className="relative">
           <PortofolioChart data={chartData} horizonYears={horizonYears} />
           
-          {/* MICROCOPY DI BAWAH CHART */}
           <div className="mt-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <p className="text-xs text-muted-foreground max-w-md italic">
+            <div className="text-xs text-muted-foreground max-w-md italic">
               *Grafik ini membandingkan hasil jika kamu melakukan investasi pada{" "}
               <GlossaryTerm term={formData.product === "mutual_fund" ? "reksa_dana" : (formData.product as GlossaryKey)} onClick={glossary.show}>
                 {formData.product.replace('_', ' ')}
               </GlossaryTerm>{" "} 
               dibanding hanya menabung biasa di bawah kasur.
-            </p>
+            </div>
             
             <Link href={`/privacy-policy`} className="text-[10px] text-muted-foreground hover:underline">
               Kebijakan Privasi Data
@@ -184,7 +181,6 @@ const GuidedPortofolio = () => {
         </p>
       </div>
 
-      {/* GLOBAL GLOSSARY PANEL */}
       <GlossaryPanel
         open={glossary.open}
         active={glossary.active}
