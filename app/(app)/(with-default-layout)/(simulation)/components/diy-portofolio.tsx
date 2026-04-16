@@ -39,6 +39,34 @@ import Link from "next/link";
 import * as m from "@/lib/motion";
 import { AnimatePresence } from "motion/react";
 
+// Deskripsi singkat risiko & estimasi return per aset
+const assetMeta: Record<string, { risk: string; riskColor: string; returnRange: string }> = {
+  reksadana_pasar_uang:      { risk: "Risiko Rendah",    riskColor: "text-green-600",  returnRange: "~4–6%/th" },
+  reksadana_pendapatan_tetap:{ risk: "Risiko Rendah",    riskColor: "text-green-600",  returnRange: "~5–8%/th" },
+  reksadana_campuran:        { risk: "Risiko Menengah",  riskColor: "text-yellow-600", returnRange: "~8–15%/th" },
+  reksadana_pasar_saham:     { risk: "Risiko Menengah",  riskColor: "text-yellow-600", returnRange: "~8–12%/th" },
+  obligasi:                  { risk: "Risiko Rendah",    riskColor: "text-green-600",  returnRange: "~5–6%/th" },
+  saham:                     { risk: "Risiko Tinggi",    riskColor: "text-red-600",    returnRange: "~10–22%/th" },
+  deposit:                   { risk: "Risiko Sangat Rendah", riskColor: "text-green-700", returnRange: "~3–5%/th" },
+  gold:                      { risk: "Risiko Menengah",  riskColor: "text-yellow-600", returnRange: "~8–11%/th" },
+};
+
+// Preset nominal tabungan awal
+const SAVINGS_PRESETS = [
+  { label: "1 Jt",  value: "1000000" },
+  { label: "5 Jt",  value: "5000000" },
+  { label: "10 Jt", value: "10000000" },
+  { label: "50 Jt", value: "50000000" },
+];
+
+// Preset nominal tabungan per bulan
+const MONTHLY_PRESETS = [
+  { label: "100 Rb", value: "100000" },
+  { label: "500 Rb", value: "500000" },
+  { label: "1 Jt",   value: "1000000" },
+  { label: "5 Jt",   value: "5000000" },
+];
+
 type AssetAllocationRow = {
   id: string;
   type: AssetType;
@@ -171,7 +199,7 @@ const DiyPortofolio = () => {
         <div className="flex w-full flex-col gap-6">
           <FieldGroup className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             <Field className="flex-1">
-              <FieldLabel>Portofolioku isinya</FieldLabel>
+              <FieldLabel>Modal awal yang ingin disimulasikan</FieldLabel>
               <FieldContent>
                 <InputGroup>
                   <InputGroupMaskInput
@@ -191,6 +219,28 @@ const DiyPortofolio = () => {
                   />
                   <InputGroupAddon align="inline-end">IDR</InputGroupAddon>
                 </InputGroup>
+                {/* Quick-fill preset buttons */}
+                <div className="flex gap-1.5 mt-2 flex-wrap">
+                  {SAVINGS_PRESETS.map((preset) => (
+                    <button
+                      key={preset.value}
+                      type="button"
+                      onClick={() =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          currentSavings: preset.value,
+                        }))
+                      }
+                      className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
+                        formData.currentSavings === preset.value
+                          ? "bg-primary text-primary-foreground border-primary"
+                          : "border-border text-muted-foreground hover:border-primary hover:text-primary"
+                      }`}
+                    >
+                      {preset.label}
+                    </button>
+                  ))}
+                </div>
                 <FieldDescription>
                   <Link href={`/privacy-policy`} className="underline text-xs">
                     Cek kebijakan privasi kami
@@ -200,7 +250,7 @@ const DiyPortofolio = () => {
             </Field>
 
             <Field className="flex-1">
-              <FieldLabel>Mau nabung per bulan</FieldLabel>
+              <FieldLabel>Tabungan rutin per bulan</FieldLabel>
               <FieldContent>
                 <InputGroup>
                   <InputGroupMaskInput
@@ -220,6 +270,28 @@ const DiyPortofolio = () => {
                   />
                   <InputGroupAddon align="inline-end">IDR</InputGroupAddon>
                 </InputGroup>
+                {/* Quick-fill preset buttons */}
+                <div className="flex gap-1.5 mt-2 flex-wrap">
+                  {MONTHLY_PRESETS.map((preset) => (
+                    <button
+                      key={preset.value}
+                      type="button"
+                      onClick={() =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          savingsPerMonth: preset.value,
+                        }))
+                      }
+                      className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
+                        formData.savingsPerMonth === preset.value
+                          ? "bg-primary text-primary-foreground border-primary"
+                          : "border-border text-muted-foreground hover:border-primary hover:text-primary"
+                      }`}
+                    >
+                      {preset.label}
+                    </button>
+                  ))}
+                </div>
               </FieldContent>
             </Field>
 
@@ -292,11 +364,23 @@ const DiyPortofolio = () => {
                             </SelectTrigger>
                             <SelectContent>
                               {Object.entries(assetCatalog).map(
-                                ([value, data]) => (
-                                  <SelectItem key={value} value={value}>
-                                    {data.label}
-                                  </SelectItem>
-                                ),
+                                ([value, data]) => {
+                                  const meta = assetMeta[value];
+                                  return (
+                                    <SelectItem key={value} value={value}>
+                                      <div className="flex flex-col">
+                                        <span>{data.label}</span>
+                                        {meta && (
+                                          <span className="text-xs text-muted-foreground">
+                                            <span className={meta.riskColor}>{meta.risk}</span>
+                                            {" · "}
+                                            <span>Return {meta.returnRange}</span>
+                                          </span>
+                                        )}
+                                      </div>
+                                    </SelectItem>
+                                  );
+                                },
                               )}
                             </SelectContent>
                           </Select>
@@ -336,7 +420,7 @@ const DiyPortofolio = () => {
                     onClick={handleAddAsset}
                   >
                     <PlusCircle />
-                    add item
+                    Tambah Aset
                   </Button>
                   <span
                     className={`text-sm ${
