@@ -37,19 +37,20 @@ import { GlossaryKey } from "@/lib/glossary";
 import PortofolioChart from "./portofolio-chart";
 import DiyPortfolioInsight from "./diy-portfolio-insight";
 
-// INTEGRASI GLOSSARY (Wikipedia-style) - Jalur diperbaiki sesuai image_d8ef93.png
-import { useGlossary, GlossaryPanel } from "./components/glossary/glossary";
-import { GlossaryPopover } from "./components/glossary/glossary-popover";
+// INTEGRASI GLOSSARY
+import { useGlossary, GlossaryPanel } from "../components/glossary/glossary";
+import { GlossaryPopover } from "../components/glossary/glossary-popover";
 
+// FIX: Sinkronisasi key dengan GlossaryKey (reksa_dana_..., deposito, emas)
 const assetMeta: Record<string, { risk: string; riskColor: string; returnRange: string }> = {
-  reksadana_pasar_uang: { risk: "Risiko Rendah", riskColor: "text-green-600", returnRange: "~4-6%/th" },
-  reksadana_pendapatan_tetap: { risk: "Risiko Rendah", riskColor: "text-green-600", returnRange: "~5-8%/th" },
-  reksadana_campuran: { risk: "Risiko Menengah", riskColor: "text-yellow-600", returnRange: "~8-15%/th" },
-  reksadana_pasar_saham: { risk: "Risiko Tinggi", riskColor: "text-red-600", returnRange: "~10-20%/th" },
+  reksa_dana_pasar_uang: { risk: "Risiko Rendah", riskColor: "text-green-600", returnRange: "~4-6%/th" },
+  reksa_dana_pendapatan_tetap: { risk: "Risiko Rendah", riskColor: "text-green-600", returnRange: "~5-8%/th" },
+  reksa_dana_campuran: { risk: "Risiko Menengah", riskColor: "text-yellow-600", returnRange: "~8-15%/th" },
+  reksa_dana_saham: { risk: "Risiko Tinggi", riskColor: "text-red-600", returnRange: "~10-20%/th" },
   obligasi: { risk: "Risiko Rendah", riskColor: "text-green-600", returnRange: "~5-7%/th" },
   saham: { risk: "Risiko Sangat Tinggi", riskColor: "text-red-700", returnRange: "~12-25%/th" },
-  deposit: { risk: "Aman Banget", riskColor: "text-green-700", returnRange: "~3-5%/th" },
-  gold: { risk: "Stabil", riskColor: "text-yellow-600", returnRange: "~8-11%/th" },
+  deposito: { risk: "Aman Banget", riskColor: "text-green-700", returnRange: "~3-5%/th" },
+  emas: { risk: "Stabil", riskColor: "text-yellow-600", returnRange: "~8-11%/th" },
 };
 
 const SAVINGS_PRESETS = [
@@ -73,9 +74,10 @@ const DiyPortofolio = () => {
     horizonYears: 10,
   });
 
+  // FIX: Default assets menggunakan key yang benar
   const [assets, setAssets] = useState<{ id: string; type: AssetType; percentage: number }[]>([
-    { id: generateRowId(), type: "reksadana_pasar_uang", percentage: 50 },
-    { id: generateRowId(), type: "reksadana_pendapatan_tetap", percentage: 50 },
+    { id: generateRowId(), type: "reksa_dana_pasar_uang", percentage: 50 },
+    { id: generateRowId(), type: "reksa_dana_pendapatan_tetap", percentage: 50 },
   ]);
 
   const [chartData, setChartData] = useState<InvestmentSimulationResult[]>([]);
@@ -97,7 +99,7 @@ const DiyPortofolio = () => {
 
   const addAsset = () => {
     if (assets.length < 8) {
-      setAssets([...assets, { id: generateRowId(), type: "reksadana_pasar_uang", percentage: 0 }]);
+      setAssets([...assets, { id: generateRowId(), type: "reksa_dana_pasar_uang", percentage: 0 }]);
     }
   };
 
@@ -202,22 +204,43 @@ const DiyPortofolio = () => {
 
             <div className="space-y-3">
               {assets.map((asset) => {
-                const meta = assetMeta[asset.type] || assetMeta['reksadana_pasar_uang'];
+                const meta = assetMeta[asset.type] || assetMeta['reksa_dana_pasar_uang'];
                 return (
                   <div key={asset.id} className="flex items-center gap-4 bg-white p-4 rounded-2xl border border-purple-100 shadow-sm transition-all hover:border-purple-300">
-                    <div className="flex-1">
-                      <GlossaryPopover 
-                        term={asset.type as GlossaryKey} 
-                        onOpenFullDetail={glossary.show}
+                    <div className="flex-1 min-w-0">
+                      {/* ASSET SELECTOR INLINE */}
+                      <Select
+                        value={asset.type}
+                        onValueChange={(v) => updateAsset(asset.id, { type: v as AssetType })}
                       >
-                        {assetCatalog.find(c => c.value === asset.type)?.label}
-                      </GlossaryPopover>
+                        <SelectTrigger className="h-auto p-0 border-none shadow-none focus:ring-0 text-left bg-transparent">
+                          <div className="font-bold text-purple-900 truncate">
+                            {assetCatalog.find(c => c.value === asset.type)?.label}
+                          </div>
+                        </SelectTrigger>
+                        <SelectContent>
+                          {assetCatalog.map((c) => (
+                            <SelectItem key={c.value} value={c.value}>
+                              {c.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+
                       <div className="flex items-center gap-2 mt-1">
                         <span className={cn("text-[9px] font-black uppercase tracking-widest", meta.riskColor)}>
                           {meta.risk}
                         </span>
                         <span className="text-purple-100 text-[10px]">|</span>
                         <span className="text-[10px] text-muted-foreground font-medium">{meta.returnRange}</span>
+                        
+                        {/* GLOSSARY TRIGGER */}
+                        <button 
+                          onClick={() => glossary.show(asset.type as GlossaryKey)}
+                          className="ml-1 text-purple-400 hover:text-purple-600 transition-colors"
+                        >
+                          <Info className="w-3 h-3" />
+                        </button>
                       </div>
                     </div>
 
@@ -279,7 +302,7 @@ const DiyPortofolio = () => {
         onOpenGlossary={glossary.show}
       />
 
-      {/* SIDE PANEL (Wikipedia Style) */}
+      {/* SIDE PANEL (Glossary) */}
       <GlossaryPanel
         open={glossary.open}
         active={glossary.active}

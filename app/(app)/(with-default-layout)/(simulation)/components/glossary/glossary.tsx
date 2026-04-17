@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { GLOSSARY, GlossaryKey } from "@/lib/glossary"; 
+// Menjadi ini (lebih spesifik):
 import { X, Lightbulb } from "lucide-react"; // Gunakan icon agar lebih konsisten
 
 /* =========================

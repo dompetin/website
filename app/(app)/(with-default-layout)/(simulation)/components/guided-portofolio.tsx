@@ -27,11 +27,21 @@ import {
 import PortofolioChart from "./portofolio-chart";
 
 // INTEGRASI GLOSSARY
-import { useGlossary, GlossaryTerm, GlossaryPanel } from "./glossary/glossary";
+import { useGlossary, GlossaryPanel } from "../components/glossary/glossary";
 import { GlossaryKey } from "@/lib/glossary";
+import { Info } from "lucide-react";
 
-// Definisikan tipe produk agar konsisten
+// Definisikan tipe produk agar konsisten dengan lib/simulate-investments
 type ProductType = "stocks" | "mutual_fund" | "obligation" | "deposit" | "gold";
+
+// Pemetaan dari ProductType ke GlossaryKey agar side panel muncul dengan benar
+const PRODUCT_TO_GLOSSARY: Record<ProductType, GlossaryKey> = {
+  mutual_fund: "reksa_dana",
+  stocks: "saham",
+  obligation: "obligasi",
+  deposit: "deposito",
+  gold: "emas",
+};
 
 const GuidedPortofolio = () => {
   const glossary = useGlossary();
@@ -68,7 +78,7 @@ const GuidedPortofolio = () => {
         </h2>
         <p className="text-muted-foreground mt-4 text-lg">
           Lihat potensi pertumbuhan uangmu dengan memilih instrumen yang tepat. 
-          Klik istilah yang kamu belum tahu untuk belajar.
+          Gunakan ikon <Info className="inline w-4 h-4" /> untuk belajar istilahnya.
         </p>
       </div>
 
@@ -105,14 +115,22 @@ const GuidedPortofolio = () => {
           </Field>
 
           <Field>
-            <FieldLabel>Pilihan Produk</FieldLabel>
+            <div className="flex items-center justify-between mb-2">
+              <FieldLabel className="mb-0">Pilihan Produk</FieldLabel>
+              <button 
+                onClick={() => glossary.show(PRODUCT_TO_GLOSSARY[formData.product])}
+                className="text-purple-600 hover:text-purple-800 transition-colors"
+              >
+                <Info className="w-4 h-4" />
+              </button>
+            </div>
             <Select
               name={`product`}
               value={formData.product}
               onValueChange={(value) => {
                 setFormData((prev) => ({
                   ...prev,
-                  product: value as ProductType, // Pakai tipe yang spesifik, jangan unknown/any
+                  product: value as ProductType,
                 }));
               }}
             >
@@ -120,21 +138,11 @@ const GuidedPortofolio = () => {
                 <SelectValue placeholder="Pilih produk" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="mutual_fund">
-                   <GlossaryTerm term="reksa_dana" onClick={glossary.show}>Reksadana</GlossaryTerm>
-                </SelectItem>
-                <SelectItem value="stocks">
-                   <GlossaryTerm term="saham" onClick={glossary.show}>Saham</GlossaryTerm>
-                </SelectItem>
-                <SelectItem value="obligation">
-                   <GlossaryTerm term="obligasi" onClick={glossary.show}>Obligasi</GlossaryTerm>
-                </SelectItem>
-                <SelectItem value="deposit">
-                   Deposito
-                </SelectItem>
-                <SelectItem value="gold">
-                   Emas
-                </SelectItem>
+                <SelectItem value="mutual_fund">Reksa Dana</SelectItem>
+                <SelectItem value="stocks">Saham</SelectItem>
+                <SelectItem value="obligation">Obligasi</SelectItem>
+                <SelectItem value="deposit">Deposito</SelectItem>
+                <SelectItem value="gold">Emas</SelectItem>
               </SelectContent>
             </Select>
           </Field>
@@ -164,9 +172,12 @@ const GuidedPortofolio = () => {
           <div className="mt-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div className="text-xs text-muted-foreground max-w-md italic">
               *Grafik ini membandingkan hasil jika kamu melakukan investasi pada{" "}
-              <GlossaryTerm term={formData.product === "mutual_fund" ? "reksa_dana" : (formData.product as GlossaryKey)} onClick={glossary.show}>
-                {formData.product.replace('_', ' ')}
-              </GlossaryTerm>{" "} 
+              <button 
+                onClick={() => glossary.show(PRODUCT_TO_GLOSSARY[formData.product])}
+                className="font-bold text-purple-700 underline decoration-dotted underline-offset-2 hover:text-purple-900 transition-colors"
+              >
+                {formData.product === "mutual_fund" ? "Reksa Dana" : formData.product.replace('_', ' ')}
+              </button>{" "} 
               dibanding hanya menabung biasa di bawah kasur.
             </div>
             

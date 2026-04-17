@@ -5,7 +5,10 @@ import { X, Lightbulb, AlertTriangle, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { GlossaryKey } from "@/lib/glossary";
 
-// Data Glossary Lengkap untuk Side Panel
+/**
+ * Data detail untuk side panel.
+ * Harus mencakup SEMUA kunci yang ada di GlossaryKey (lib/glossary.ts)
+ */
 const GLOSSARY_DETAILS: Record<GlossaryKey, {
   title: string;
   definition: string;
@@ -13,75 +16,89 @@ const GLOSSARY_DETAILS: Record<GlossaryKey, {
   riskLevel: "Rendah" | "Menengah" | "Tinggi" | "Sangat Tinggi";
   tips: string;
 }> = {
-  reksadana_pasar_uang: {
-    title: "Reksa Dana Pasar Uang",
-    definition: "Instrumen investasi yang menempatkan 100% dananya pada instrumen pasar uang seperti deposito bank dan surat berharga dengan jatuh tempo kurang dari satu tahun.",
-    example: "Sangat cocok untuk menyimpan dana darurat karena pencairannya yang relatif cepat dan nilainya stabil.",
+  deposito: {
+    title: "Deposito",
+    definition: "Produk simpanan bank yang penyetoran maupun penarikannya hanya dapat dilakukan pada waktu tertentu (jatuh tempo).",
+    example: "Menyimpan uang Rp10 juta selama 12 bulan. Jika diambil sebelum waktunya, kamu akan dikenakan penalti/denda.",
     riskLevel: "Rendah",
-    tips: "Gunakan untuk tujuan jangka pendek (< 1 tahun) agar uangmu tidak tergerus inflasi tabungan biasa.",
-  },
-  reksadana_pendapatan_tetap: {
-    title: "Reksa Dana Pendapatan Tetap",
-    definition: "Jenis reksa dana yang menginvestasikan minimal 80% aktivanya dalam bentuk efek utang atau obligasi.",
-    example: "Memberikan imbal hasil yang lebih stabil dibanding saham namun lebih tinggi dari pasar uang.",
-    riskLevel: "Rendah",
-    tips: "Cocok untuk tujuan keuangan jangka menengah (1-3 tahun).",
-  },
-  reksadana_campuran: {
-    title: "Reksa Dana Campuran",
-    definition: "Investasi yang mengombinasikan berbagai instrumen seperti saham, obligasi, dan pasar uang dalam satu wadah.",
-    example: "Fleksibel dalam menyesuaikan kondisi pasar karena Manajer Investasi bisa memindahkan porsi aset.",
-    riskLevel: "Menengah",
-    tips: "Pilihan tepat bagi investor yang ingin moderat; tidak terlalu agresif tapi tetap mengejar pertumbuhan.",
-  },
-  reksadana_pasar_saham: {
-    title: "Reksa Dana Saham",
-    definition: "Reksa dana yang mayoritas portofolionya (minimal 80%) ditempatkan pada instrumen ekuitas atau saham.",
-    example: "Potensi keuntungan sangat besar dalam jangka panjang, namun bisa turun drastis dalam jangka pendek.",
-    riskLevel: "Tinggi",
-    tips: "Hanya gunakan uang dingin dan untuk jangka waktu panjang (> 5 tahun).",
+    tips: "Sangat aman karena dijamin LPS. Gunakan untuk dana yang sudah pasti tidak dipakai dalam jangka pendek.",
   },
   obligasi: {
     title: "Obligasi",
-    definition: "Surat pernyataan utang dari penerbit (pemerintah/perusahaan) kepada pemegang obligasi dengan janji membayar bunga berkala.",
-    example: "Seperti memberikan pinjaman ke negara dan kamu mendapatkan imbalan bunga (kupon) setiap bulannya.",
+    definition: "Surat pernyataan utang dari penerbit (pemerintah atau perusahaan) kepada pemegang obligasi dengan janji membayar bunga berkala (kupon).",
+    example: "Membeli ORI atau SBR. Kamu meminjamkan uang ke negara dan negara memberi imbalan bunga setiap bulan.",
     riskLevel: "Rendah",
-    tips: "Obligasi Negara (SBN) adalah salah satu investasi paling aman karena dijamin undang-undang.",
+    tips: "Obligasi pemerintah adalah instrumen investasi yang sangat aman karena dijamin oleh undang-undang.",
+  },
+  emas: {
+    title: "Emas",
+    definition: "Logam mulia yang dianggap sebagai aset pelindung nilai (safe haven) karena nilainya cenderung bertahan saat ekonomi tidak pasti.",
+    example: "Membeli emas batangan atau emas digital sebagai cadangan nilai kekayaan jangka panjang.",
+    riskLevel: "Rendah",
+    tips: "Emas cocok untuk menjaga daya beli uangmu terhadap inflasi dalam jangka waktu yang sangat lama.",
+  },
+  reksa_dana: {
+    title: "Reksa Dana",
+    definition: "Wadah untuk menghimpun dana dari masyarakat pemodal yang selanjutnya dikelola oleh Manajer Investasi ke dalam berbagai aset keuangan.",
+    example: "Ibarat menitipkan uang ke supir bus (Manajer Investasi) agar diantarkan ke tujuan investasi yang aman dan menguntungkan.",
+    riskLevel: "Menengah",
+    tips: "Pilihan praktis bagi pemula yang tidak memiliki waktu untuk mengelola investasi secara mandiri.",
+  },
+  reksa_dana_pasar_uang: {
+    title: "Reksa Dana Pasar Uang",
+    definition: "Reksa dana yang 100% dananya ditempatkan pada instrumen pasar uang seperti deposito bank dan surat utang jangka pendek (< 1 tahun).",
+    example: "Tempat menyimpan dana darurat karena pencairannya cepat (likuid) dan risikonya paling rendah.",
+    riskLevel: "Rendah",
+    tips: "Gunakan untuk tujuan keuangan jangka pendek agar uang tidak menganggur di tabungan biasa.",
+  },
+  reksa_dana_pendapatan_tetap: {
+    title: "Reksa Dana Pendapatan Tetap",
+    definition: "Jenis reksa dana yang menginvestasikan minimal 80% aktivanya dalam bentuk efek utang atau obligasi.",
+    example: "Memberikan imbal hasil yang lebih stabil dibanding saham namun tetap lebih tinggi dari bunga deposito.",
+    riskLevel: "Rendah",
+    tips: "Cocok untuk target keuangan jangka menengah (1-3 tahun) seperti DP rumah atau biaya sekolah anak.",
+  },
+  reksa_dana_saham: {
+    title: "Reksa Dana Saham",
+    definition: "Reksa dana yang mayoritas portofolionya (minimal 80%) ditempatkan pada instrumen ekuitas atau saham perusahaan.",
+    example: "Potensi keuntungan paling besar dalam jangka panjang, namun nilainya bisa fluktuatif (naik-turun) tajam.",
+    riskLevel: "Tinggi",
+    tips: "Hanya gunakan 'uang dingin' dan tujukan untuk investasi jangka panjang (di atas 5 tahun).",
+  },
+  reksa_dana_campuran: {
+    title: "Reksa Dana Campuran",
+    definition: "Investasi yang mengombinasikan berbagai instrumen seperti saham, obligasi, dan pasar uang dalam satu produk.",
+    example: "Fleksibel dalam menyesuaikan kondisi pasar; Manajer Investasi akan mengatur porsi aset sesuai kondisi ekonomi.",
+    riskLevel: "Menengah",
+    tips: "Pilihan tepat jika kamu ingin diversifikasi otomatis antara aset aman dan aset agresif.",
+  },
+  reksa_dana_syariah: {
+    title: "Reksa Dana Syariah",
+    definition: "Reksa dana yang dikelola sesuai dengan prinsip syariat Islam dan hanya berinvestasi pada emiten yang masuk Daftar Efek Syariah.",
+    example: "Investasi tidak akan masuk ke perusahaan yang menjual alkohol, judi, atau bank konvensional (mengandung riba).",
+    riskLevel: "Menengah",
+    tips: "Memberikan ketenangan pikiran bagi investor yang ingin investasinya berkah dan halal.",
   },
   saham: {
     title: "Saham",
-    definition: "Tanda penyertaan modal seseorang atau pihak dalam suatu perusahaan atau perseroan terbatas.",
-    example: "Jika perusahaan untung, kamu bisa dapat dividen atau keuntungan dari kenaikan harga sahamnya.",
+    definition: "Tanda penyertaan modal atau kepemilikan seseorang dalam suatu perusahaan atau perseroan terbatas.",
+    example: "Membeli saham perusahaan seperti BCA atau Telkom. Jika perusahaan untung, kamu bisa dapat dividen.",
     riskLevel: "Sangat Tinggi",
-    tips: "Lakukan analisis fundamental sebelum membeli saham perusahaan tertentu.",
-  },
-  deposit: {
-    title: "Deposito",
-    definition: "Produk simpanan bank yang penyetoran maupun penarikannya hanya dapat dilakukan pada waktu tertentu.",
-    example: "Bunga lebih tinggi dari tabungan biasa, tapi ada penalti jika diambil sebelum jatuh tempo.",
-    riskLevel: "Rendah",
-    tips: "Pastikan bank tempatmu menaruh deposito terdaftar di LPS.",
-  },
-  gold: {
-    title: "Emas",
-    definition: "Logam mulia yang dianggap sebagai aset pelindung nilai (safe haven) saat kondisi ekonomi tidak pasti.",
-    example: "Harga emas cenderung naik saat inflasi tinggi atau terjadi krisis global.",
-    riskLevel: "Rendah",
-    tips: "Cocok untuk menjaga daya beli uangmu dalam jangka waktu yang sangat lama.",
+    tips: "Selalu lakukan analisis fundamental dan jangan sekadar ikut-ikutan tren atau 'FOMO'.",
   },
   diversifikasi: {
     title: "Diversifikasi",
-    definition: "Strategi menyebar modal ke berbagai jenis aset untuk mengurangi risiko kerugian.",
-    example: "Jangan menaruh semua telur dalam satu keranjang. Jika satu jatuh, yang lain masih aman.",
+    definition: "Strategi menyebar modal ke berbagai jenis aset investasi yang berbeda untuk mengurangi risiko kerugian total.",
+    example: "Jangan menaruh semua telur dalam satu keranjang. Jika satu jatuh (satu aset rugi), yang lain masih aman.",
     riskLevel: "Rendah",
-    tips: "Kombinasikan aset berisiko tinggi (saham) dengan aset aman (emas/pasar uang).",
+    tips: "Kombinasikan aset berisiko tinggi dengan aset aman untuk menjaga stabilitas portofoliomu.",
   },
   risk_reward: {
     title: "Risk to Reward Ratio",
-    definition: "Perbandingan antara potensi keuntungan yang diharapkan dengan risiko kerugian yang mungkin terjadi.",
-    example: "Semakin tinggi potensi untung (High Return), maka risiko yang menyertainya juga semakin tinggi (High Risk).",
+    definition: "Prinsip perbandingan antara potensi keuntungan yang diharapkan dengan risiko kerugian yang mungkin terjadi.",
+    example: "Semakin tinggi potensi untung (High Return), maka risiko yang menyertai juga semakin tinggi (High Risk).",
     riskLevel: "Menengah",
-    tips: "Jangan hanya melihat angka profit, selalu cek apakah kamu siap dengan risiko penurunan nilainya.",
+    tips: "Sesuaikan pilihan investasimu dengan 'profil risiko' atau tingkat keberanianmu menghadapi kerugian.",
   },
 };
 

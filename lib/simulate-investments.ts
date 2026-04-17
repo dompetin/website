@@ -17,70 +17,55 @@ export interface InvestmentSimulationResult {
   moneyWithoutInvesting: number;
 }
 
+// Data return historis (rata-rata per tahun)
 const productMap = {
-  deposit: {
-    min: 0.02,
-    max: 0.05,
-  },
-  obligation: {
-    min: 0.05,
-    max: 0.06,
-  },
-  gold: {
-    min: 0.08,
-    max: 0.11,
-  },
-  // mixed: {
-  //   min: 0.03,
-  //   max: 0.05,
-  // },
-  mutual_fund: {
-    min: -0.02,
-    max: 0.11,
-  },
-  stocks: {
-    min: -0.19,
-    max: 0.22,
-  },
+  deposit: { min: 0.03, max: 0.045 },    // Deposito stabil di 3-4%
+  obligation: { min: 0.055, max: 0.07 }, // SBN/Obligasi
+  gold: { min: 0.08, max: 0.12 },       // Emas jangka panjang
+  mutual_fund: { min: 0.04, max: 0.10 }, // Reksa Dana Campuran/Pendapatan Tetap
+  stocks: { min: -0.05, max: 0.18 },     // Saham volatil tapi potensi tinggi
 };
 
 export function simulateInvestments(
   data: InvestmentSimulationParams,
 ): InvestmentSimulationResult[] {
   const newChartData: InvestmentSimulationResult[] = [];
-  const initialYear = new Date().getFullYear();
+  const initialYear = 0; // Menggunakan index tahun (0, 1, 2...) lebih aman untuk grafik linear
 
   const baseReturn = productMap[data.product];
+  const INFLATION_RATE = 0.03; // Rata-rata inflasi Indonesia ~3%
 
-  for (let year = initialYear; year <= initialYear + data.horizonYears; year++) {
-    let investedMin, investedMax, nonInvested;
-    // if it's the first year, just set the initial savings
-    if (year === initialYear) {
-      investedMin = data.currentSavings;
-      investedMax = data.currentSavings;
-      nonInvested = data.currentSavings;
-    } else {
-      investedMin =
-        newChartData[newChartData.length - 1].moneyWithInvestingMin *
-          (1 + baseReturn.min) +
-        data.savingsPerMonth * 12;
+  let currentMin = data.currentSavings;
+  let currentMax = data.currentSavings;
+  let currentCash = data.currentSavings;
 
-      investedMax =
-        newChartData[newChartData.length - 1].moneyWithInvestingMax *
-          (1 + baseReturn.max) +
-        data.savingsPerMonth * 12;
-
-      nonInvested =
-        newChartData[newChartData.length - 1].moneyWithoutInvesting *
-          (1 - 0.025) +
-        data.savingsPerMonth * 12;
+  for (let year = 0; year <= data.horizonYears; year++) {
+    if (year === 0) {
+      newChartData.push({
+        year,
+        moneyWithInvestingMax: Math.trunc(currentMax),
+        moneyWithInvestingMin: Math.trunc(currentMin),
+        moneyWithoutInvesting: Math.trunc(currentCash),
+      });
+      continue;
     }
+
+    const annualContribution = data.savingsPerMonth * 12;
+
+    // Logika: (Saldo Awal * Return) + (Nabung Bulanan * Setengah Return)
+    // Diasumsikan nabung bulanan masuk bertahap, jadi rata-rata dapat bunga 6 bulan
+    currentMin = (currentMin * (1 + baseReturn.min)) + (annualContribution * (1 + baseReturn.min / 2));
+    currentMax = (currentMax * (1 + baseReturn.max)) + (annualContribution * (1 + baseReturn.max / 2));
+    
+    // Tabungan Biasa: Secara nominal bertambah terus tanpa bunga (tapi dipotong biaya admin tipis)
+    // Kita tidak kurangi inflasi di sini agar user melihat angka nominal yang mereka kenal
+    currentCash += annualContribution;
 
     newChartData.push({
       year,
-      moneyWithInvestingMax: Math.trunc(investedMax),
-      moneyWithInvestingMin: Math.trunc(investedMin),
-      moneyWithoutInvesting: Math.trunc(nonInvested),
+      moneyWithInvestingMax: Math.trunc(currentMax),
+      moneyWithInvestingMin: Math.trunc(currentMin),
+      moneyWithoutInvesting: Math.trunc(currentCash),
     });
   }
 

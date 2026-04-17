@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   ChartConfig,
@@ -11,15 +11,15 @@ import {
 } from "@/components/ui/chart";
 import { InvestmentSimulationResult } from "@/lib/simulate-investments";
 
-// Mengembalikan warna UNGU ke Config
+// Config warna ungu yang konsisten dengan tema
 const chartConfig = {
   moneyWithInvestingMax: {
     label: "Potensi Maksimal",
-    color: "#a855f7", // Warna ungu primary
+    color: "#a855f7",
   },
   moneyWithInvestingMin: {
     label: "Potensi Minimal",
-    color: "#e9d5ff", // Warna ungu muda
+    color: "#e9d5ff",
   },
   moneyWithoutInvesting: {
     label: "Tabungan Biasa",
@@ -42,6 +42,7 @@ const PortofolioChart = ({
     }
   }, [data]);
 
+  // Formatter untuk angka di kartu (Contoh: 1.250,5 jt)
   const formatToMillion = (val: number) => {
     return (val / 10 ** 6).toLocaleString("id-ID", {
       maximumFractionDigits: 1,
@@ -49,20 +50,26 @@ const PortofolioChart = ({
     });
   };
 
+  // Formatter untuk Axis (Contoh: 10jt, 1M)
+  const formatAxis = (val: number) => {
+    if (val >= 10 ** 9) return `${(val / 10 ** 9).toFixed(1)}M`;
+    return `${val / 10 ** 6}jt`;
+  };
+
   if (!latestDataPoint) return null;
 
   return (
     <div className="flex w-full flex-col items-center gap-8">
       <div className="flex flex-col items-center gap-4 text-center">
-        <p className="text-muted-foreground text-sm font-medium uppercase tracking-wider">
-          Estimasi Saldo Akhir Setelah <span className="text-foreground font-bold">{horizonYears} Tahun</span>
+        <p className="text-muted-foreground text-xs font-bold uppercase tracking-[0.2em]">
+          Estimasi Saldo Akhir Setelah <span className="text-purple-600 underline underline-offset-4">{horizonYears} Tahun</span>
         </p>
 
         <div className="flex flex-wrap justify-center gap-4">
-          {/* Kartu Hasil Investasi Tetap UNGU */}
-          <Card className="border-purple-100 bg-purple-50/50 shadow-sm transition-all hover:shadow-md">
+          {/* Card: Dengan Investasi */}
+          <Card className="border-purple-100 bg-purple-50/30 shadow-none transition-all hover:bg-purple-50/50">
             <CardContent className="p-6">
-              <p className="text-muted-foreground mb-1 text-xs font-semibold">DENGAN INVESTASI</p>
+              <p className="text-muted-foreground mb-2 text-[10px] font-bold tracking-widest">HASIL INVESTASI</p>
               <div className="flex items-baseline gap-1 text-purple-700">
                 <span className="text-sm font-bold">Rp</span>
                 <span className="text-3xl font-black tracking-tight">
@@ -73,9 +80,10 @@ const PortofolioChart = ({
             </CardContent>
           </Card>
 
-          <Card className="border-muted bg-neutral-50 shadow-sm transition-all hover:shadow-md">
+          {/* Card: Tanpa Investasi */}
+          <Card className="border-muted bg-neutral-50 shadow-none transition-all hover:bg-neutral-100">
             <CardContent className="p-6">
-              <p className="text-muted-foreground mb-1 text-xs font-semibold">TABUNGAN BIASA</p>
+              <p className="text-muted-foreground mb-2 text-[10px] font-bold tracking-widest">TABUNGAN BIASA</p>
               <div className="flex items-baseline gap-1 text-neutral-900">
                 <span className="text-sm font-bold">Rp</span>
                 <span className="text-3xl font-black tracking-tight">
@@ -89,88 +97,91 @@ const PortofolioChart = ({
       </div>
 
       <ChartContainer config={chartConfig} className="aspect-[2/1] w-full lg:aspect-[3/1]">
+        {/* ResponsiveContainer memastikan chart mengisi ruang yang tersedia */}
         <AreaChart
           data={data}
           margin={{ top: 10, right: 10, left: 10, bottom: 0 }}
         >
-          {/* Mengembalikan Definisi Gradien UNGU */}
           <defs>
             <linearGradient id="colorInvest" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#a855f7" stopOpacity={0.4} />
+              <stop offset="5%" stopColor="#a855f7" stopOpacity={0.3} />
               <stop offset="95%" stopColor="#a855f7" stopOpacity={0} />
             </linearGradient>
           </defs>
           
-          <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="hsl(var(--muted-foreground) / 0.2)" />
+          <CartesianGrid vertical={false} strokeDasharray="3 3" strokeOpacity={0.5} />
           
           <XAxis
             dataKey="year"
             tickLine={false}
             axisLine={false}
-            tickMargin={10}
+            tickMargin={12}
             tickFormatter={(value) => `Thn ${value}`}
-            className="text-[10px] font-medium text-muted-foreground"
+            className="text-[10px] font-bold text-muted-foreground"
           />
           
           <YAxis
             orientation="right"
             tickLine={false}
             axisLine={false}
-            tickMargin={10}
-            tickFormatter={(value) => `Rp ${value / 10 ** 6}jt`}
-            className="text-[10px] font-medium text-muted-foreground"
+            tickMargin={12}
+            tickFormatter={formatAxis}
+            className="text-[10px] font-bold text-muted-foreground"
           />
 
           <ChartTooltip
             cursor={{ stroke: "#a855f7", strokeWidth: 1, strokeDasharray: "4 4" }}
             content={
               <ChartTooltipContent 
-                indicator="line" 
+                indicator="dot" 
                 labelFormatter={(value) => `Tahun ke-${value}`}
-                className="w-56"
+                className="w-64 rounded-2xl border-purple-100 shadow-xl"
               />
             }
           />
 
-          {/* Area Grafik menggunakan Gradien UNGU */}
+          {/* Area Maksimal (Area Utama) */}
           <Area
             dataKey="moneyWithInvestingMax"
             type="monotone"
             stroke="#a855f7"
-            strokeWidth={2}
+            strokeWidth={3}
             fill="url(#colorInvest)" 
-            stackId="1"
-            isAnimationActive={true}
+            isAnimationActive={false} // Dimatikan agar transisi antar input terasa instan dan snappy
           />
           
+          {/* Area Minimal (Hanya garis putus-putus) */}
           <Area
             dataKey="moneyWithInvestingMin"
             type="monotone"
             stroke="#a855f7"
-            strokeWidth={1}
-            strokeDasharray="4 4"
+            strokeWidth={1.5}
+            strokeDasharray="6 6"
             fill="transparent"
-            stackId="2"
+            isAnimationActive={false}
           />
 
+          {/* Garis Tabungan Biasa */}
           <Area
             dataKey="moneyWithoutInvesting"
             type="monotone"
             stroke="#000000"
             strokeWidth={2}
-            strokeDasharray="5 5"
+            strokeDasharray="4 4"
             fill="none"
+            isAnimationActive={false}
           />
         </AreaChart>
       </ChartContainer>
       
-      <div className="flex gap-6 text-xs text-muted-foreground p-4 bg-gray-50 rounded-full border">
-        <div className="flex items-center gap-1.5">
-          <div className="h-0.5 w-4 bg-purple-500" />
-          <span>Estimasi Investasi (Min - Max)</span>
+      {/* Legend Custom */}
+      <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+        <div className="flex items-center gap-2">
+          <div className="h-1 w-6 rounded-full bg-purple-500" />
+          <span>Potensi Investasi</span>
         </div>
-        <div className="flex items-center gap-1.5">
-          <div className="h-0.5 w-4 border-t-2 border-dashed border-black" />
+        <div className="flex items-center gap-2">
+          <div className="h-0.5 w-6 border-t-2 border-dashed border-black" />
           <span>Tabungan Tanpa Bunga</span>
         </div>
       </div>

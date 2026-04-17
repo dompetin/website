@@ -15,19 +15,22 @@ import {
 import { InvestmentSimulationResult } from "@/lib/simulate-investments";
 import { formatCurrency } from "@/lib/utils";
 import { Cell, Label, Pie, PieChart } from "recharts";
-import { GlossaryTerm } from "@/components/glossary";
 import { GlossaryKey } from "@/lib/glossary";
 
-// Konfigurasi warna Donut Chart (Tetap Ungu)
+// FIX: Konfigurasi warna Donut Chart (Disinkronkan dengan GlossaryKey)
 const PORTFOLIO_CHART_CONFIG: ChartConfig = {
-  reksadana_pasar_uang: { label: "Pasar Uang", color: "#e9d5ff" },
-  reksadana_pendapatan_tetap: { label: "Pendapatan Tetap", color: "#c084fc" },
-  reksadana_campuran: { label: "Campuran", color: "#a855f7" },
-  reksadana_pasar_saham: { label: "Pasar Saham", color: "#9333ea" },
+  reksa_dana_pasar_uang: { label: "Pasar Uang", color: "#e9d5ff" },
+  reksa_dana_pendapatan_tetap: { label: "Pendapatan Tetap", color: "#c084fc" },
+  reksa_dana_campuran: { label: "Campuran", color: "#a855f7" },
+  reksa_dana_saham: { label: "Saham (RD)", color: "#9333ea" },
+  reksa_dana_syariah: { label: "Syariah", color: "#d8b4fe" },
+  reksa_dana: { label: "Reksa Dana", color: "#7e22ce" },
   obligasi: { label: "Obligasi", color: "#6366f1" },
   saham: { label: "Saham", color: "#4f46e5" },
-  deposit: { label: "Deposito", color: "#94a3b8" },
-  gold: { label: "Emas", color: "#fbbf24" },
+  deposito: { label: "Deposito", color: "#94a3b8" },
+  emas: { label: "Emas", color: "#fbbf24" },
+  diversifikasi: { label: "Diversifikasi", color: "#ec4899" },
+  risk_reward: { label: "Risk-to-Reward", color: "#3b82f6" },
 };
 
 interface DiyPortfolioInsightProps {
@@ -84,13 +87,18 @@ const DiyPortfolioInsight = ({
           {latestProjectionCopy}
         </div>
         
-        <p className="mt-8 text-sm font-medium text-purple-700 bg-purple-50 inline-block px-4 py-2 rounded-full border border-purple-100">
-          Analisa Strategi{" "}
-          <GlossaryTerm term="diversifikasi" onClick={() => onOpenGlossary?.("diversifikasi")}>
-            Diversifikasi
-          </GlossaryTerm>{" "}
-          Kamu
-        </p>
+        <div className="mt-8 inline-block">
+          <p className="text-sm font-medium text-purple-700 bg-purple-50 px-4 py-2 rounded-full border border-purple-100">
+            Analisa Strategi{" "}
+            <button 
+              onClick={() => onOpenGlossary?.("diversifikasi")}
+              className="font-bold underline decoration-dotted underline-offset-2 hover:text-purple-900 transition-colors"
+            >
+              Diversifikasi
+            </button>{" "}
+            Kamu
+          </p>
+        </div>
       </div>
 
       <div className="grid gap-12 lg:grid-cols-[350px_minmax(0,1fr)] lg:items-center">
@@ -105,7 +113,7 @@ const DiyPortfolioInsight = ({
                 <Pie
                   data={analysis.slices}
                   dataKey="percentage"
-                  nameKey="label"
+                  nameKey="type" // FIX: Pakai 'type' sesuai key di ChartConfig
                   innerRadius="72%"
                   outerRadius="100%"
                   strokeWidth={4}
@@ -126,7 +134,7 @@ const DiyPortfolioInsight = ({
                           <tspan x={cx} y={cy} className="fill-foreground text-3xl font-bold">
                             {Math.round(analysis.topAsset?.percentage ?? 0)}%
                           </tspan>
-                          <tspan x={cx} y={cy + 24} className="fill-muted-foreground text-xs uppercase tracking-wider font-medium">
+                          <tspan x={cx} y={cy + 24} className="fill-muted-foreground text-[10px] uppercase tracking-wider font-bold">
                             {analysis.topAsset?.label || "Aset Utama"}
                           </tspan>
                         </text>
@@ -148,7 +156,7 @@ const DiyPortfolioInsight = ({
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
-          {/* DIVERSIFIKASI CARD - Mengembalikan Gradient UNGU/PINK */}
+          {/* DIVERSIFIKASI CARD */}
           <div className="group flex flex-col overflow-hidden rounded-[2rem] bg-white border border-gray-100 shadow-sm transition-all hover:shadow-md">
             <div className="flex h-24 items-center justify-center bg-gradient-to-r from-pink-100 via-purple-100 to-purple-50 p-6">
               <button 
@@ -168,7 +176,7 @@ const DiyPortfolioInsight = ({
             </div>
           </div>
 
-          {/* RISK REWARD CARD - Mengembalikan Gradient UNGU/BIRU */}
+          {/* RISK REWARD CARD */}
           <div className="group flex flex-col overflow-hidden rounded-[2rem] bg-white border border-gray-100 shadow-sm transition-all hover:shadow-md">
             <div className="flex h-24 items-center justify-center bg-gradient-to-r from-purple-100 via-indigo-100 to-blue-50 p-6">
               <button 
