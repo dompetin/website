@@ -27,7 +27,7 @@ import {
 import PortofolioChart from "./portofolio-chart";
 
 // INTEGRASI GLOSSARY
-import { useGlossary, GlossaryTerm, GlossaryPanel } from "./glossary";
+import { useGlossary, GlossaryTerm, GlossaryPanel } from "./glossary/glossary";
 import { GlossaryKey } from "@/lib/glossary";
 
 // Definisikan tipe produk agar konsisten

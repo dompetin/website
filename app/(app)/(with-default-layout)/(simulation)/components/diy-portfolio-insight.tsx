@@ -15,10 +15,10 @@ import {
 import { InvestmentSimulationResult } from "@/lib/simulate-investments";
 import { formatCurrency } from "@/lib/utils";
 import { Cell, Label, Pie, PieChart } from "recharts";
-// IMPORT GLOSSARY
-import { GlossaryTerm } from "./glossary";
+import { GlossaryTerm } from "@/components/glossary";
 import { GlossaryKey } from "@/lib/glossary";
 
+// Konfigurasi warna Donut Chart (Tetap Ungu)
 const PORTFOLIO_CHART_CONFIG: ChartConfig = {
   reksadana_pasar_uang: { label: "Pasar Uang", color: "#e9d5ff" },
   reksadana_pendapatan_tetap: { label: "Pendapatan Tetap", color: "#c084fc" },
@@ -35,7 +35,7 @@ interface DiyPortfolioInsightProps {
   latestProjection: InvestmentSimulationResult | null;
   totalDeposited: number;
   horizonYears?: number;
-  onOpenGlossary?: (key: GlossaryKey) => void; // PROP BARU
+  onOpenGlossary?: (key: GlossaryKey) => void;
 }
 
 const DiyPortfolioInsight = ({
@@ -46,7 +46,6 @@ const DiyPortfolioInsight = ({
   onOpenGlossary,
 }: DiyPortfolioInsightProps) => {
   
-  // RENDER COPY DENGAN EDUKASI INFLASI
   const latestProjectionCopy = latestProjection ? (
     <div className="space-y-2">
       <p>
@@ -85,8 +84,7 @@ const DiyPortfolioInsight = ({
           {latestProjectionCopy}
         </div>
         
-        {/* MICROCOPY DENGAN GLOSSARY */}
-        <p className="mt-8 text-sm font-medium text-primary bg-primary/5 inline-block px-4 py-2 rounded-full border border-primary/10">
+        <p className="mt-8 text-sm font-medium text-purple-700 bg-purple-50 inline-block px-4 py-2 rounded-full border border-purple-100">
           Analisa Strategi{" "}
           <GlossaryTerm term="diversifikasi" onClick={() => onOpenGlossary?.("diversifikasi")}>
             Diversifikasi
@@ -96,7 +94,6 @@ const DiyPortfolioInsight = ({
       </div>
 
       <div className="grid gap-12 lg:grid-cols-[350px_minmax(0,1fr)] lg:items-center">
-        {/* PIE CHART SECTION */}
         <div className="flex flex-col items-center">
           {analysis.isReady ? (
             <ChartContainer
@@ -150,14 +147,13 @@ const DiyPortfolioInsight = ({
           )}
         </div>
 
-        {/* METRICS CARDS SECTION */}
         <div className="grid gap-6 md:grid-cols-2">
-          {/* DIVERSIFIKASI CARD */}
+          {/* DIVERSIFIKASI CARD - Mengembalikan Gradient UNGU/PINK */}
           <div className="group flex flex-col overflow-hidden rounded-[2rem] bg-white border border-gray-100 shadow-sm transition-all hover:shadow-md">
-            <div className="flex h-24 items-center justify-center bg-gradient-to-br from-purple-50 to-indigo-50 p-6">
+            <div className="flex h-24 items-center justify-center bg-gradient-to-r from-pink-100 via-purple-100 to-purple-50 p-6">
               <button 
                 onClick={() => onOpenGlossary?.("diversifikasi")}
-                className="text-2xl font-bold text-indigo-900 underline decoration-dotted decoration-indigo-300 underline-offset-4 hover:text-indigo-600 transition-colors"
+                className="text-2xl font-bold text-purple-950 underline decoration-dotted decoration-purple-400 underline-offset-4 hover:text-purple-700 transition-colors"
               >
                 Diversifikasi
               </button>
@@ -172,12 +168,12 @@ const DiyPortfolioInsight = ({
             </div>
           </div>
 
-          {/* RISK REWARD CARD */}
+          {/* RISK REWARD CARD - Mengembalikan Gradient UNGU/BIRU */}
           <div className="group flex flex-col overflow-hidden rounded-[2rem] bg-white border border-gray-100 shadow-sm transition-all hover:shadow-md">
-            <div className="flex h-24 items-center justify-center bg-gradient-to-br from-blue-50 to-cyan-50 p-6">
+            <div className="flex h-24 items-center justify-center bg-gradient-to-r from-purple-100 via-indigo-100 to-blue-50 p-6">
               <button 
                 onClick={() => onOpenGlossary?.("risk_reward")}
-                className="text-2xl font-bold text-blue-900 underline decoration-dotted decoration-blue-300 underline-offset-4 hover:text-blue-600 transition-colors"
+                className="text-2xl font-bold text-purple-950 underline decoration-dotted decoration-purple-400 underline-offset-4 hover:text-purple-700 transition-colors"
               >
                 Risk-to-Reward
               </button>
@@ -192,16 +188,6 @@ const DiyPortfolioInsight = ({
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="mt-8 p-6 bg-white/50 border border-muted rounded-2xl">
-        <p className="text-sm text-center text-muted-foreground italic leading-relaxed">
-          &ldquo;Dengan{" "}
-          <GlossaryTerm term="diversifikasi" onClick={() => onOpenGlossary?.("diversifikasi")}>
-            diversifikasi
-          </GlossaryTerm>{" "}
-          yang tepat, kamu membagi risiko agar jika satu aset turun, aset lainnya bisa menyeimbangkan. Ini kunci investasi jangka panjang.&rdquo;
-        </p>
       </div>
 
       <div className="text-muted-foreground/60 text-center text-[10px] uppercase tracking-widest font-bold">

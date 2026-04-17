@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import { useEffect, useState } from "react";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   ChartConfig,
@@ -10,16 +10,16 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { InvestmentSimulationResult } from "@/lib/simulate-investments";
-import { formatCurrency } from "@/lib/utils";
 
+// Mengembalikan warna UNGU ke Config
 const chartConfig = {
   moneyWithInvestingMax: {
     label: "Potensi Maksimal",
-    color: "hsl(var(--primary))",
+    color: "#a855f7", // Warna ungu primary
   },
   moneyWithInvestingMin: {
     label: "Potensi Minimal",
-    color: "hsl(var(--primary) / 0.5)",
+    color: "#e9d5ff", // Warna ungu muda
   },
   moneyWithoutInvesting: {
     label: "Tabungan Biasa",
@@ -42,7 +42,6 @@ const PortofolioChart = ({
     }
   }, [data]);
 
-  // Helper untuk format angka jutaan agar lebih clean
   const formatToMillion = (val: number) => {
     return (val / 10 ** 6).toLocaleString("id-ID", {
       maximumFractionDigits: 1,
@@ -54,17 +53,17 @@ const PortofolioChart = ({
 
   return (
     <div className="flex w-full flex-col items-center gap-8">
-      {/* SUMMARY CARDS */}
       <div className="flex flex-col items-center gap-4 text-center">
         <p className="text-muted-foreground text-sm font-medium uppercase tracking-wider">
           Estimasi Saldo Akhir Setelah <span className="text-foreground font-bold">{horizonYears} Tahun</span>
         </p>
 
         <div className="flex flex-wrap justify-center gap-4">
-          <Card className="border-primary/20 bg-primary/5 shadow-sm transition-all hover:shadow-md">
+          {/* Kartu Hasil Investasi Tetap UNGU */}
+          <Card className="border-purple-100 bg-purple-50/50 shadow-sm transition-all hover:shadow-md">
             <CardContent className="p-6">
               <p className="text-muted-foreground mb-1 text-xs font-semibold">DENGAN INVESTASI</p>
-              <div className="flex items-baseline gap-1 text-primary">
+              <div className="flex items-baseline gap-1 text-purple-700">
                 <span className="text-sm font-bold">Rp</span>
                 <span className="text-3xl font-black tracking-tight">
                   {formatToMillion(latestDataPoint.moneyWithInvestingMin)} - {formatToMillion(latestDataPoint.moneyWithInvestingMax)}
@@ -89,16 +88,16 @@ const PortofolioChart = ({
         </div>
       </div>
 
-      {/* CHART CONTAINER */}
       <ChartContainer config={chartConfig} className="aspect-[2/1] w-full lg:aspect-[3/1]">
         <AreaChart
           data={data}
           margin={{ top: 10, right: 10, left: 10, bottom: 0 }}
         >
+          {/* Mengembalikan Definisi Gradien UNGU */}
           <defs>
             <linearGradient id="colorInvest" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="var(--color-moneyWithInvestingMax)" stopOpacity={0.3} />
-              <stop offset="95%" stopColor="var(--color-moneyWithInvestingMax)" stopOpacity={0} />
+              <stop offset="5%" stopColor="#a855f7" stopOpacity={0.4} />
+              <stop offset="95%" stopColor="#a855f7" stopOpacity={0} />
             </linearGradient>
           </defs>
           
@@ -123,7 +122,7 @@ const PortofolioChart = ({
           />
 
           <ChartTooltip
-            cursor={{ stroke: "hsl(var(--primary))", strokeWidth: 1, strokeDasharray: "4 4" }}
+            cursor={{ stroke: "#a855f7", strokeWidth: 1, strokeDasharray: "4 4" }}
             content={
               <ChartTooltipContent 
                 indicator="line" 
@@ -133,33 +132,31 @@ const PortofolioChart = ({
             }
           />
 
-          {/* Area Best Case (Max) */}
+          {/* Area Grafik menggunakan Gradien UNGU */}
           <Area
             dataKey="moneyWithInvestingMax"
             type="monotone"
-            stroke="var(--color-moneyWithInvestingMax)"
+            stroke="#a855f7"
             strokeWidth={2}
-            fill="url(#colorInvest)"
+            fill="url(#colorInvest)" 
             stackId="1"
             isAnimationActive={true}
           />
           
-          {/* Area Worst Case (Min) - Dibuat sedikit transparan untuk efek 'range' */}
           <Area
             dataKey="moneyWithInvestingMin"
             type="monotone"
-            stroke="var(--color-moneyWithInvestingMax)"
+            stroke="#a855f7"
             strokeWidth={1}
             strokeDasharray="4 4"
             fill="transparent"
             stackId="2"
           />
 
-          {/* Garis Dasar Tanpa Investasi */}
           <Area
             dataKey="moneyWithoutInvesting"
             type="monotone"
-            stroke="var(--color-moneyWithoutInvesting)"
+            stroke="#000000"
             strokeWidth={2}
             strokeDasharray="5 5"
             fill="none"
@@ -167,9 +164,9 @@ const PortofolioChart = ({
         </AreaChart>
       </ChartContainer>
       
-      <div className="flex gap-6 text-xs text-muted-foreground">
+      <div className="flex gap-6 text-xs text-muted-foreground p-4 bg-gray-50 rounded-full border">
         <div className="flex items-center gap-1.5">
-          <div className="h-0.5 w-4 bg-primary" />
+          <div className="h-0.5 w-4 bg-purple-500" />
           <span>Estimasi Investasi (Min - Max)</span>
         </div>
         <div className="flex items-center gap-1.5">
