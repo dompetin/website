@@ -7,7 +7,6 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { InvestmentSimulationResult } from "@/lib/simulate-investments";
-import { formatCurrency } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 

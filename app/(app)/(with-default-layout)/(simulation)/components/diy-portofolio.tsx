@@ -59,13 +59,6 @@ const ASSET_RISK: Record<AssetType, { label: string; level: RiskLevel }> = {
   saham:                      { label: "Risiko Sangat Tinggi", level: "very-high" },
 };
 
-const RISK_COLORS: Record<RiskLevel, string> = {
-  safe:        "text-emerald-600 bg-emerald-50",
-  low:         "text-green-600 bg-green-50",
-  medium:      "text-amber-600 bg-amber-50",
-  high:        "text-orange-600 bg-orange-50",
-  "very-high": "text-red-600 bg-red-50",
-};
 
 const ALL_ASSET_TYPES = Object.keys(assetCatalog) as AssetType[];
 const MAX_ASSETS = 8;

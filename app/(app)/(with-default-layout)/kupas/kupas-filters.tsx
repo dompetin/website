@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Search, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { KupasArticle } from "./page";
+import type { KupasArticle } from "./kupas-data";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
