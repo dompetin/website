@@ -10,7 +10,9 @@ export type GlossaryKey =
   | "reksa_dana_syariah"
   | "saham"
   | "diversifikasi"
-  | "risk_reward";
+  | "risk_reward"
+  | "imbal_hasil"
+  | "volatilitas";
 
 export const GLOSSARY: Record<
   GlossaryKey,
@@ -75,5 +77,15 @@ export const GLOSSARY: Record<
     title: "Risk-to-Reward",
     desc: "Prinsip bahwa potensi keuntungan besar selalu dibarengi risiko yang besar pula.",
     hint: "💡 Pahami profil risikomu sebelum mulai berinvestasi.",
+  },
+  imbal_hasil: {
+    title: "Imbal Hasil (Return)",
+    desc: "Keuntungan yang diperoleh dari investasi, dinyatakan sebagai persentase dari modal awal per tahun.",
+    hint: "💡 Angka ini adalah rata-rata antara skenario optimis dan pesimis portofoliomu.",
+  },
+  volatilitas: {
+    title: "Volatilitas",
+    desc: "Ukuran seberapa besar nilai investasi berfluktuasi dari waktu ke waktu. Semakin tinggi, semakin tidak stabil.",
+    hint: "💡 Volatilitas rendah = tidur lebih nyenyak. Volatilitas tinggi = potensi untung besar, tapi siap rugi besar juga.",
   },
 };

@@ -1,98 +1,148 @@
 "use client";
 
-import { useState } from "react";
-import { GLOSSARY, GlossaryKey } from "@/lib/glossary"; 
-// Menjadi ini (lebih spesifik):
-import { X, Lightbulb } from "lucide-react"; // Gunakan icon agar lebih konsisten
+import { useCallback, useEffect, useRef, useState } from "react";
+import { GLOSSARY, GlossaryKey } from "@/lib/glossary";
+import { X, Lightbulb, BookOpen } from "lucide-react";
 
-/* =========================
-    HOOK
-========================= */
+// ─── Hook ─────────────────────────────────────────────────────────────────────
+
 export const useGlossary = () => {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState<GlossaryKey | null>(null);
 
-  const show = (key: GlossaryKey) => {
+  const show = useCallback((key: GlossaryKey) => {
     setActive(key);
     setOpen(true);
-  };
+  }, []);
 
-  const hide = () => setOpen(false);
+  const hide = useCallback(() => {
+    setOpen(false);
+    // Keep `active` alive during close animation — clear after transition
+    setTimeout(() => setActive(null), 500);
+  }, []);
 
   return { open, active, show, hide };
 };
 
-/* =========================
-    COMPONENT: GlossaryPanel
-    (Wikipedia Side Panel)
-========================= */
-export const GlossaryPanel = ({
-  open,
-  active,
-  onClose,
-}: {
+// ─── Panel ────────────────────────────────────────────────────────────────────
+
+interface GlossaryPanelProps {
   open: boolean;
   active: GlossaryKey | null;
   onClose: () => void;
-}) => {
-  if (!active) return null;
+}
 
-  const data = GLOSSARY[active];
+export const GlossaryPanel = ({ open, active, onClose }: GlossaryPanelProps) => {
+  // Retain last-seen data during close animation so panel doesn't blank out
+  const lastDataRef = useRef<(typeof GLOSSARY)[GlossaryKey] | null>(null);
+  const data = active ? GLOSSARY[active] : null;
+  if (data) lastDataRef.current = data;
+  const displayData = data ?? lastDataRef.current;
+
+  // Escape key + scroll lock
+  useEffect(() => {
+    if (!open) return;
+
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleEsc);
+
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", handleEsc);
+    };
+  }, [open, onClose]);
 
   return (
-    <div className={`fixed inset-0 z-[110] flex justify-end ${open ? "visible" : "invisible"}`}>
-      {/* Overlay Gelap */}
+    <>
+      {/* Backdrop */}
       <div
-        className={`absolute inset-0 bg-purple-950/20 backdrop-blur-sm transition-opacity duration-300 ${
-          open ? "opacity-100" : "opacity-0"
-        }`}
+        aria-hidden="true"
         onClick={onClose}
+        className={[
+          "fixed inset-0 z-[110] bg-violet-950/20 backdrop-blur-sm transition-opacity duration-300",
+          open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none",
+        ].join(" ")}
       />
-      
-      {/* Panel Konten */}
-      <div className={`relative w-full max-w-md bg-white h-full shadow-2xl p-8 flex flex-col transition-transform duration-500 ease-out ${
-        open ? "translate-x-0" : "translate-x-full"
-      }`}>
-        {/* Tombol Close */}
-        <button 
-          onClick={onClose}
-          className="self-end p-2 hover:bg-purple-50 rounded-full transition-colors text-purple-400"
-          aria-label="Close"
-        >
-          <X className="w-6 h-6" />
-        </button>
 
-        {/* Header & Deskripsi */}
-        <div className="mt-6">
-          <span className="text-[10px] font-black uppercase tracking-widest text-purple-500">Glosarium Dompetin</span>
-          <h2 className="text-3xl font-extrabold mt-2 text-purple-950 leading-tight">
-            {data.title}
-          </h2>
-          <div className="h-1.5 w-12 bg-purple-500 mt-4 rounded-full" />
-          
-          <p className="text-base mt-6 leading-relaxed text-gray-600 italic border-l-4 border-purple-100 pl-4">
-            {data.desc}
-          </p>
-        </div>
+      {/* Slide-in panel */}
+      <aside
+        role="dialog"
+        aria-modal="true"
+        aria-label={displayData?.title ?? "Glosarium"}
+        className={[
+          "fixed right-0 top-0 z-[120] flex h-full w-full max-w-md flex-col bg-white shadow-2xl",
+          "transition-transform duration-500 ease-[cubic-bezier(.32,1,.25,1)]",
+          open ? "translate-x-0" : "translate-x-full",
+        ].join(" ")}
+      >
+        {displayData ? (
+          <>
+            {/* Top bar */}
+            <div className="flex items-center justify-between border-b border-violet-50 px-6 py-4">
+              <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-violet-500">
+                <BookOpen className="size-3" />
+                Glosarium Dompetin
+              </div>
+              <button
+                onClick={onClose}
+                aria-label="Tutup panel"
+                className="group rounded-full p-2 transition-colors hover:bg-violet-50"
+              >
+                <X className="size-5 text-violet-400 transition-transform duration-300 group-hover:rotate-90" />
+              </button>
+            </div>
 
-        {/* Hint Section */}
-        {data.hint && (
-          <div className="mt-8 p-6 bg-purple-900 text-white rounded-3xl shadow-lg relative overflow-hidden">
-            <Lightbulb className="absolute -right-4 -bottom-4 w-24 h-24 text-purple-800/50 rotate-12" />
-            <h4 className="font-bold mb-2 flex items-center gap-2">Tips Cerdas</h4>
-            <p className="text-sm text-purple-100 leading-relaxed relative z-10">
-              {data.hint}
-            </p>
+            {/* Scrollable body */}
+            <div className="flex flex-1 flex-col gap-6 overflow-y-auto px-6 py-8">
+              {/* Title */}
+              <div>
+                <h2 className="text-3xl font-extrabold leading-tight text-violet-950">
+                  {displayData.title}
+                </h2>
+                <div className="mt-3 h-1.5 w-10 rounded-full bg-violet-500" />
+              </div>
+
+              {/* Description */}
+              <p className="border-l-4 border-violet-100 pl-4 text-base leading-relaxed text-stone-600 italic">
+                {displayData.desc}
+              </p>
+
+              {/* Tip */}
+              {displayData.hint && (
+                <div className="relative overflow-hidden rounded-3xl bg-violet-900 px-6 py-5 text-white shadow-lg">
+                  {/* Decorative icon */}
+                  <Lightbulb className="absolute -bottom-4 -right-4 size-24 rotate-12 text-violet-800/40" />
+
+                  <h4 className="relative z-10 mb-2 flex items-center gap-2 text-sm font-bold">
+                    <Lightbulb className="size-4 text-yellow-300" />
+                    Tips Cerdas
+                  </h4>
+                  <p className="relative z-10 text-sm leading-relaxed text-violet-100">
+                    {displayData.hint}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="border-t border-violet-50 px-6 py-4">
+              <p className="text-xs text-violet-400 italic">
+                Belajar finansial jadi simpel bareng Dompetin.
+              </p>
+            </div>
+          </>
+        ) : (
+          /* Empty / loading state */
+          <div className="flex flex-1 items-center justify-center">
+            <p className="text-sm text-muted-foreground">Memuat glosarium…</p>
           </div>
         )}
-
-        {/* Footer */}
-        <div className="mt-auto pt-6 border-t border-purple-50">
-          <p className="text-xs text-purple-400 italic">
-            Belajar finansial jadi simpel bareng Dompetin.
-          </p>
-        </div>
-      </div>
-    </div>
+      </aside>
+    </>
   );
 };
