@@ -84,8 +84,6 @@ function ArticleCard({ article, index }: { article: KupasArticle; index: number 
         <Button
           asChild={isReal}
           disabled={!isReal}
-          // @ts-expect-error — transition is a custom prop on Button
-          transition="scale"
           className={!isReal ? "opacity-50 cursor-not-allowed" : ""}
         >
           {isReal ? (
