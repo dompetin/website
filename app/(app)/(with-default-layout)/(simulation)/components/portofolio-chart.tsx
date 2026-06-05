@@ -13,30 +13,43 @@ import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 // ─── Chart config ─────────────────────────────────────────────────────────────
 
 const chartConfig = {
-  moneyWithInvestingMax: {
-    label: "Investasi (Maksimum)",
-    color: "var(--primary)",
-  },
-  moneyWithInvestingMin: {
-    label: "Investasi (Minimum)",
-    color: "var(--primary)",
-  },
-  moneyWithoutInvesting: {
-    label: "Tanpa Investasi",
-    color: "#a8a29e",
-  },
+  moneyWithInvestingMax: { label: "Investasi (Maksimum)", color: "var(--primary)" },
+  moneyWithInvestingMin: { label: "Investasi (Minimum)",  color: "var(--primary)" },
+  moneyWithoutInvesting: { label: "Tanpa Investasi",      color: "#a8a29e"        },
 } satisfies ChartConfig;
 
-// ─── Helper ───────────────────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
+/**
+ * Format a rupiah amount for the Y-axis and summary cards.
+ * Rules:
+ *  - Always returns a single unbreakable token (no space between number and unit)
+ *  - Rounds to nearest 100k before dividing so 153_800_000 → "153.8 jt" not "153.8 jt"
+ *  - Integer values show no decimal: 120_000_000 → "120 jt"
+ *  - ≥ 1 M (miliar): "1.5 M"
+ *  - < 1 jt: falls through to "rb"
+ */
 function formatJt(value: number): string {
-  if (value >= 1_000_000_000) return `${(value / 1_000_000_000).toFixed(1)} M`;
-  if (value >= 1_000_000)     return `${(value / 1_000_000).toFixed(1)} jt`;
-  if (value >= 1_000)         return `${Math.floor(value / 1_000)} rb`;
+  if (value >= 1_000_000_000) {
+    const n = value / 1_000_000_000;
+    return `${Number.isInteger(n) ? n : n.toFixed(1)}\u00a0M`;
+  }
+  if (value >= 1_000_000) {
+    // Round to nearest 100k to avoid "153.85 jt" → "153.9 jt" surprises
+    const n = Math.round(value / 100_000) / 10;
+    return `${Number.isInteger(n) ? n : n.toFixed(1)}\u00a0jt`;
+  }
+  if (value >= 1_000) {
+    return `${Math.floor(value / 1_000)}\u00a0rb`;
+  }
   return String(value);
 }
 
-// ─── Summary card ─────────────────────────────────────────────────────────────
+// ─── SummaryCard ──────────────────────────────────────────────────────────────
+//
+// Key fix: `whitespace-nowrap` on the value prevents "Rp 154" and "jt" from
+// wrapping onto separate lines when the card is narrow.
+// `text-lg` instead of `text-xl` keeps long values fitting in a 2-column grid.
 
 function SummaryCard({
   label,
@@ -50,19 +63,20 @@ function SummaryCard({
   valueClass?: string;
 }) {
   return (
-    <div className="flex flex-col gap-2 rounded-2xl bg-white px-5 py-4 shadow-sm">
-      <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+    <div className="flex flex-col gap-1.5 rounded-2xl bg-white px-4 py-3 shadow-sm">
+      <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground leading-tight">
         {label}
       </p>
-      <p className={`text-xl font-bold leading-tight ${valueClass}`}>
+      {/* whitespace-nowrap + overflow-hidden prevents the value wrapping */}
+      <p className={`text-lg font-bold leading-tight whitespace-nowrap overflow-hidden text-ellipsis ${valueClass}`}>
         {value}
       </p>
-      <p className="text-xs text-muted-foreground">{sub}</p>
+      <p className="text-[11px] text-muted-foreground">{sub}</p>
     </div>
   );
 }
 
-// ─── Empty state ──────────────────────────────────────────────────────────────
+// ─── EmptyChart ───────────────────────────────────────────────────────────────
 
 function EmptyChart() {
   return (
@@ -75,7 +89,7 @@ function EmptyChart() {
   );
 }
 
-// ─── Main component ───────────────────────────────────────────────────────────
+// ─── PortofolioChart ──────────────────────────────────────────────────────────
 
 export const PortofolioChart = ({
   data,
@@ -85,52 +99,43 @@ export const PortofolioChart = ({
   horizonYears: number;
 }) => {
   const [latest, setLatest] = useState<InvestmentSimulationResult>({
-    year:                  0,
-    moneyWithInvestingMax: 0,
-    moneyWithInvestingMin: 0,
-    moneyWithoutInvesting: 0,
+    year: 0, moneyWithInvestingMax: 0, moneyWithInvestingMin: 0, moneyWithoutInvesting: 0,
   });
 
   useEffect(() => {
     if (data.length > 0) setLatest(data[data.length - 1]);
   }, [data]);
 
-  // Growth % vs no-invest baseline
   const firstMax  = data[0]?.moneyWithInvestingMax ?? 0;
   const growthPct = firstMax > 0
     ? Math.round(((latest.moneyWithInvestingMax - firstMax) / firstMax) * 100)
     : 0;
-
   const yearLabel = `Tahun ${latest.year}`;
 
   return (
     <div className="flex w-full flex-col gap-5">
 
-      {/*
-        ┌──────────────┬──────────────┬──────────────┬──────────────┐
-        │ POTENSI      │ POTENSI      │ TANPA        │ PERTUMBUHAN  │
-        │ TERTINGGI    │ TERENDAH     │ INVESTASI    │ MAKS         │
-        │ Rp 120.9 jt  │ Rp 26.5 jt  │ Rp 23.0 jt  │ +11992%      │
-        │ Tahun 2051   │ Tahun 2051   │ Tahun 2051   │ Dalam 25 thn │
-        └──────────────┴──────────────┴──────────────┴──────────────┘
-      */}
+      {/* ── Summary cards ── */}
       {data.length > 0 && (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div
+          className="grid grid-cols-2 gap-2 sm:grid-cols-4"
+          aria-label={`Ringkasan proyeksi: tertinggi ${formatJt(latest.moneyWithInvestingMax)}, terendah ${formatJt(latest.moneyWithInvestingMin)}, tanpa investasi ${formatJt(latest.moneyWithoutInvesting)}, pertumbuhan +${growthPct}%`}
+        >
           <SummaryCard
             label="Potensi Tertinggi"
-            value={`Rp ${formatJt(latest.moneyWithInvestingMax)}`}
+            value={`Rp\u00a0${formatJt(latest.moneyWithInvestingMax)}`}
             sub={yearLabel}
             valueClass="text-primary"
           />
           <SummaryCard
             label="Potensi Terendah"
-            value={`Rp ${formatJt(latest.moneyWithInvestingMin)}`}
+            value={`Rp\u00a0${formatJt(latest.moneyWithInvestingMin)}`}
             sub={yearLabel}
             valueClass="text-violet-400"
           />
           <SummaryCard
             label="Tanpa Investasi"
-            value={`Rp ${formatJt(latest.moneyWithoutInvesting)}`}
+            value={`Rp\u00a0${formatJt(latest.moneyWithoutInvesting)}`}
             sub={yearLabel}
             valueClass="text-stone-500"
           />
@@ -143,16 +148,18 @@ export const PortofolioChart = ({
         </div>
       )}
 
-      {/* Chart */}
+      {/* ── Chart ── */}
       {data.length === 0 ? (
         <EmptyChart />
       ) : (
         <>
-          <ChartContainer config={chartConfig} className="aspect-video w-full">
-            <AreaChart
-              data={data}
-              margin={{ top: 4, right: 8, left: 4, bottom: 0 }}
-            >
+          <ChartContainer
+            config={chartConfig}
+            className="aspect-video w-full"
+            role="img"
+            aria-label={`Grafik proyeksi investasi ${horizonYears} tahun. Potensi tertinggi: Rp ${formatJt(latest.moneyWithInvestingMax)}, terendah: Rp ${formatJt(latest.moneyWithInvestingMin)}, tanpa investasi: Rp ${formatJt(latest.moneyWithoutInvesting)}.`}
+          >
+            <AreaChart data={data} margin={{ top: 4, right: 8, left: 4, bottom: 0 }}>
               <defs>
                 <linearGradient id="gradMax" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="var(--primary)" stopOpacity={0.18} />
@@ -176,7 +183,7 @@ export const PortofolioChart = ({
                 tickLine={false}
                 axisLine={false}
                 tickMargin={6}
-                width={44}
+                width={48}
                 tickFormatter={(v: number) => formatJt(v)}
                 className="text-[10px] text-muted-foreground"
               />
@@ -188,7 +195,7 @@ export const PortofolioChart = ({
                     indicator="dot"
                     labelFormatter={(v) => `Tahun ke-${v}`}
                     formatter={(value, name) => [
-                      `Rp ${formatJt(Number(value))}`,
+                      `Rp\u00a0${formatJt(Number(value))}`,
                       chartConfig[name as keyof typeof chartConfig]?.label ?? name,
                     ]}
                     className="w-56 rounded-xl text-xs shadow-xl"
@@ -196,7 +203,7 @@ export const PortofolioChart = ({
                 }
               />
 
-              {/* Max potential — solid purple fill */}
+              {/* Max — solid line with gradient fill */}
               <Area
                 dataKey="moneyWithInvestingMax"
                 type="monotone"
@@ -208,7 +215,7 @@ export const PortofolioChart = ({
                 activeDot={{ r: 4, fill: "var(--primary)", stroke: "#fff", strokeWidth: 2 }}
               />
 
-              {/* Min potential — dashed line, no fill */}
+              {/* Min — dashed, no fill */}
               <Area
                 dataKey="moneyWithInvestingMin"
                 type="monotone"
@@ -220,7 +227,7 @@ export const PortofolioChart = ({
                 activeDot={{ r: 3, fill: "var(--primary)", stroke: "#fff", strokeWidth: 2 }}
               />
 
-              {/* No-invest — dashed dark line */}
+              {/* No-invest — dashed grey */}
               <Area
                 dataKey="moneyWithoutInvesting"
                 type="monotone"
@@ -234,6 +241,14 @@ export const PortofolioChart = ({
             </AreaChart>
           </ChartContainer>
 
+          {/* Screen-reader text summary */}
+          <p className="sr-only" aria-live="polite">
+            Proyeksi investasi dalam {horizonYears} tahun:
+            potensi tertinggi Rp {formatJt(latest.moneyWithInvestingMax)},
+            potensi terendah Rp {formatJt(latest.moneyWithInvestingMin)},
+            tanpa investasi Rp {formatJt(latest.moneyWithoutInvesting)}.
+          </p>
+
           {/* Legend */}
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-1.5 text-[11px] text-muted-foreground">
             <div className="flex items-center gap-2">
@@ -241,7 +256,7 @@ export const PortofolioChart = ({
               <span className="font-medium">Potensi tertinggi</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="h-0.5 w-5 rounded-full border-t-2 border-dashed border-primary opacity-60" style={{background:"none"}} />
+              <div className="h-0.5 w-5" style={{ borderTop: "2px dashed var(--primary)", opacity: 0.6 }} />
               <span className="font-medium">Potensi terendah</span>
             </div>
             <div className="flex items-center gap-2">

@@ -3,18 +3,42 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { TentangFaq } from "./tentang-faq";
+import { Mail, Handshake, Newspaper, Heart, Rocket, BookOpen } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Tentang Kami | Dompetin",
+  description:
+    "Dompetin adalah gerakan yang membentuk generasi muda Indonesia menjadi generasi yang mapan dan sadar finansial.",
 };
 
-// ─── Data ──────────────────────────────────────────────────────────────────────
+// ─── Data ─────────────────────────────────────────────────────────────────────
 
+// Icon components are defined here so they're typed and tree-shakeable.
+// The skill audit flagged emojis as icons — replaced with Lucide SVG icons
+// for consistent sizing, theming, and screen reader support.
 const CONTACT = [
-  { icon: "📧", title: "Email",       val: "halo@dompetin.id",    sub: "Untuk pertanyaan umum"            },
-  { icon: "🤝", title: "Kolaborasi",  val: "partner@dompetin.id", sub: "Untuk partnership & sponsorship"  },
-  { icon: "📰", title: "Media",       val: "press@dompetin.id",   sub: "Untuk liputan & press"            },
-];
+  {
+    Icon:  Mail,
+    title: "Email",
+    val:   "halo@dompetin.id",
+    href:  "mailto:halo@dompetin.id",
+    sub:   "Untuk pertanyaan umum",
+  },
+  {
+    Icon:  Handshake,
+    title: "Kolaborasi",
+    val:   "partner@dompetin.id",
+    href:  "mailto:partner@dompetin.id",
+    sub:   "Untuk partnership & sponsorship",
+  },
+  {
+    Icon:  Newspaper,
+    title: "Media",
+    val:   "press@dompetin.id",
+    href:  "mailto:press@dompetin.id",
+    sub:   "Untuk liputan & press",
+  },
+] as const;
 
 const FAQS = [
   {
@@ -33,18 +57,21 @@ const FAQS = [
     q: "Apakah Dompetin adalah produk investasi?",
     a: "Tidak. Dompetin adalah platform edukasi dan simulasi. Kami tidak menjual produk investasi apapun dan bukan merupakan agen investasi terdaftar.",
   },
-];
+] as const;
 
-// ─── Section divider ──────────────────────────────────────────────────────────
+// ─── SectionDivider ───────────────────────────────────────────────────────────
+// Uses <p> not <h2> — these are visual labels, not document-structure headings.
+// The heading outline is: h1 (Tentang Dompetin) → h2 (Siap mulai...)
+// Adding h2s for every section label would inflate and distort the outline.
 
 function SectionDivider({ label }: { label: string }) {
   return (
-    <div className="flex items-center gap-3 mb-8">
-      <div className="h-0.5 w-6 bg-primary" />
-      <h2 className="text-xs font-bold text-primary uppercase tracking-widest whitespace-nowrap">
+    <div className="mb-8 flex items-center gap-3" aria-hidden="true">
+      <div className="h-0.5 w-6 rounded-full bg-primary" />
+      <p className="whitespace-nowrap text-xs font-bold uppercase tracking-widest text-primary">
         {label}
-      </h2>
-      <div className="flex-1 h-px bg-border" />
+      </p>
+      <div className="h-px flex-1 bg-border" />
     </div>
   );
 }
@@ -55,11 +82,12 @@ export default function TentangKamiPage() {
   return (
     <div className="flex flex-col items-center justify-center">
 
-      {/* ── HERO (original, untouched) ── */}
+      {/* ── HERO ── */}
       <Container className="my-32 flex flex-col items-center justify-center gap-8 md:flex-row md:gap-12 lg:gap-16">
         <Image
           src="/tentang-kami/hero.png"
-          alt="Hero Image"
+          alt=""
+          aria-hidden="true"
           quality={100}
           width={900}
           height={400}
@@ -68,7 +96,7 @@ export default function TentangKamiPage() {
         <div className="space-y-4 md:space-y-6 [&_p]:mt-4 md:[&_p]:mt-6">
           <h1 className="mb-8 text-4xl font-bold leading-none text-black sm:text-5xl md:mb-13 md:text-6xl lg:text-7xl xl:text-[3rem]">
             Tentang
-            <br />{" "}
+            <br />
             <span className="text-6xl text-purple-400 sm:text-7xl md:text-8xl lg:text-[7rem] xl:text-[8rem]">
               Dompetin
             </span>
@@ -89,12 +117,17 @@ export default function TentangKamiPage() {
       </Container>
 
       <Container>
-        <hr className="w-full text-gray-400" />
+        <hr className="w-full border-gray-200" />
       </Container>
 
-      {/* ── VISI & MISI — original image for Visi, real HTML for Misi ── */}
-      <Container className="grid grid-cols-1 items-start justify-between gap-18 pt-10 pb-16 sm:grid-cols-2 lg:gap-28 xl:gap-32">
-        {/* Visi — original untouched */}
+      {/* ── VISI & MISI ── */}
+      {/*
+        gap-18 is not a standard Tailwind value and silently outputs nothing.
+        Replaced with gap-16 (lg) / gap-20 (xl).
+      */}
+      <Container className="grid grid-cols-1 items-start justify-between gap-12 pb-16 pt-10 sm:grid-cols-2 lg:gap-16 xl:gap-20">
+
+        {/* Visi */}
         <div className="md:mt-3">
           <Image
             src="/tentang-kami/visi.png"
@@ -102,9 +135,9 @@ export default function TentangKamiPage() {
             quality={100}
             width={900}
             height={400}
-            className="w-full scale-70 sm:scale-80 md:scale-90"
+            className="w-full scale-75 sm:scale-[.80] md:scale-90"
           />
-          <p className="text-justify text-pretty">
+          <p className="text-pretty text-justify">
             Menumbuhkan generasi muda Indonesia yang cerdas finansial dan
             mandiri, dengan meningkatkan tingkat literasi keuangan nasional dari
             65,4% menjadi 85% dalam 5–10 tahun ke depan, serta membangun
@@ -112,7 +145,7 @@ export default function TentangKamiPage() {
           </p>
         </div>
 
-        {/* Misi — plain numbered list matching original screenshot style */}
+        {/* Misi */}
         <div>
           <Image
             src="/tentang-kami/misi.png"
@@ -120,26 +153,33 @@ export default function TentangKamiPage() {
             quality={100}
             width={900}
             height={400}
-            className="w-full scale-70 sm:scale-80 md:scale-90"
+            className="w-full scale-75 sm:scale-[.80] md:scale-90"
           />
-          <ol className="ml-5 list-decimal space-y-4 text-lg font-bold text-[#601679] *:text-justify *:text-pretty sm:ml-7 [&_span]:block [&_span]:text-base [&_span]:font-normal [&_span]:text-black [&_span]:mt-1">
-            <li>
+          {/*
+            Removed *:text-justify — the universal selector applies to ALL
+            descendants including <span> children that are already text-justify
+            via the parent. Redundant and can override more specific rules.
+            Also removed [&_span]:mt-1 shorthand in favour of a direct class
+            on each span for clarity.
+          */}
+          <ol className="ml-5 list-decimal space-y-4 text-lg font-bold text-[#601679] sm:ml-7">
+            <li className="text-justify text-pretty">
               Edukasi Finansial yang Relevan
-              <span>
+              <span className="mt-1 block text-base font-normal text-black">
                 Menyediakan pembelajaran interaktif dan sederhana tentang
-                menabung, investasi, dan pengelolaan uang
+                menabung, investasi, dan pengelolaan uang.
               </span>
             </li>
-            <li>
+            <li className="text-justify text-pretty">
               Bangun Kebiasaan Finansial Sehat
-              <span>
+              <span className="mt-1 block text-base font-normal text-black">
                 Membantu pelajar memahami risiko dan strategi investasi melalui
                 simulasi portofolio yang berbasis data.
               </span>
             </li>
-            <li>
+            <li className="text-justify text-pretty">
               Dorong Gerakan Finansial Muda
-              <span>
+              <span className="mt-1 block text-base font-normal text-black">
                 Mendorong praktik keuangan yang konsisten dan bertanggung jawab
                 dalam kehidupan sehari-hari.
               </span>
@@ -148,51 +188,64 @@ export default function TentangKamiPage() {
         </div>
       </Container>
 
-      {/* ── NEW: FAQ (interactive — client component) ── */}
+      {/* ── FAQ ── */}
       <Container className="pb-16">
         <SectionDivider label="FAQ" />
-        <TentangFaq faqs={FAQS} />
+        <TentangFaq faqs={[...FAQS]} />
       </Container>
 
-      {/* ── NEW: Contact ── */}
+      {/* ── Hubungi Kami ── */}
       <Container className="pb-16">
         <SectionDivider label="Hubungi Kami" />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           {CONTACT.map((c) => (
-            <div
+            /*
+              Each card is an <a> with mailto: so tapping on mobile opens
+              the mail client — not just decorative text.
+              hover:shadow-md requires layout recalc; using ring instead
+              is cheaper and consistent with the rest of the design system.
+            */
+            <a
               key={c.title}
-              className="flex flex-col items-center gap-1.5 rounded-2xl border border-border bg-white px-5 py-5 shadow-sm text-center hover:shadow-md transition-shadow"
+              href={c.href}
+              className="flex flex-col items-center gap-1.5 rounded-2xl border border-border bg-white px-5 py-5 text-center shadow-sm transition-all hover:border-primary/30 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
             >
-              <span className="text-2xl">{c.icon}</span>
-              <p className="font-bold text-sm text-foreground">{c.title}</p>
-              <p className="text-xs text-primary font-semibold">{c.val}</p>
+              <span className="flex size-10 items-center justify-center rounded-xl bg-primary/10">
+                <c.Icon className="size-5 text-primary" aria-hidden="true" />
+              </span>
+              <p className="text-sm font-bold text-foreground">{c.title}</p>
+              <p className="text-xs font-semibold text-primary">{c.val}</p>
               <p className="text-xs text-muted-foreground">{c.sub}</p>
-            </div>
+            </a>
           ))}
         </div>
       </Container>
 
-      {/* ── NEW: CTA ── */}
+      {/* ── CTA ── */}
       <Container className="pb-20">
-        <div className="rounded-2xl bg-primary px-8 py-10 text-center text-white shadow-xl">
-          <div className="text-4xl mb-3">💚</div>
-          <h2 className="text-2xl font-extrabold mb-2">
+        <div className="rounded-2xl bg-primary px-8 py-10 text-center text-white">
+          <span className="mb-3 flex justify-center" aria-hidden="true">
+            <Heart className="size-10 fill-white/80 text-white" />
+          </span>
+
+          <h2 className="mb-2 text-2xl font-extrabold">
             Siap mulai perjalanan finansialmu?
           </h2>
-          <p className="text-white/70 text-sm mb-6 max-w-md mx-auto">
+          <p className="mx-auto mb-6 max-w-md text-sm text-white/70">
             Bergabunglah dengan ribuan anak muda Indonesia yang sudah mulai
             belajar finansial bersama Dompetin.
           </p>
-          <div className="flex gap-3 justify-center flex-wrap">
+
+          <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/simulasi"
-              className="bg-white text-primary font-bold text-sm px-6 py-3 rounded-full hover:bg-white/90 transition"
+              className="rounded-full bg-white px-6 py-3 text-sm font-bold text-primary transition hover:bg-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
             >
               Coba Simulasi Gratis →
             </Link>
             <Link
               href="/akademi"
-              className="border border-white/40 text-white font-semibold text-sm px-6 py-3 rounded-full hover:bg-white/10 transition"
+              className="rounded-full border border-white/40 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
             >
               Buka Akademi
             </Link>
